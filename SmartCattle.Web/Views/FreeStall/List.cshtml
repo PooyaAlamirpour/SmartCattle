@@ -1,0 +1,483 @@
+﻿@using System.Threading
+@model List<SmartCattle.Web.Domain.FreeStallTbl>
+@using SmartCattle.DomainClass
+@{
+    ViewBag.Title = Localization.getString("FreeStall_Management");
+}
+
+<div class="row">
+    <div class="col-xs-6 col-md-6">
+        <div class="widget">
+            <div class="widget-header ">
+                <span class="widget-caption">@Localization.getString("FreeStall_List")</span>
+                <div class="widget-buttons">
+                    @*<a href="#" data-toggle="dispose">
+                        <i class="fa fa-times"></i>
+                    </a>*@
+                </div>
+            </div>
+            <div class="widget-body">
+                <div class="table-toolbar">
+                    <div class="btn-group pull-right">
+                    </div>
+                </div>
+                <table class="table table-striped table-hover table-bordered" id="editabledatatable">
+                    <thead>
+                        <tr role="row">
+                            <th>
+                                @Localization.getString("FreeStall_Name")
+                            </th>
+                            <th>
+                                @Localization.getString("FreeStall_Description")
+                            </th>
+                            <th>
+                                @Localization.getString("ZoneId")
+                            </th>
+                            <th>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null)
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="roleName" onclick="clickOnFreeStall(@item.ServerName)">@item.name</td>
+                                    <td class="roleDesc" onclick="clickOnFreeStall(@item.ServerName)">@item.Description</td>
+                                    <td class="" onclick="clickOnFreeStall(@item.ServerName)">@item.ServerName</td>
+                                    <td>
+                                        <span>
+                                            @{
+                                                if (PermissionViewer.WillBeShow("FreeStall-EditFreeStallName", User.Identity.Name))
+                                                {
+                                                    <a href="#" data-id="@item.ID" class="btn btn-info btn-xs edit"><i class="fa fa-edit"></i> @Localization.getString("Edit")</a>
+                                                }
+                                            }
+                                            @*<span style="margin-right:30px">@item.ServerName</span>*@
+                                        </span>
+                                    </td>
+                                </tr>
+                                                    }
+                                                }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 curve-10" style="background-color:white;width:49%">
+        <div class="card">
+            <div class="curve-10 header">
+                <p class="center-vertically text-bold" style="color:white">
+                    @Localization.getString("FreeStall_Map")
+                </p>
+            </div>
+            <div id="map_canvas" class="curve-10 header" style="background-color: white; height: 558px; margin-bottom: 15px;"></div>
+        </div>
+    </div>
+</div>
+
+<!--End Email Templates-->
+<!--Success Modal Templates-->
+<div id="modal-success" class="modal modal-message modal-success fade" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="glyphicon glyphicon-check"></i>
+            </div>
+            <div class="modal-title">Success</div>
+            <div class="modal-body">You have done great!</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+            </div>
+        </div> <!-- / .modal-content -->
+    </div> <!-- / .modal-dialog -->
+</div>
+<!--End Success Modal Templates-->
+<!--Info Modal Templates-->
+<div id="modal-info" class="modal modal-message modal-info fade" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="fa fa-envelope"></i>
+            </div>
+            <div class="modal-title">Alert</div>
+            <div class="modal-body">You'vd got mail!</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal">OK</button>
+            </div>
+        </div> <!-- / .modal-content -->
+    </div> <!-- / .modal-dialog -->
+</div>
+<!--End Info Modal Templates-->
+<!--Danger Modal Templates-->
+<div id="modal-danger" class="modal modal-message modal-danger fade" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="glyphicon glyphicon-fire"></i>
+            </div>
+            <div class="modal-title">Alert</div>
+            <div class="modal-body">You'vd done bad!</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">OK</button>
+            </div>
+        </div> <!-- / .modal-content -->
+    </div> <!-- / .modal-dialog -->
+</div>
+<!--End Danger Modal Templates-->
+<!--Danger Modal Templates-->
+<div id="modal-warning" class="modal modal-message modal-warning fade" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="fa fa-warning"></i>
+            </div>
+            <div class="modal-title">Warning</div>
+            <div class="modal-body">Is something wrong?</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-dismiss="modal">OK</button>
+            </div>
+        </div> <!-- / .modal-content -->
+    </div> <!-- / .modal-dialog -->
+</div>
+<!--End Danger Modal Templates-->
+<div id="dialog" style="display: none">
+</div>
+
+@section PageScripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <link href="~/assets/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <script src="~/assets/js/datatable/jquery.dataTables.min.js"></script>
+    <script src="~/assets/js/datatable/ZeroClipboard.js"></script>
+    <script src="~/assets/js/datatable/dataTables.tableTools.min.js"></script>
+    <script src="~/assets/js/datatable/dataTables.bootstrap.min.js"></script>
+    <script src="~/assets/Thems/LoadingDialog/bootstrap-waitingfor.js"></script>
+    <script src="~/assets/js/toastr/toastr.js"></script>
+    <script src="http://maps.google.com/maps/api/js?sensor=true&key=AIzaSyDrbXqxXPH_oWjPIuM8AikKdIkKKR01Fh8" type="text/javascript"></script>
+
+    <script>
+    var InitiateEditableDataTable = function() {
+        return {
+            init: function () {
+                debugger;
+            //Datatable Initiating
+            var oTable = $('#editabledatatable').dataTable({
+                "aLengthMenu": [
+                    [5, 10, 15, 20, 100, -1],
+                    [5, 10, 15, 20, 100, "All"]
+                ],
+                "iDisplayLength": 10,
+                "sPaginationType": "bootstrap",
+                "sDom": "Tflt<'row DTTTFooter'<'col-sm-6'i><'col-sm-6'p>>",
+                "oTableTools": {
+                    "aButtons": [
+                        "print"
+                    ]
+                },
+                "language": {
+                    "search": "",
+                    "sLengthMenu": "_MENU_",
+                    "oPaginate": {
+                        "sPrevious": "Prev",
+                        "sNext": "Next"
+                    }
+                },
+                "aoColumns": [
+                    { "bSortable": false },
+                    { "bSortable": false },
+                    { "bSortable": false },
+                    { "bSortable": true }
+                ]
+            });
+
+            var isEditing = null;
+
+            //Add New Row
+            $('#editabledatatable_new').click(function (e) {
+                EditMode = false;
+                e.preventDefault();
+                var aiNew = oTable.fnAddData([
+                    '', '','', '',
+                    '<a href="#" class="btn btn-success btn-xs save"><i class="fa fa-edit"></i> @Localization.getString("Save")</a> <a href="#" class="btn btn-warning btn-xs cancel" data-mode="new"><i class="fa fa-times"></i> Cancel</a>'
+                ]);
+                var nRow = oTable.fnGetNodes(aiNew[0]);
+                editAddedRow(oTable, nRow);
+                isEditing = nRow;
+            });
+
+            //Cancel Editing or Adding a Row
+            $('#editabledatatable').on("click", 'a.cancel', function (e) {
+                EditMode = true;
+                e.preventDefault();
+                if ($(this).attr("data-mode") == "new") {
+                    var nRow = $(this).parents('tr')[0];
+                    oTable.fnDeleteRow(nRow);
+                    isEditing = null;
+                } else {
+                    restoreRow(oTable, isEditing);
+                    isEditing = null;
+                }
+            });
+
+            //Edit A Row
+            $('#editabledatatable').on("click", 'a.edit', function (e) {
+                EditMode = false;
+                e.preventDefault();
+
+                var nRow = $(this).parents('tr')[0];
+
+                if (isEditing !== null && isEditing != nRow) {
+                    restoreRow(oTable, isEditing);
+                    editRow(oTable, nRow, $(this).data("id"));
+                    isEditing = nRow;
+                } else {
+                    editRow(oTable, nRow, $(this).data("id"));
+                    isEditing = nRow;
+                }
+            });
+
+            //Save an Editing Row
+            $('#editabledatatable').on("click", 'a.save', function (e) {
+                Notify('@Localization.getString("Please_wait")', 'bottom-right', '5000', 'blue', 'fa-check', true);
+                EditMode = true;
+                e.preventDefault();
+                var dis = $(this);
+                if (this.innerHTML.indexOf(0<="@Localization.getString("Save")")) {
+                    var jqInputs = $('input', isEditing);
+                    var name = $(jqInputs[0]).val();
+                    var desc = $(jqInputs[1]).val();
+                    var id = $(this).data("id");
+                    var newid;
+
+                    $.post("/FreeStall/EditFreeStallName",
+                    {
+                        FreeStallId: id,
+                        Name: name,
+                        Desc: desc
+                    },
+                    function (data) {
+                        if (data == "OK") {
+                            Notify('Thank You! All of your information saved successfully.', 'bottom-right', '5000', 'blue', 'fa-check', true);
+                            location.reload(true);
+                        }
+                        else {
+                            Notify('مشکلی وجود دارد.', 'bottom-right', '5000', 'blue', 'fa-check', true);
+                        }
+                    });
+                }
+            });
+
+
+            function restoreRow(oTable, nRow) {
+                var aData = oTable.fnGetData(nRow);
+                var jqTds = $('>td', nRow);
+
+                for (var i = 0, iLen = jqTds.length; i < iLen; i++) {
+                    oTable.fnUpdate(aData[i], nRow, i, false);
+                }
+
+                oTable.fnDraw();
+            }
+
+            function editRow(oTable, nRow, dataId) {
+                var aData = oTable.fnGetData(nRow);
+                var jqTds = $('>td', nRow);
+                jqTds[0].innerHTML = '<input type="text" class="form-control input-small roleName" value="' + aData[0] + '">';
+                jqTds[1].innerHTML = '<input type="text" class="form-control input-small roleDesc" value="' + aData[1] + '">';
+                //jqTds[2].innerHTML = '<input type="text" class="form-control input-small roleDesc" value="' + aData[2] + '">';
+                jqTds[3].innerHTML = '<a href="#" data-id=' + dataId + ' class="btn btn-success btn-xs save"><i class="fa fa-save"></i>@Localization.getString("Save")</a> <a href="#" class="btn btn-warning btn-xs cancel"><i class="fa fa-times"></i> Cancel</a>';
+            }
+
+            function editAddedRow(oTable, nRow) {
+                var aData = oTable.fnGetData(nRow);
+                var jqTds = $('>td', nRow);
+                jqTds[0].innerHTML = '<input type="text" class="form-control input-small roleName" value="' + aData[0] + '">';
+                jqTds[1].innerHTML = '<input type="text" class="form-control input-small roleDesc" value="' + aData[1] + '">';
+                jqTds[2].innerHTML = aData[4];
+            }
+
+            function saveRow(oTable, nRow , newId) {
+                var jqInputs = $('input', nRow);
+                oTable.fnUpdate(jqInputs[0].value, nRow, 0, false);
+                oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);
+                oTable.fnUpdate('<a href="#" data-id=' + newId + ' class="btn btn-info btn-xs edit"><i class="fa fa-edit"></i> @Localization.getString("Edit")</a>', nRow, 2, false);
+                oTable.fnDraw();
+            }
+
+            function cancelEditRow(oTable, nRow) {
+                var jqInputs = $('input', nRow);
+                oTable.fnUpdate(jqInputs[0].value, nRow, 0, false);
+                oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);
+                oTable.fnUpdate('<a href="#" class="btn btn-info btn-xs edit"><i class="fa fa-edit"></i> @Localization.getString("Edit")</a> <a href="#" class="btn btn-danger btn-xs delete"><i class="fa fa-trash-o"></i> @Localization.getString("Delete")</a>', nRow, 2, false);
+                oTable.fnDraw();
+            }
+        }
+
+    };
+        }();
+        InitiateEditableDataTable.init();
+    </script>
+    <script>
+        debugger;
+        $.post("/FreeStallPlot/getMap",
+        {
+            MAC: "",
+            ServerName: 1
+        },
+        function (data) {
+            DrawMap(data.Map, data.CenterMap.Lat, data.CenterMap.Lng, data.ZoneId, data.MacList);
+            waitingDialog.hide();
+        });
+    </script>
+
+    @*Draw map*@
+    <script>
+        var map;
+        function DrawMap(data, center_lat, center_lng, zoneId, sensor_position_list) {
+            if (sensor_position_list.length != 0) {
+                var myLatLng = new google.maps.LatLng(center_lat, center_lng);
+                map = new google.maps.Map(document.getElementById('map_canvas'), {
+                    zoom: 18,
+                    center: myLatLng,
+                    scrollwheel: true,
+                    panControl: true,
+                    zoomControl: true,
+                    scaleControl: true,
+                    disableDefaultUI: true
+                });
+                var i;
+                var marker;
+                var markerList = [];
+                var x_offset = 200;
+                var y_offset = 100;
+                for (i = 0; i < sensor_position_list.length; i++) {
+                    if (i == 0) {
+                        marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(sensor_position_list[i].Lat, sensor_position_list[i].Lng),
+                            map: map,
+                            icon: pinSymbol('red')
+                        });
+                    }
+                    else {
+                        marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(sensor_position_list[i].Lat, sensor_position_list[i].Lng),
+                            map: map,
+                            icon: pinSymbol('blue')
+                        });
+                    }
+
+                    markerList.push(marker);
+                }
+                for (i = 0; i < sensor_position_list.length; i++) {
+                    google.maps.event.addListener(markerList[i], 'click', (function (marker, i) {
+                        return function () {
+                            for (var n = 0; n < markerList.length; n++) {
+                                markerList[n].setIcon(pinSymbol('blue'));
+                            }
+                            markerList[i].setIcon(pinSymbol('red'));
+                            document.getElementById('SelectedMAC').value = sensor_position_list[i].MAC;
+                            drawEnvPlot(sensor_position_list[i].MAC);
+                        }
+                    })(markerList[i], i));
+                }
+                google.maps.event.addListener(map, 'zoom_changed', function () {
+                    var zoomLevel = map.getZoom();
+                    var lat = markerList[0].getPosition().lat();
+                    var lng = markerList[0].getPosition().lng();
+                });
+
+                for (var i = 0; i < data.length; i++) {
+                    map.data.addGeoJson(data[i]);
+                }
+                map.data.setStyle(function (feature) {
+                    var SD_NAME = feature.getProperty('name');
+                    var SD_FILL = feature.getProperty('fill');
+                    SD_NAME = SD_NAME.replace("kml_", "");
+                    SD_NAME = SD_NAME.replace("kml-", "");
+                    if (SD_NAME == zoneId) {
+                        color = "#ff00ba";
+                    }
+                    else {
+                        color = "#0cff00";
+                    }
+                    return {
+                        fillColor: color,
+                        strokeWeight: 1
+                    }
+                });
+            }
+            else {
+                var myLatLng = new google.maps.LatLng(center_lat, center_lng);
+                map = new google.maps.Map(document.getElementById('map_canvas'), {
+                    zoom: 18,
+                    center: myLatLng,
+                    scrollwheel: true,
+                    panControl: true,
+                    zoomControl: true,
+                    scaleControl: true,
+                    disableDefaultUI: true
+                });
+                var i;
+                var marker;
+                var markerList = [];
+                var x_offset = 200;
+                var y_offset = 100;
+
+                google.maps.event.addListener(map, 'zoom_changed', function () {
+                    var zoomLevel = map.getZoom();
+                    var lat = markerList[0].getPosition().lat();
+                    var lng = markerList[0].getPosition().lng();
+                });
+
+                for (var i = 0; i < data.length; i++) {
+                    map.data.addGeoJson(data[i]);
+                }
+                map.data.setStyle(function (feature) {
+                    var SD_NAME = feature.getProperty('name');
+                    var SD_FILL = feature.getProperty('fill');
+                    SD_NAME = SD_NAME.replace("kml_", "");
+                    SD_NAME = SD_NAME.replace("kml-", "");
+                    if (SD_NAME == zoneId) {
+                        color = "#ff00ba";
+                    }
+                    else {
+                        color = "#0cff00";
+                    }
+                    return {
+                        fillColor: color,
+                        strokeWeight: 1
+                    }
+                });
+            }
+        }
+
+        function pinSymbol(color) {
+            return {
+                path: 'M125 410 c-56 -72 -111 -176 -120 -224 -7 -36 11 -83 49 -124 76 -85 223 -67 270 31 28 60 29 88 6 150 -19 51 -122 205 -148 221 -6 3 -32 -21 -57 -54z m110 -175 c35 -34 33 -78 -4 -116 -35 -35 -71 -37 -105 -7 -40 35 -43 78 -11 116 34 41 84 44 120 7z',
+                fillColor: color,
+                fillOpacity: 0.8,
+                scale: 0.1,
+                strokeColor: color,
+                strokeWeight: 1,
+                anchor: new google.maps.Point(185, 500)
+            };
+        }
+    </script>
+    <script>
+        function clickOnFreeStall(ID) {
+            var strID = String(ID);
+            strID = strID.replace("kml_", "");
+            strID = strID.replace("kml-", "");
+            $.post("/FreeStallPlot/getMap",
+                {
+                    MAC: "",
+                    ServerName: strID
+                },
+                function (data) {
+                    DrawMap(data.Map, data.CenterMap.Lat, data.CenterMap.Lng, data.ZoneId, data.MacList);
+                    waitingDialog.hide();
+                });
+        }
+    </script>
+}

@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<mvcSiteMap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0"
+            xsi:schemaLocation="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0 MvcSiteMapSchema.xsd">
+
+  <mvcSiteMapNode title="$resources:SiteMapLocalizations,Dashboard"  urlResolver="SmartCattle.Web.Models.CustomSiteMapUrlResolver,SmartCattle.Web" visibility="false" controller="Home" action="Index" imageUrl="glyphicon glyphicon-home" description="dashboard2">
+    <mvcSiteMapNode title="$resources:SiteMapLocalizations,Cattle" urlResolver="SmartCattle.Web.Models.CustomSiteMapUrlResolver,SmartCattle.Web" controller="Cattle" action="Index" imageUrl="fa fa-square" description="beyond containers">  
+      <mvcSiteMapNode title="$resources:SiteMapLocalizations,Cattle_List" urlResolver="SmartCattle.Web.Models.CustomSiteMapUrlResolver,SmartCattle.Web" controller="Cattle" action="List" description="Cattle Managment"/>
+      <mvcSiteMapNode title="$resources:SiteMapLocalizations,Cattle_Insert" urlResolver="SmartCattle.Web.Models.CustomSiteMapUrlResolver,SmartCattle.Web" controller="Cattle" action="Insert" description="Cattle Managment"/>
+      <mvcSiteMapNode title="$resources:SiteMapLocalizations,Edit_GroupOf_Cattle" urlResolver="SmartCattle.Web.Models.CustomSiteMapUrlResolver,SmartCattle.Web" controller="Cattle" action="EditGroupOfCattle" description="Cattle Managment"/>
+    </mvcSiteMapNode>
+    
+    <mvcSiteMapNode title="$resources:SiteMapLocalizations,Cattle_Group" urlResolver="SmartCattle.Web.Models.CustomSiteMapUrlResolver,SmartCattle.Web" controller="CattleGroup" action="Index" imageUrl="fa fa-sitemap" description="Cattle Group">
+      <mvcSiteMapNode title="$resources:SiteMapLocalizations,Cattle_Group_List" urlResolver="SmartCattle.Web.Models.CustomSiteMapUrlResolver,SmartCattle.Web" controller="CattleGroup" action="List" description="Cattle Group List"/>
+    </mvcSiteMapNode>
+    
+    <mvcSiteMapNode title="$resources:SiteMapLocalizations,Cattle_Herd" urlResolver="SmartCattle.Web.Models.CustomSiteMapUrlResolver,SmartCattle.Web" controller="CattleHerd" action="Index" imageUrl="fa fa-sitemap" description="Cattle Herd">
+      <mvcSiteMapNode title="$resources:SiteMapLocalizations,Cattle_Herd_List" urlResolver="SmartCattle.Web.Models.CustomSiteMapUrlResolver,SmartCattle.Web" controller="CattleHerd" action="List" description="Cattle Herd List"/>
+    </mvcSiteMapNode>
+    <mvcSiteMapNode title="$resources:SiteMapLocalizations,Free_Stall" urlResolver="SmartCattle.Web.Models.CustomSiteMapUrlResolver,SmartCattle.Web" controller="FreeStall" action="Index" imageUrl="fa fa-simplybuilt" description="Free Stall">
+      <mvcSiteMapNode title="$resources:SiteMapLocalizations,Free_Stall_List" urlResolver="SmartCattle.Web.Models.CustomSiteMapUrlResolver,SmartCattle.Web" controller="FreeStall" action="List" description="Free Stall List"/>
+      <mvcSiteMapNode title="$resources:SiteMapLocalizations,Free_Stall_Plot" urlResolver="SmartCattle.Web.Models.CustomSiteMapUrlResolver,SmartCattle.Web" controller="FreeStallPlot" action="Index" description="Free Stall Plot"/>
+    </mvcSiteMapNode>
+    <!--<mvcSiteMapNode title="$resources:SiteMapLocalizations,Nutrition" urlResolver="SmartCattle.Web.Models.CustomSiteMapUrlResolver,SmartCattle.Web" controller="Nutrition" action="Index" imageUrl="typcn typcn-leaf" description="Nutrition"/>-->
+    <mvcSiteMapNode title="$resources:SiteMapLocalizations,Sensor" urlResolver="SmartCattle.Web.Models.CustomSiteMapUrlResolver,SmartCattle.Web" controller="Sensor" action="Index" imageUrl="fa fa-bullseye" description="Sensor">     
+      <mvcSiteMapNode title="$resources:SiteMapLocalizations,Assign_Sensor_To_Cattle" urlResolver="SmartCattle.Web.Models.CustomSiteMapUrlResolver,SmartCattle.Web" controller="Sensor" action="AssignToCattle" description="Cattle Tag Assignment"/>
+      <mvcSiteMapNode title="$resources:SiteMapLocalizations,Report_Equipment" urlResolver="SmartCattle.Web.Models.CustomSiteMapUrlResolver,SmartCattle.Web" controller="Sensor" action="Report" description="Report Equipment"/>
+    </mvcSiteMapNode>
+    <mvcSiteMapNode title="$resources:SiteMapLocalizations,Positioning" urlResolver="SmartCattle.Web.Models.CustomSiteMapUrlResolver,SmartCattle.Web" controller="Positioning" action="Index" imageUrl="fa fa-map-marker" description="Positioning"/> 
+    
+    <!--
+    <mvcSiteMapNode title="$resources:SiteMapLocalizations,Mail" urlResolver="SmartCattle.Web.Models.CustomSiteMapUrlResolver,SmartCattle.Web" controller="Mail" action="Index" imageUrl="fa fa-envelope-o" description="Mail">
+      <mvcSiteMapNode title="$resources:SiteMapLocalizations,Inbox" urlResolver="SmartCattle.Web.Models.CustomSiteMapUrlResolver,SmartCattle.Web" controller="Mail" action="Inbox" description="Inbox"/> 
+      <mvcSiteMapNode title="$resources:SiteMapLocalizations,ComposeMessage" urlResolver="SmartCattle.Web.Models.CustomSiteMapUrlResolver,SmartCattle.Web" controller="Mail" action="Compose" description="Cattle Managment"/>
+    </mvcSiteMapNode>  
+    -->
+    
+    <!--<mvcSiteMapNode title="$resources:SiteMapLocalizations,Analysis" urlResolver="SmartCattle.Web.Models.CustomSiteMapUrlResolver,SmartCattle.Web" controller="Analysis" action="Index" imageUrl="fa fa-area-chart" description="Analysis"/>-->
+    <mvcSiteMapNode title="$resources:SiteMapLocalizations,Inbox" urlResolver="SmartCattle.Web.Models.CustomSiteMapUrlResolver,SmartCattle.Web" controller="Notification" action="List" imageUrl="fa fa-envelope-o" description="Inbox"/>
+    <mvcSiteMapNode title="$resources:SiteMapLocalizations,Setting" urlResolver="SmartCattle.Web.Models.CustomSiteMapUrlResolver,SmartCattle.Web" controller="Setting" action="Index" imageUrl="fa fa-cog" description="Setting"/>
+    <mvcSiteMapNode title="$resources:SiteMapLocalizations,Introduction" urlResolver="SmartCattle.Web.Models.CustomSiteMapUrlResolver,SmartCattle.Web" controller="Introduction" action="Index" imageUrl="fa fa-info" description="Introduction"/>
+       
+  </mvcSiteMapNode>
+
+</mvcSiteMap>

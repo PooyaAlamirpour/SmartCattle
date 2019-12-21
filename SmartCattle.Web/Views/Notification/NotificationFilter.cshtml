@@ -1,0 +1,147 @@
+﻿@using SmartCattle.Web.Domain;
+@using System.Threading;
+@model IList<NotificationController.NotificationsList>
+@using SmartCattle.DomainClass;
+@using SmartCattle.Web.Controllers;
+
+<table class="table table-bordered table-hover table-striped" id="searchable">
+    <thead class="bordered-darkorange">
+        <tr role="row">
+            <th>
+                @Localization.getString("AlarmID")
+            </th>
+            <th>
+                @Localization.getString("CattleFreestallID")
+            </th>
+            <th>
+                @Localization.getString("AlarmType")
+            </th>
+            <th>
+                @Localization.getString("AlarmSubject")
+            </th>
+            <th>
+                @Localization.getString("AlarmDescription")
+            </th>
+            <th>
+                @Localization.getString("TimeIssued")
+            </th>
+            <th>
+                @Localization.getString("AlarmState")
+            </th>
+            <th>
+                @Localization.getString("Ack")
+            </th>
+            <th>
+                @Localization.getString("AlarmUser")
+            </th>
+            <th>
+                @Localization.getString("AlarmNote")
+            </th>
+            <th>
+                @Localization.getString("ActTime")
+            </th>
+            <th>
+                @Localization.getString("DeactivationTime")
+            </th>
+        </tr>
+        <tr>
+            <th class="relative ">
+                <i data-filter="NotificationID_Filter" data-column="NotificationID" class="fa fa-filter" aria-hidden="true"></i>
+                <input id="NotificationID_Input" type="text" class="filter-input" onchange="test(this)" />
+                <i id="NotificationID_Label" class="selectedFilter"></i>
+            </th>
+            <th class="relative ">
+                <i data-filter="NotificationCattleFreestallID_Filter" data-column="NotificationCattleFreestallID" class="fa fa-filter" aria-hidden="true"></i>
+                <input id="NotificationCattleFreestallID_Input" type="text" class="filter-input" />
+                <i id="NotificationCattleFreestallID_Label" class="selectedFilter"></i>
+            </th>
+            <th class="relative ">
+                <i data-filter="NotificationType_Filter" data-column="NotificationType" class="fa fa-filter" aria-hidden="true"></i>
+                <input id="NotificationType_Input" type="text" class="filter-input" />
+                <i id="NotificationType_Label" class="selectedFilter"></i>
+            </th>
+            <th class="relative ">
+                <input id="NotificationTopic_Input" type="text" class="filter-input" />
+                <i id="NotificationTopic_Label" class="selectedFilter"></i>
+            </th>
+            <th class="relative ">
+                <input id="NotificationMessage_Input" type="text" class="filter-input" />
+                <i id="NotificationMessage_Label" class="selectedFilter"></i>
+            </th>
+            <th class="relative ">
+                <i data-filter="NotificationEventDate_Filter" data-column="NotificationEventDate" class="fa fa-filter" aria-hidden="true"></i>
+                <input id="NotificationEventDate_Input" type="text" class="filter-input" />
+                <i id="NotificationEventDate_Label" class="selectedFilter"></i>
+            </th>
+            <th class="relative ">
+                <i data-filter="NotificationState_Filter" data-column="NotificationState" class="fa fa-filter" aria-hidden="true"></i>
+                <input id="NotificationState_Input" type="text" class="filter-input" />
+                <i id="NotificationState_Label" class="selectedFilter"></i>
+            </th>
+            <th class="relative ">
+                <i data-filter="NotificationAct_Filter" data-column="NotificationAct" class="fa fa-filter" aria-hidden="true"></i>
+                <input id="NotificationAct_Input" type="text" class="filter-input" />
+                <i id="NotificationAct_Label" class="selectedFilter"></i>
+            </th>
+            <th class="relative ">
+                <input id="NotificationUsername_Input" type="text" class="filter-input" />
+                <i id="NotificationUsername_Label" class="selectedFilter"></i>
+            </th>
+            <th class="relative ">
+                <input id="NotificationActComment_Input" type="text" class="filter-input" />
+                <i id="NotificationActComment_Label" class="selectedFilter"></i>
+            </th>
+            <th class="relative ">
+                <i data-filter="NotificationActDate_Filter" data-column="NotificationActDate" class="fa fa-filter" aria-hidden="true"></i>
+                <input id="NotificationActDate_Input" type="text" class="filter-input" />
+                <i id="NotificationActDate_Label" class="selectedFilter"></i>
+            </th>
+            <th class="relative ">
+                <i data-filter="NotificationDeactiveDate_Filter" data-column="NotificationDeactiveDate" class="fa fa-filter" aria-hidden="true"></i>
+                <input id="NotificationDeactiveDate_Input" type="text" class="filter-input" />
+                <i id="NotificationDeactiveDate_Label" class="selectedFilter"></i>
+            </th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            @*<th rowspan="1" colspan="1"><input type="text" name="search_engine" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                <th rowspan="1" colspan="1"><input type="text" name="search_browser" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                <th rowspan="1" colspan="1"><input type="text" name="search_platform" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                <th rowspan="1" colspan="1"><input type="text" name="search_version" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                <th rowspan="1" colspan="1"><input type="text" name="search_grade" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                <th rowspan="1" colspan="1"><input type="text" name="search_engine" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                <th rowspan="1" colspan="1"><input type="text" name="search_browser" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                <th rowspan="1" colspan="1"><input type="text" name="search_platform" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                <th rowspan="1" colspan="1"><input type="text" name="search_engine" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                <th rowspan="1" colspan="1"><input type="text" name="search_browser" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                <th rowspan="1" colspan="1"><input type="text" name="search_platform" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>*@
+        </tr>
+    </tfoot>
+    <tbody>
+        @{
+            for (int i = 0; i < Model.Count; i++)
+            {
+                var Color = Model[i].Color;
+                var RowId = "RowId" + @Model[i].ID.ToString();
+
+                <tr class="rowData" data-rowid="@i" id="@RowId" onclick="onClickRow(this)" style="background-color:@Color">
+                    <td class="center">@Model[i].ID</td>
+                    <td class="center">@Model[i].Cattle_Freestall_Id</td>
+                    <td class="center">@Model[i].NotificationType</td>
+                    <td class="center">@Model[i].Topic</td>
+                    <td class="center">@Model[i].Comment</td>
+                    <td class="center">@Model[i].CreatedDate</td>
+                    <td class="center">@Model[i].Status</td>
+                    <td class="center">@Model[i].Act</td>
+                    <td class="center">@Model[i].Username</td>
+                    <td class="center">@Model[i].ActionComment</td>
+                    <td class="center">@Model[i].ActDate</td>
+                    <td class="center">@Model[i].DeactiveAt</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+@{Html.RenderPartial("Paging", Model);}
+

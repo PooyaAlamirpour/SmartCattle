@@ -1,0 +1,107 @@
+﻿@model   SmartCattle.Web.Controllers.ListModel
+@using SmartCattle.Core;
+@using SmartCattle.DomainClass;
+<table class="table table-bordered table-hover table-striped" id="searchable">
+    <thead class="bordered-darkorange">
+        <tr role="row">
+            <th>
+
+            </th>
+            <th>
+                @Localization.getString("Cattle_Number")
+            </th>
+            <th>
+                @Localization.getString("Cattle_Group")
+            </th>
+            <th>
+                @Localization.getString("Free_stall")
+            </th>
+            <th>
+                @Localization.getString("DIM")
+            </th>
+            <th>
+                @Localization.getString("Lactation_Number")
+            </th>
+            <th>
+                @Localization.getString("Fertility_Status")
+            </th>
+            <th>
+                @Localization.getString("In_Heat_Status")
+            </th>
+            <th>
+                @Localization.getString("Health_Status")
+            </th>
+
+        </tr>
+        <tr>
+            <th></th>
+            <th class="relative ">
+                <i data-filter="CattleID_Filter" data-column="CattleID" class="fa fa-filter" aria-hidden="true"></i>
+                <input id="CattleID_Input" type="text" class="filter-input" />
+                <i id="CattleID_Label" class="selectedFilter"> </i>
+            </th>
+            <th class="relative ">
+                <i data-filter="CattleGroupID_Filter" data-column="CattleGroupID" class="fa fa-filter" aria-hidden="true"></i>
+                <input id="CattleGroupID_Input" type="text" class="filter-input" />
+                <i id="CattleGroupID_Label" class="selectedFilter"> </i>
+            </th>
+            <th class="relative ">
+                <i data-filter="FreeStallID_Filter" data-column="FreeStallID" class="fa fa-filter" aria-hidden="true"></i>
+                <input id="FreeStallID_Input" type="text" class="filter-input" />
+                <i id="FreeStallID_Label" class="selectedFilter"> </i>
+            </th>
+            <th class="relative ">
+                <i data-filter="CattleDIM_Filter" data-column="CattleDIM" class="fa fa-filter" aria-hidden="true"></i>
+                <input id="CattleDIM_Input" type="text" class="filter-input" />
+                <i id="CattleDIM_Label" class="selectedFilter"> </i>
+            </th>
+            <th class="relative ">
+                <i data-filter="CattleLactationNumber_Filter" data-column="CattleLactationNumber" class="fa fa-filter" aria-hidden="true"></i>
+                <input id="CattleLactationNumber_Input" type="text" class="filter-input" />
+                <i id="CattleLactationNumber_Label" class="selectedFilter"> </i>
+            </th>
+            <th class="relative ">
+                <i data-filter="FertilityState_Filter" data-column="FertilityState" class="fa fa-filter" aria-hidden="true"></i>
+                <i id="FertilityState_Label" class="selectedFilter"> </i>
+            </th>
+            <th class="relative ">
+                <i data-filter="CattleHeatState_Filter" data-column="CattleHeatState" class="fa fa-filter" aria-hidden="true"></i>
+                <i id="CattleHeatState_Label" class="selectedFilter"> </i>
+            </th>
+            <th class="relative ">
+                <i data-filter="CattleHealthState_Filter" data-column="CattleHealthState" class="fa fa-filter" aria-hidden="true"></i>
+                <i id="CattleHealthState_Label" class="selectedFilter"> </i>
+            </th>
+        </tr>
+    </thead>
+    <tfoot>
+    </tfoot>
+    <tbody>
+        @if (Model.Cattles != null && Model.Cattles.Any())
+        {
+            foreach (var item in Model.Cattles)
+            {
+                var onoffswitch = "onoffswitch" + item.ID;
+                var PermissionSwitch = "CattleNumber_" + item.ID;
+                <tr class="rowData" data-rowid="@item.ID">
+                    <td>
+                        <div class="onoffswitch">
+                            <input type="checkbox" name="@{@onoffswitch}" class="onoffswitch-checkbox" id="@{@PermissionSwitch}" onchange="OnChecked(this)">
+                            <label class="onoffswitch-label" for="@{@PermissionSwitch}"></label>
+                        </div>
+                    </td>
+                    <td class="center">@item.animalNumber</td>
+                    <td class="center">@Helper.getCattleGroupName(item.CattleGroupId)</td>
+                    <td class="center">@Helper.getCattleFreeStallName(item.FreeStallId)</td>
+                    <td class="center">@item.Dim</td>
+                    <td class="center">@item.lactationNumber</td>
+                    <td class="center">@(Localization.getString(item.fertilityStatus) == "NULL" ? "" : Localization.getString(item.fertilityStatus))</td>
+                    <td class="center">@(Localization.getString(item.heatStatus) == "NULL" ? "" : Localization.getString(item.heatStatus))</td>
+                    <td class="center">@(Localization.getString(item.healthStatus) == "NULL" ? "" : Localization.getString(item.healthStatus))</td>
+                </tr>
+        }
+    }
+    </tbody>
+</table>
+@{Html.RenderPartial("Paging", Model);}
+

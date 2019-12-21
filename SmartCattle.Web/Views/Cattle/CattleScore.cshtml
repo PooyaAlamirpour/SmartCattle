@@ -1,0 +1,219 @@
+﻿@using System.Threading
+@model List<SmartCattle.Web.Domain.CattleScoreTbl>
+@{
+    int counter = 1;
+}
+<div id="scoreWrapper" class="well with-header  with-footer">
+    <div class="header bg-yellow">
+        @Localization.getString("Cattle_Scores")
+    </div>
+
+    @using (Html.BeginForm("SetScore", "Cattle", FormMethod.Post, new { id = "setScoreForm" }))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="CattleId" value="@ViewBag.CattleId" />
+
+            <div class="col-lg-2 col-md-2 col-sm-2">
+                <select class="form-control col-lg-12" name="ScoreItem">
+                    <option value="@SmartCattle.DomainClass.ScoreTypes.Body_Condition_Score"> @Localization.getString("Body_Condition_Score") </option>
+                    <option value="@SmartCattle.DomainClass.ScoreTypes.Cleanliness"> @Localization.getString("Cleanliness") </option>
+                    <option value="@SmartCattle.DomainClass.ScoreTypes.Hock"> @Localization.getString("Hock") </option>
+                    <option value="@SmartCattle.DomainClass.ScoreTypes.Mobility"> @Localization.getString("Mobility") </option>
+                    <option value="@SmartCattle.DomainClass.ScoreTypes.Manure"> @Localization.getString("Manure") </option>
+                    <option value="@SmartCattle.DomainClass.ScoreTypes.Rumen"> @Localization.getString("Rumen") </option>
+                    <option value="@SmartCattle.DomainClass.ScoreTypes.Teat"> @Localization.getString("Teat") </option>
+                    <option value="@SmartCattle.DomainClass.ScoreTypes.Milk_Production"> @Localization.getString("Milk_Production") </option>
+                </select>
+            </div>
+
+            <div class="form-group col-lg-2 col-md-2 col-sm-2">
+                <span class="input-icon icon-right">
+                    <input type="text" style="height:35px" class="form-control" name="Value" id="ScoreValue" placeholder="@Localization.getString("Number_Value")">
+                </span>
+            </div>
+
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <div id="Last_Calving_Widget" data-mddatetimepicker="true" data-targetselector="#BirthDate" data-trigger="click" data-enabletimepicker="false" data-isgregorian="false">
+                        <span class="input-icon icon-right">
+                            <input type="text" class="form-control padding-5 col-md-12 col-lg-12 col-sm-12" id="ScoreDate" name="ScoreDate" value="" placeholder="@Localization.getString("Date")" />
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-1 col-md-1">
+                <input type="button" onclick="setScore()" value="@Localization.getString("Submit")" class="btn btn-yellow margin-right-20" />
+            </div>
+    }
+</div>
+
+<div class="col-xs-12 col-md-12">
+    <div class="well with-header  with-footer">
+        <div class="header bg-yellow">
+            @Localization.getString("Cattle_Score_List")
+        </div>
+        <table id="ScoreTable" class="table table-hover">
+            <thead class="bordered-darkorange">
+                <tr>
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        @Localization.getString("Item")
+                    </th>
+                    <th>
+                        @Localization.getString("Value")
+                    </th>
+                    <th>
+                        اقدام کننده
+                    </th>
+                    <th>
+                        @Localization.getString("Date")
+                    </th>
+                    <th>
+                        @Localization.getString("Delete")
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null )
+                {
+                    foreach (var item in Model)
+                    {
+                <tr>
+                    <td>
+                        @(counter++)
+                    </td>
+                    <td>
+                        @Localization.getString(@item.item.ToString())
+                    </td>
+                    <td>
+                        @item.value
+                    </td>
+                    <td>
+                        @item.UserName
+                    </td>
+                    <td>
+                        @Helper.getDateBaseOnCulture(item.Date)
+                    </td>
+                    <td>
+                        <a href="javascript:void(0);" data-id="@item.ID" onclick="remove(this)" class="btn btn-default btn-xs purple"><i class="fa fa-remove"></i> @Localization.getString("Delete")</a>
+                    </td>
+                </tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+<script>
+
+    function remove(obj) {
+        alertify.success('@Localization.getString("Please_Wait")');
+        $.ajax({
+            url: '@Url.Action("UnSetScore", "Cattle")',
+            type: "POST",
+            data:AddAntiForgeryToken({"scoreId": $(obj).data("id")}),
+            success: function (data) {
+                reloadScore();
+                alertify.success('@Localization.getString("Remove_Successfully")');
+            },
+            error: function (xhr, error) {
+                alertify.error("ERROR 5471");
+                reloadScore();
+            }
+        });
+    }
+
+    AddAntiForgeryToken = function (data) {
+        data.__RequestVerificationToken = $('input[name=__RequestVerificationToken]').val();
+        return data;
+    };
+</script>
+
+<script>
+    function setScore() {
+        alertify.success('@Localization.getString("Please_Wait")');
+            $.ajax({
+                url: '@Url.Action("SetScore", "Cattle")',
+                type: "POST",
+                data: $("#setScoreForm").serialize(),
+                success: function (data) {
+                    reloadScore();
+                    alertify.success('@Localization.getString("Saved_Successfully")');
+                },
+                error: function (xhr, error) {
+                    $("#eventWrapper").parent().html(xhr.responseText);
+                    alertify.error("Error_in_Add_Score");
+                }
+            });
+        }
+
+    function reloadScore() {
+        $.ajax({
+            url: '@Url.Action("CattleScore", "Cattle")',
+            type: "POST",
+            data: {"CattleID":@ViewBag.cattleId},
+            success: function (data) {
+                $("#scoreWrapper").parent().html(data);
+            },
+            error: function (xhr, error) {
+                alertify.error("Error_Reload_Data");
+            }
+        });
+    }
+
+
+</script>
+
+<script>
+    //Disable Text Entry in score textbox:
+
+    $('#ScoreValue').on('change keyup', function() {
+        var sanitized = $(this).val().replace(/[^0-9.]/g, '');
+        sanitized = sanitized.replace(/\.(?=.*\.)/, '');
+        $(this).val(sanitized);
+    });
+</script>
+
+<script>
+    var cultureInfo = '@Thread.CurrentThread.CurrentCulture.Name';
+    if (cultureInfo == "fa-IR")
+    {
+        $('#Last_Calving_Widget').MdPersianDateTimePicker({
+            Placement: 'bottom',
+            Trigger: 'click',
+            EnableTimePicker: true,
+            TargetSelector: '#ScoreDate',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'yyyy/MM/dd HH:mm',
+            IsGregorian: false
+        });
+    }
+    else
+    {
+        $('#Last_Calving_Widget').MdPersianDateTimePicker({
+            Placement: 'bottom',
+            Trigger: 'click',
+            EnableTimePicker: true,
+            TargetSelector: '#ScoreDate',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'yyyy/MM/dd HH:mm',
+            IsGregorian: true
+        });
+    }
+</script>

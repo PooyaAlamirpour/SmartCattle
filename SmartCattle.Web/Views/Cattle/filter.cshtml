@@ -1,0 +1,91 @@
+﻿@model  SmartCattle.Web.Controllers.ListModel
+@using SmartCattle.Core;
+@using SmartCattle.DomainClass;
+@*@{
+    if (PermissionViewer.WillBeShow("Cattle-Advancefilter", User.Identity.Name))
+    {*@
+        <table class="table table-bordered table-hover table-striped" id="searchable">
+            <thead class="bordered-darkorange">
+                <tr role="row">
+                    <th>
+                        @Localization.getString("Cattle_Number")
+                    </th>
+                    <th>
+                        @Localization.getString("Cattle_Group")
+                    </th>
+                    <th>
+                        @Localization.getString("Free_stall")
+                    </th>
+                    <th>
+                        @Localization.getString("DIM")
+                    </th>
+                    <th>
+                        @Localization.getString("Lactation_Number")
+                    </th>
+                    <th>
+                        @Localization.getString("Fertility_Status")
+                    </th>
+                    <th>
+                        @Localization.getString("In_Heat_Status")
+                    </th>
+                    <th>
+                        @Localization.getString("Health_Status")
+                    </th>
+
+                </tr>
+                <tr>
+                    <th class="relative "><i data-filter="arithmetic" data-column="CattleNumber" class="fa fa-filter" aria-hidden="true"></i> <input type="text" class="filter-input" /></th>
+                    <th class="relative "><i data-filter="arithmetic" data-column="GroupNumber" class="fa fa-filter" aria-hidden="true"></i> <input type="text" class="filter-input" /></th>
+                    <th class="relative "><i data-filter="arithmetic" data-column="FreeStallCode" class="fa fa-filter" aria-hidden="true"></i> <input type="text" class="filter-input" /></th>
+                    <th class="relative "><i data-filter="arithmetic" data-column="DIM" class="fa fa-filter" aria-hidden="true"></i> <input type="text" class="filter-input" /></th>
+                    <th class="relative "><i data-filter="arithmetic" data-column="LactationNumber" class="fa fa-filter" aria-hidden="true"></i> <input type="text" class="filter-input" /></th>
+                    <th class="relative " id="dateHeader">
+                        <div class="input-group">
+                            <i data-filter="fertility" data-column="FertilityState" class="fa fa-filter" aria-hidden="true"></i>
+                            <div id="datepickerwidget" class="input-group-addon" data-mddatetimepicker="true" data-targetselector="#dateInput" data-trigger="click" data-enabletimepicker="false" data-isgregorian="false">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </div>
+                            <input type="text" class="form-control no-padding" id="dateInput" placeholder="تاریخ" />
+                        </div>
+
+                    </th>
+                    <th class="relative "><i data-filter="heat" data-column="HeatState" class="fa fa-filter" aria-hidden="true"></i></th>
+                    <th class="relative "><i data-filter="health" data-column="HealthState" class="fa fa-filter" aria-hidden="true"></i> </th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th rowspan="1" colspan="1"><input type="text" name="search_engine" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                    <th rowspan="1" colspan="1"><input type="text" name="search_browser" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                    <th rowspan="1" colspan="1"><input type="text" name="search_platform" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                    <th rowspan="1" colspan="1"><input type="text" name="search_version" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                    <th rowspan="1" colspan="1"><input type="text" name="search_grade" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                    <th rowspan="1" colspan="1"><input type="text" name="search_engine" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                    <th rowspan="1" colspan="1"><input type="text" name="search_browser" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                    <th rowspan="1" colspan="1"><input type="text" name="search_platform" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                </tr>
+            </tfoot>
+            <tbody>
+                @if (Model.Cattles != null && Model.Cattles.Any())
+                {
+                    foreach (var item in Model.Cattles)
+                    {
+                        <tr class="rowData" data-rowid="@item.ID">
+                            <td class="center">@item.animalNumber</td>
+                            <td class="center">@Helper.getCattleGroupName(item.CattleGroupId)</td>
+                            <td class="center">@Helper.getCattleFreeStallName(item.FreeStallId)</td>
+                            <td class="center">@item.Dim</td>
+                            <td class="center">@item.lactationNumber</td>
+                            <td class="center">@(Localization.getString(item.fertilityStatus) == "NULL" ? "" : Localization.getString(item.fertilityStatus))</td>
+	                    <td class="center">@(Localization.getString(item.heatStatus) == "NULL" ? "" : Localization.getString(item.heatStatus))</td>
+	                    <td class="center">@(Localization.getString(item.healthStatus) == "NULL" ? "" : Localization.getString(item.healthStatus))</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    
+
+
+@{Html.RenderPartial("Paging", Model);}
+

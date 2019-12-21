@@ -1,0 +1,150 @@
+﻿@model SmartCattle.Web.Controllers.CattleActivityviewModel
+@using SmartCattle.DomainClass
+@using Newtonsoft.Json;
+@using System.Threading;
+
+<style>
+    .white-boarder-10 {
+        background-color: white;
+        height: 10px;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+
+    .blue-title-bar {
+        background-color: #2dc3e8;
+        height: 35px;
+    }
+
+    #area-chart,
+    #line-chart,
+    #bar-chart,
+    #stacked,
+    #pie-chart {
+        min-height: 250px;
+    }
+</style>
+
+<input type="hidden" value="@ViewBag.MAC" id="MACNumber" />
+<input type="hidden" value="@ViewBag.IsEmpty" id="IsEmpty" />
+
+<div class="container-fluid content" style="direction:ltr">
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background-color:white;margin-top:20px">
+            <div class="card">
+                <div class="body">
+                    <div id="activity_chart" class="graph"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="white-boarder-10"></div>
+
+<div class="sidebar menu" style="width:0px">
+    <ul class="list">
+        <li class="active">
+        </li>
+    </ul>
+</div>
+
+<script src="~/assets/Thems/AdminBSB/plugins/jquery/jquery.min.js"></script>
+<script src="~/assets/Thems/AdminBSB/plugins/bootstrap/js/bootstrap.js"></script>
+<script src="~/assets/Thems/AdminBSB/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+<script src="~/assets/Thems/AdminBSB/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+<script src="~/assets/Thems/AdminBSB/plugins/node-waves/waves.js"></script>
+<script src="~/assets/Thems/AdminBSB/plugins/raphael/raphael.min.js"></script>
+<script src="~/assets/Thems/AdminBSB/plugins/morrisjs/morris.js"></script>
+<script src="~/assets/Thems/AdminBSB/js/demo.js"></script>
+<script src="~/assets/Thems/LoadingDialog/bootstrap-waitingfor.js"></script>
+
+<script>
+
+    $(function () {
+        var arr = [];
+        var MACNumber = document.getElementById('MACNumber').value;
+        var IsEmpty = document.getElementById('IsEmpty').value;
+        waitingDialog.show('@Localization.getString("Cattle_Activity_Loading")', {
+            headerText: '@Localization.getString("Cattle_Activity")', dialogSize: 'sm', progressType: 'danger'
+        });
+        $.post("/Cattle/getSpecActivity",
+        {
+            MAC: MACNumber,
+            date_step_cattleId: window.location.search.substring(1),
+            cultureInfo: cultureInfo
+        },
+        function (input) {
+            for (var i = 0; i < input.CattleActivity.length; i++) {
+                var promise = {
+                    'period': input.CattleActivity[i].Date,
+                    //'drinking': input.CattleActivity[i].drinking,
+                    'eating': input.CattleActivity[i].eating,
+                    'idle': input.CattleActivity[i].sitting,
+                    //'standing': input.CattleActivity[i].standing,
+                    'ruminating': input.CattleActivity[i].ruminating,
+                    'walking': input.CattleActivity[i].walking
+                };
+                arr.push(promise);
+            }
+            drawActivity(arr, 'area');
+        });
+
+    });
+
+
+    function drawActivity(arr, type) {
+        //arr = [];
+        //if (input.CattleActivity.length != 0)
+        //{
+        //    for (var i = 0; i < input.CattleActivity.length; i++) {
+        //        var promise = {
+        //            'period': input.CattleActivity[i].Date,
+        //            'drinking': input.CattleActivity[i].drinking,
+        //            'eating': input.CattleActivity[i].eating,
+        //            'sitting': input.CattleActivity[i].sitting,
+        //            'standing': input.CattleActivity[i].standing,
+        //            'ruminating': input.CattleActivity[i].ruminating,
+        //            'walking': input.CattleActivity[i].walking
+        //        };
+        //        arr.push(promise);
+        //    }
+        //}
+        //else
+        //{
+        //    for (var i = 0; i < 10; i++) {
+        //        var promise = {
+        //            'period': i,
+        //            'drinking': 0,
+        //            'eating': 0,
+        //            'sitting': 0,
+        //            'standing': 0,
+        //            'ruminating': 0,
+        //            'walking': 0
+        //        };
+        //        arr.push(promise);
+        //    }
+        //}
+
+        if (type === 'area') {
+            Morris.Area({
+                element: 'activity_chart',
+                data: arr,
+                xkey: 'period',
+                //ykeys: ['drinking', 'eating', 'sitting', 'standing', 'ruminating', 'walking'],
+                //labels: ['drinking', 'eating', 'sitting', 'standing', 'ruminating', 'walking'],
+                ykeys: ['idle', 'eating', 'ruminating', 'walking'],
+                labels: ['idle', 'eating', 'ruminating', 'walking'],
+                pointSize: 2,
+                hideHover: 'auto',
+                //lineColors: ['#d50000', '#AA00FF', '#304FFE', '#00E5FF', '#64DD17', '#F57F17'],
+                lineColors: ['#304FFE', '#00E5FF', '#64DD17', '#F57F17'],
+                parseTime: false,
+                resize: true,
+                ymax: 100
+            });
+        }
+
+        waitingDialog.hide();
+    }
+
+</script>

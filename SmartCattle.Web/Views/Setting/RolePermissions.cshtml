@@ -1,0 +1,26 @@
+﻿@using SmartCattle.DomainClass
+@model List<ActionControllerListTbl>
+    @{ 
+        string roleId = ViewBag.roleID;
+        List<RolePermission> granted = Model.Where(r => r.UserRoles.Select(u => u.Id).Contains(roleId)).ToList();
+    }
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 col-lg-3 col-sm-6 col-xs-12">
+            <div class="checkbox">
+                <label>
+                    @if (granted.Contains(item))
+                    {
+                        <input type="checkbox" class="colored-success" checked="checked" data-roleid="@item.ID">                 
+                    }
+                    else
+                    {
+                       <input type="checkbox" class="colored-success" data-roleid="@item.ID" />
+                    }
+                    <span class="text">@item.Title</span>
+                </label>
+            </div>
+        </div>
+    }
+ 
+

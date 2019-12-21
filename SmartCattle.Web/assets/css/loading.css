@@ -1,0 +1,124 @@
+﻿.loader {
+  left: 50%;
+  overflow: hidden;
+  padding: 10px 0;
+  position: absolute;
+  top: 50%;
+  display:none;
+  transform: translate(-50%);
+  width: 180px;
+  z-index:999999999;
+}
+.loader .ball {
+  background: #38d368;
+  border-radius: 5px;
+  display: block;
+  height: 10px;
+  left: 15px;
+  position: absolute;
+  top: 5px;
+  width: 10px;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-name: along;
+  -webkit-animation-timing-function: linear;
+}
+.loader .ball2 {
+  background: #508EC3;
+  border-radius: 5px;
+  display: block;
+  height: 10px;
+  left: 15px;
+  position: absolute;
+  top: 5px;
+  width: 10px;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-name: along;
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-delay: -1s;
+}
+.loader ul {
+  margin: 0;
+  padding: 0;
+}
+.loader li {
+  background-color: #00bff3;
+  border-radius: 5px;
+  display: inline-block;
+  margin: 0;
+  height: 10px;
+  width: 30px;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-name: around;
+  -webkit-animation-timing-function: linear;
+}
+.loader li:nth-child(1) {
+  -webkit-animation-delay: 0s;
+}
+.loader li:nth-child(2) {
+  background-color: #82ca9c;
+  -webkit-animation-delay: 0.2s;
+}
+.loader li:nth-child(3) {
+  background-color: #f69679;
+  -webkit-animation-delay: 0.4s;
+}
+.loader li:nth-child(4) {
+  background-color: #acd373;
+  -webkit-animation-delay: 0.6s;
+}
+.loader li:nth-child(5) {
+  background-color: #959595;
+  -webkit-animation-delay: 0.8s;
+}
+
+@-webkit-keyframes around {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+  }
+}
+@-webkit-keyframes along {
+  0% {
+    left: 0;
+    top: 5px;
+  }
+  5% {
+    top: 3px;
+  }
+  10% {
+    top: 5px;
+  }
+  15% {
+    top: 3px;
+  }
+  20% {
+    top: 5px;
+  }
+  25% {
+    top: 3px;
+  }
+  30% {
+    top: 5px;
+  }
+  35% {
+    top: 3px;
+  }
+  40% {
+    top: 5px;
+  }
+  45% {
+    top: 3px;
+  }
+  50% {
+    left: 100%;
+    top: 5px;
+  }
+  100% {
+    left: 100%;
+  }
+}

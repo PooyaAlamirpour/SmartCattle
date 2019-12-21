@@ -1,0 +1,295 @@
+﻿@model SmartCattle.Web.Controllers.TemperatureViweModel
+@using SmartCattle.DomainClass
+@using Newtonsoft.Json;
+@using System.Threading;
+@using Resources;
+
+<input type="hidden" value="@ViewBag.MAC" id="MACNumber" />
+
+<script src="~/assets/Charts/amchart_fa_date/jdate.min.js"></script>
+@{
+    if (@Thread.CurrentThread.CurrentCulture.Name == "fa-IR")
+    {
+        <script src="~/assets/Charts/amchart_fa_date/amcharts_fa.js"></script>
+    }
+    else
+    {
+        <script src="~/assets/Charts/amchart_fa_date/amcharts_en.js"></script>
+    }
+}
+<script src="~/assets/Charts/amchart_fa_date/serial.js"></script>
+<script src="~/assets/Charts/amchart_fa_date/plugins/export/export.min.js"></script>
+<link rel="stylesheet" href="~/assets/Charts/amchart_fa_date/plugins/export/export.css" type="text/css" media="all" />
+<script src="~/assets/Charts/amchart_fa_date/themes/none.js"></script>
+<style>
+    #chartdiv_TimeBudget {
+        width: 100%;
+        height: 500px;
+    }
+</style>
+
+<div id="chartdiv_TimeBudget" style="padding-top:50px;margin-bottom:10px"></div>
+
+<script>
+    debugger;
+    waitingDialog.show('@Localization.getString("Cattle_Time_Budget_Loading")', {
+        headerText: '@Localization.getString("Cattle_Time_Budget")', dialogSize: 'sm', progressType: 'danger'
+    });
+    var MACNumber = document.getElementById('MACNumber').value;
+    $.post("/Cattle/getSpecTimeBudget",
+    {
+        MAC: MACNumber,
+        date_and_step: window.location.search.substring(1),
+        cultureInfo: cultureInfo
+    },
+    function (response) {
+        debugger;
+        DrawCattleTimeBudget(response);
+    });
+
+</script>
+
+<script>
+
+    var chart;
+
+    function DrawCattleTimeBudget(input)
+    {
+        debugger;
+        var charData = [];
+        for (var i = 0; i < input.Data.CattleActivity.length; i++) {
+            charData.push(
+            {
+                date: input.Data.CattleActivity[i].Date,
+                drinking: input.Data.CattleActivity[i].drinking,
+                eating: input.Data.CattleActivity[i].eating,
+                ruminating: input.Data.CattleActivity[i].ruminating,
+                sitting: input.Data.CattleActivity[i].sitting,
+                standing: input.Data.CattleActivity[i].standing,
+                walking: input.Data.CattleActivity[i].walking
+            });
+        }
+
+        chart = AmCharts.makeChart("chartdiv_TimeBudget", {
+            "type": "serial",
+            "theme": "none",
+            "marginRight": 40,
+            "marginLeft": 40,
+            "autoMarginOffset": 20,
+            "mouseWheelZoomEnabled": true,
+            "dataDateFormat": "YYYY-MM-DD HH:NN",
+            "valueAxes": [{
+                "id": "v1",
+                "axisAlpha": 0,
+                "position": "left",
+                "ignoreAxisWidth": true
+            }],
+            "balloon": {
+                "borderThickness": 1,
+                "shadowAlpha": 0
+            },
+            "graphs": [{
+                "id": "g1",
+                "balloon": {
+                    "drop": true,
+                    "adjustBorderColor": false,
+                    "color": "#ffffff"
+                },
+                "bullet": "round",
+                "bulletBorderAlpha": 1,
+                "bulletColor": "#FFFFFF",
+                "bulletSize": 5,
+                "hideBulletsCount": 50,
+                "lineThickness": 2,
+                "title": "red line",
+                "useLineColorForBulletBorder": true,
+                "valueField": "drinking",
+                "title": "sitting",
+                "balloonText": "<span style='font-size:12x;'>[[value]]</span>"
+            },
+            {
+                "id": "g2",
+                "balloon": {
+                    "drop": true,
+                    "adjustBorderColor": false,
+                    "color": "#ffffff"
+                },
+                "bullet": "round",
+                "bulletBorderAlpha": 1,
+                "bulletColor": "#FFFFFF",
+                "bulletSize": 5,
+                "hideBulletsCount": 50,
+                "lineThickness": 2,
+                "title": "red line",
+                "useLineColorForBulletBorder": true,
+                "valueField": "eating",
+                "title": "eating",
+                "balloonText": "<span style='font-size:12x;'>[[value]]</span>"
+            },
+            {
+                "id": "g3",
+                "balloon": {
+                    "drop": true,
+                    "adjustBorderColor": false,
+                    "color": "#ffffff"
+                },
+                "bullet": "round",
+                "bulletBorderAlpha": 1,
+                "bulletColor": "#FFFFFF",
+                "bulletSize": 5,
+                "hideBulletsCount": 50,
+                "lineThickness": 2,
+                "title": "red line",
+                "useLineColorForBulletBorder": true,
+                "valueField": "ruminating",
+                "title": "ruminating",
+                "balloonText": "<span style='font-size:12x;'>[[value]]</span>"
+            },
+            {
+                "id": "g4",
+                "balloon": {
+                    "drop": true,
+                    "adjustBorderColor": false,
+                    "color": "#ffffff"
+                },
+                "bullet": "round",
+                "bulletBorderAlpha": 1,
+                "bulletColor": "#FFFFFF",
+                "bulletSize": 5,
+                "hideBulletsCount": 50,
+                "lineThickness": 2,
+                "title": "red line",
+                "useLineColorForBulletBorder": true,
+                "valueField": "sitting",
+                "title": "idle",
+                "balloonText": "<span style='font-size:12x;'>[[value]]</span>"
+            },
+            {
+                "id": "g5",
+                "balloon": {
+                    "drop": true,
+                    "adjustBorderColor": false,
+                    "color": "#ffffff"
+                },
+                "bullet": "round",
+                "bulletBorderAlpha": 1,
+                "bulletColor": "#FFFFFF",
+                "bulletSize": 5,
+                "hideBulletsCount": 50,
+                "lineThickness": 2,
+                "title": "red line",
+                "useLineColorForBulletBorder": true,
+                "valueField": "standing",
+                "title": "standing",
+                "balloonText": "<span style='font-size:12x;'>[[value]]</span>"
+            },
+            {
+                "id": "g6",
+                "balloon": {
+                    "drop": true,
+                    "adjustBorderColor": false,
+                    "color": "#ffffff"
+                },
+                "bullet": "round",
+                "bulletBorderAlpha": 1,
+                "bulletColor": "#FFFFFF",
+                "bulletSize": 5,
+                "hideBulletsCount": 50,
+                "lineThickness": 2,
+                "title": "red line",
+                "useLineColorForBulletBorder": true,
+                "valueField": "walking",
+                "title": "walking",
+                "balloonText": "<span style='font-size:12x;'>[[value]]</span>"
+            }],
+            "chartScrollbar": {
+                "graph": "g1",
+                "oppositeAxis": false,
+                "offset": 30,
+                "scrollbarHeight": 40,
+                "backgroundAlpha": 0,
+                "selectedBackgroundAlpha": 0.1,
+                "selectedBackgroundColor": "#888888",
+                "graphFillAlpha": 0,
+                "graphLineAlpha": 0.5,
+                "selectedGraphFillAlpha": 0,
+                "selectedGraphLineAlpha": 1,
+                "autoGridCount": true,
+                "color": "#AAAAAA"
+            },
+            "chartCursor": {
+                "pan": true,
+                "valueLineEnabled": true,
+                "valueLineBalloonEnabled": true,
+                "cursorAlpha": 1,
+                "cursorColor": "#258cbb",
+                "limitToGraph": "g1",
+                "valueLineAlpha": 0.2,
+                "valueZoomable": true,
+                "categoryBalloonDateFormat": "JJ:NN D MMM YYYY"
+            },
+            "valueScrollbar": {
+                "oppositeAxis": false,
+                "offset": 50,
+                "scrollbarHeight": 10
+            },
+            "categoryField": "date",
+            "categoryAxis": {
+                "parseDates": true,
+                "dashLength": 1,
+                "minPeriod": "mm",
+                "minorGridEnabled": true,
+                "dateFormats": [{
+                    period: 'fff',
+                    format: 'JJ:NN:SS'
+                }, {
+                    period: 'ss',
+                    format: 'JJ:NN:SS'
+                }, {
+                    period: 'mm',
+                    format: 'JJ:NN:SS'
+                }, {
+                    period: 'hh',
+                    format: 'JJ:NN'
+                }, {
+                    period: 'DD',
+                    format: 'MMM D'
+                }, {
+                    period: 'WW',
+                    format: 'MMM D'
+                }, {
+                    period: 'MM',
+                    format: 'MMM YYYY'
+                }, {
+                    period: 'YYYY',
+                    format: 'MMM YYYY'
+                }]
+            },
+            "export": {
+                "enabled": true
+            },
+            "legend": {
+                "align": "center",
+                "position": "bottom",
+                "equalWidths": false,
+                "useGraphSettings": true,
+                "valueAlign": "left",
+                "valueWidth": 120,
+                "marginRight": 21,
+                "markerType": "circle",
+            },
+            "dataProvider": charData
+        });
+
+        chart.addListener("rendered", zoomChart);
+
+        zoomChart();
+
+        waitingDialog.hide();
+
+    }
+
+    function zoomChart() {
+        chart.zoomToIndexes(chart.dataProvider.length - 40, chart.dataProvider.length - 1);
+    }
+</script>

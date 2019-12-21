@@ -1,0 +1,14 @@
+﻿@{
+    string lang = HttpContext.Current.Request.RequestContext.RouteData.Values["language"] as string ?? "fa";
+    switch (lang)
+    {
+        case "nl":
+        case "en":
+            Layout = "~/Views/Shared/_EnglishLayout.cshtml";
+            break;
+        case "fa":
+            Layout = "~/Views/Shared/_Default.cshtml";
+            break;
+    }
+
+}

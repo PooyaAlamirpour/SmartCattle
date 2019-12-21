@@ -1,0 +1,614 @@
+﻿@model SmartCattle.Web.Controllers.CattleDetailModel
+@using System.Threading;
+
+<div class="col-xs-12 col-md-7">
+    <div class="well with-header">
+        <div class="header bg-yellow" style="color:darkred">
+            <div style="float:left">
+                <a id="btnEditCattle" class="btn btn-warning btn-xs edit" onclick="btnEditCattle()"><i class="fa fa-edit"></i> @Localization.getString("Edit")</a>
+                <a id="btnSaveEditedCattle" class="btn btn-success btn-xs edit" onclick="btnSaveEditedCattle()"><i class="fa fa-edit"></i> @Localization.getString("Save")</a>
+                <a id="btnCancelEditedCattle" class="btn btn-danger btn-xs edit" onclick="btnCancelEditedCattle()"><i class="fa fa-edit"></i> @Localization.getString("cancel")</a>
+            </div>
+            <div style="float:right">
+                @Localization.getString("Cattle_Identity")
+            </div>
+        </div>
+        <table class="table table-hover">
+            <thead class="bordered-darkorange">
+                <tr>
+                    <th>
+                        @Localization.getString("Cattle")
+                    </th>
+                    <th>
+
+                    </th>
+                    <th>
+
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        @Localization.getString("Cattle_ID")
+                    </td>
+                    <td>
+                        @Model.cattle.animalNumber
+                        <div id="CattleId">@Model.cattle.ID</div>
+                    </td>
+                    <td>
+                        @Localization.getString("Name")
+                    </td>
+                    <td>
+                        @{
+                            if (Model.ActiveEditMode == true)
+                            {
+                                <input type="text" class="form-control padding-5 col-md-12 col-lg-12 col-sm-12" id="txtCattleName" name="txtCattleName" value="@Model.cattle.Name" placeholder="@Model.cattle.Name" />
+                            }
+                            else
+                            {
+                                @Model.cattle.Name
+                            }
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Localization.getString("Sex")
+                    </td>
+                    <td>
+                        @{
+                            if (Model.ActiveEditMode)
+                            {
+                                @*<input type="text" class="form-control padding-5 col-md-12 col-lg-12 col-sm-12" id="txtCattleSex" name="txtCattleSex" value="@Model.cattle.Sex" placeholder="@Model.cattle.Sex" />*@
+                                <select class="form-control col-lg-12" id="txtCattleSex">
+                                    <option value="@SmartCattle.DomainClass.Sex_Subcategory.Sex"> @Localization.getString("Sex")</option>
+                                    <option value="@SmartCattle.DomainClass.Sex_Subcategory.Male"> @Localization.getString("Male")</option>
+                                    <option value="@SmartCattle.DomainClass.Sex_Subcategory.Female"> @Localization.getString("Female")</option>
+                                </select>
+                            }
+                            else
+                            {
+                                @Localization.getString(Model.cattle.Sex)
+                            }
+                        }
+                    </td>
+                    <td>
+                        @Localization.getString("Genetics_type_num")
+                    </td>
+                    <td>
+                        @{
+                            if (Model.ActiveEditMode)
+                            {
+                                <input type="text" class="form-control padding-5 col-md-12 col-lg-12 col-sm-12" id="txtCattleGenetics_type_num" name="txtCattleGenetics_type_num" value="@Model.cattle.Genetics_type_num" placeholder="@Model.cattle.Genetics_type_num" />
+                            }
+                            else
+                            {
+                                @Model.cattle.Genetics_type_num
+                            }
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Localization.getString("date_of_birth")
+                    </td>
+                    <td>
+                        @{
+                            if (Model.ActiveEditMode)
+                            {
+                                <div id="BirthDateWidget" data-mddatetimepicker="true" data-targetselector="#BirthDate" data-trigger="click" data-enabletimepicker="false" data-isgregorian="false">
+                                    <span class="input-icon icon-right">
+                                        <input type="text" class="form-control padding-5 col-md-12 col-lg-12 col-sm-12" id="txtCattleBirthDate" name="txtCattleBirthDate" value="@Helper.EliminateHoutFromDate(@Helper.getDateBaseOnCulture(Model.cattle.birthDate))" placeholder="@Helper.EliminateHoutFromDate(@Helper.getDateBaseOnCulture(Model.cattle.birthDate))" />
+                                    </span>
+                                </div>
+                            }
+                            else
+                            {
+                                @Helper.EliminateHoutFromDate(@Helper.getDateBaseOnCulture(Model.cattle.birthDate))
+                            }
+                        }
+                    </td>
+                    <td>
+                        @Localization.getString("MotherID")
+                    </td>
+                    <td>
+                        @{
+                            if (Model.ActiveEditMode)
+                            {
+                                <input type="text" class="form-control padding-5 col-md-12 col-lg-12 col-sm-12" id="txtCattleMotherID" name="txtCattleMotherID" value="@Model.cattle.MotherID" placeholder="@Model.cattle.MotherID" />
+                            }
+                            else
+                            {
+                                @Model.cattle.MotherID
+                            }
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Localization.getString("Lacation_Number")
+                    </td>
+                    <td>
+                        @{
+                            if (Model.ActiveEditMode)
+                            {
+                                <input type="text" class="form-control padding-5 col-md-12 col-lg-12 col-sm-12" id="txtCattleLactationNumber" name="txtCattleLactationNumber" value="@Model.cattle.lactationNumber" placeholder="@Model.cattle.lactationNumber" />
+                            }
+                            else
+                            {
+                                @Model.cattle.lactationNumber
+                            }
+                        }
+                    </td>
+                    <td>
+                        @Localization.getString("Last_Calving_Date")
+                    </td>
+                    <td>
+                        @{
+                            if (Model.ActiveEditMode)
+                            {
+
+                                if (Model.cattle.lastCalvingDate.ToString("HH:mm:ss yyyy/MM/dd").Contains("1999/01/01"))
+                                {
+                                    <div id="Last_Calving_Widget" data-mddatetimepicker="true" data-targetselector="#CattleLastCalvingDate" data-trigger="click" data-enabletimepicker="false" data-isgregorian="false">
+                                        <span class="input-icon icon-right">
+                                            <input type="text" class="form-control padding-5 col-md-12 col-lg-12 col-sm-12" id="txtCattleLastCalvingDate" name="txtCattleLastCalvingDate" value="" placeholder="@Localization.getString("NULL")" />
+                                        </span>
+                                    </div>
+                                }
+                                else if (Model.cattle.lastCalvingDate.ToString("HH:mm:ss yyyy/MM/dd").Contains("1377/10/11"))
+                                {
+                                    <div id="Last_Calving_Widget" data-mddatetimepicker="true" data-targetselector="#CattleLastCalvingDate" data-trigger="click" data-enabletimepicker="false" data-isgregorian="false">
+                                        <span class="input-icon icon-right">
+                                            <input type="text" class="form-control padding-5 col-md-12 col-lg-12 col-sm-12" id="txtCattleLastCalvingDate" name="txtCattleLastCalvingDate" value="" placeholder="@Localization.getString("NULL")" />
+                                        </span>
+                                    </div>
+                                }
+                                else if (Model.cattle.lastCalvingDate.ToString("HH:mm:ss yyyy/MM/dd").Contains("2620/03/21"))
+                                {
+                                    <div id="Last_Calving_Widget" data-mddatetimepicker="true" data-targetselector="#CattleLastCalvingDate" data-trigger="click" data-enabletimepicker="false" data-isgregorian="false">
+                                        <span class="input-icon icon-right">
+                                            <input type="text" class="form-control padding-5 col-md-12 col-lg-12 col-sm-12" id="txtCattleLastCalvingDate" name="txtCattleLastCalvingDate" value="" placeholder="@Localization.getString("NULL")" />
+                                        </span>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div id="Last_Calving_Widget" data-mddatetimepicker="true" data-targetselector="#CattleLastCalvingDate" data-trigger="click" data-enabletimepicker="false" data-isgregorian="false">
+                                        <span class="input-icon icon-right">
+                                            <input type="text" class="form-control padding-5 col-md-12 col-lg-12 col-sm-12" id="txtCattleLastCalvingDate" name="txtCattleLastCalvingDate" value="@Helper.EliminateHoutFromDate(@Helper.getDateBaseOnCulture(Model.cattle.lastCalvingDate))" placeholder="@Helper.EliminateHoutFromDate(@Helper.getDateBaseOnCulture(Model.cattle.lastCalvingDate))" />
+                                        </span>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                if (Model.cattle.lastCalvingDate.ToString("HH:mm:ss yyyy/MM/dd").Contains("1999/01/01"))
+                                {
+                                    @Localization.getString("NULL")
+                                }
+                                else if (Model.cattle.lastCalvingDate.ToString("HH:mm:ss yyyy/MM/dd").Contains("1377/10/11"))
+                                {
+                                    @Localization.getString("NULL")
+                                }
+                                else if (Model.cattle.lastCalvingDate.ToString("HH:mm:ss yyyy/MM/dd").Contains("2620/03/21"))
+                                {
+                                    @Localization.getString("NULL")
+                                }
+                                else
+                                {
+                                    @Helper.EliminateHoutFromDate(@Helper.getDateBaseOnCulture(Model.cattle.lastCalvingDate))
+                                }
+                            }
+                        }
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="col-xs-12 col-md-5">
+    <div class="well with-header">
+        <div class="header bg-yellow" style="color:darkred">
+            @Localization.getString("Basic_Cattle_Info")
+        </div>
+        <table class="table table-hover">
+            <thead class="bordered-darkorange">
+                <tr>
+                    <th>
+                        @Localization.getString("Cattle")
+                    </th>
+                    <th>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        @Localization.getString("Sensor_ID")
+                    </td>
+                    <td>
+                        @Helper.getCattleSensorId(Model.cattle.ID)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Localization.getString("Herd")
+                    </td>
+                    <td>
+                        @Helper.getCattleHerdName(Model.cattle.CattleHerd_ID)
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                        @Localization.getString("FreeStall")
+                    </td>
+                    <td>
+                        @Helper.getCattleFreeStallName(Model.cattle.FreeStallId)
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                        @Localization.getString("Group")
+                    </td>
+                    <td>
+                        @Helper.getCattleGroupName(Model.cattle.CattleGroupId)
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="col-xs-12 col-md-7">
+    <div class="well with-header">
+        <div class="header bg-yellow" style="color:darkred">
+            @Localization.getString("Cattle_Score")
+        </div>
+        <table class="table table-hover">
+            <thead class="bordered-darkorange">
+                <tr>
+                    <th>
+                        @Localization.getString("Topic")
+                    </th>
+                    <th>
+                        @Localization.getString("Value")
+                    </th>
+                    <th>
+                        @Localization.getString("UpdateDate")
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        @Localization.getString("Body_Condition_Score")
+                    </td>
+                    <td>
+                        @Model.CattlesScore.BodyCondition.ToString().Replace("/", ".")
+                    </td>
+                    <td>
+                        @Helper.getDateBaseOnCulture(Model.CattlesScore.BodyConditionDate)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Localization.getString("Cleanliness")
+                    </td>
+                    <td>
+                        @Model.CattlesScore.Cleanliness.ToString().Replace("/", ".")
+                    </td>
+                    <td>
+                        @Helper.getDateBaseOnCulture(Model.CattlesScore.CleanlinessDate)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Localization.getString("Hock")
+                    </td>
+                    <td>
+                        @Model.CattlesScore.Hock.ToString().Replace("/", ".")
+                    </td>
+                    <td>
+                        @Helper.getDateBaseOnCulture(Model.CattlesScore.HockDate)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Localization.getString("Mobility")
+                    </td>
+                    <td>
+                        @Model.CattlesScore.Mobility.ToString().Replace("/", ".")
+                    </td>
+                    <td>
+                        @Helper.getDateBaseOnCulture(Model.CattlesScore.MobilityDate)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Localization.getString("Manure")
+                    </td>
+                    <td>
+                        @Model.CattlesScore.Manure.ToString().Replace("/", ".")
+                    </td>
+                    <td>
+                       @Helper.getDateBaseOnCulture(Model.CattlesScore.ManureDate)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Localization.getString("Rumen")
+                    </td>
+                    <td>
+                        @Model.CattlesScore.Rumen.ToString().Replace("/", ".")
+                    </td>
+                    <td>
+                        @Helper.getDateBaseOnCulture(Model.CattlesScore.RumenDate)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Localization.getString("Teat")
+                    </td>
+                    <td>
+                        @Model.CattlesScore.Teat.ToString().Replace("/", ".")
+                    </td>
+                    <td>
+                        @Helper.getDateBaseOnCulture(Model.CattlesScore.TeatDate)
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="col-xs-12 col-md-5">
+    <div class="well with-header">
+        <div class="header bg-yellow" style="color:darkred">
+            @Localization.getString("Cattle_Status")
+        </div>
+        <table class="table table-hover">
+            <thead class="bordered-darkorange">
+                <tr>
+                    <th>
+                        @Localization.getString("Topic")
+                    </th>
+                    <th>
+                        @Localization.getString("Value")
+                    </th>
+                    <th>
+                        @Localization.getString("UpdateDate")
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        @Localization.getString("HealthState")
+                    </td>
+                    <td>
+                        @Localization.getString(Model.cattle.healthStatus)
+                    </td>
+                    <td>
+                        @Helper.getDateBaseOnCulture(Model.cattle.healthStatusDate)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Localization.getString("FertilityStatus")
+                    </td>
+                    <td>
+                        @Localization.getString(Model.cattle.fertilityStatus)
+                    </td>
+                    <td>
+                        @Helper.getDateBaseOnCulture(Model.cattle.fertilityStatusDate)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Localization.getString("HeatStatus")
+                    </td>
+                    <td>
+                        @Localization.getString(Model.cattle.heatStatus)
+                    </td>
+                    <td>
+                        @Helper.getDateBaseOnCulture(Model.cattle.heatStatusDate)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Localization.getString("Milk_Production")
+                    </td>
+                    <td>
+                        @Model.cattle.milkAvg
+                    </td>
+                    <td>
+                        @Helper.getDateBaseOnCulture(Model.cattle.milkAvgDate)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Localization.getString("Days_In_Milk")
+                    </td>
+                    <td>
+                        @Model.cattle.Dim
+                    </td>
+                    <td>
+                        @Helper.getDateBaseOnCulture(DateTime.Now)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Localization.getString("Days_Open")
+                    </td>
+                    <td>
+                        @Model.OpenDays
+                    </td>
+                    <td>
+                        @Helper.getDateBaseOnCulture(DateTime.Now)
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $("#btnSaveEditedCattle").hide();
+    $("#btnCancelEditedCattle").hide();
+    $("#CattleId").hide();
+
+    function btnEditCattle() {
+        var CattleId = document.getElementById("CattleId").innerHTML;
+        $.ajax({
+            url: '@Url.Action("MakeEditable", "Cattle")',
+            type: "POST",
+            data: { "CattleId": CattleId, "ActiveEditMode": true },
+            success: function (response) {
+                debugger;
+                $("#Cattle_info").html(response);
+                $("#btnEditCattle").hide();
+                $("#btnSaveEditedCattle").show();
+                $("#btnCancelEditedCattle").show();
+            },
+            error: function (xhr, error) {
+                debugger;
+            }
+        });
+    }
+
+    function btnCancelEditedCattle()
+    {
+        var CattleId = document.getElementById("CattleId").innerHTML;
+        $.ajax({
+            url: '@Url.Action("RefreshDetail", "Cattle")',
+            type: "POST",
+            data: { "CattleId": CattleId },
+            success: function (response) {
+                debugger;
+                $("#Cattle_info").html(response);
+                $("#btnEditCattle").show();
+                $("#btnSaveEditedCattle").hide();
+                $("#btnCancelEditedCattle").hide();
+            },
+            error: function (xhr, error) {
+                debugger;
+            }
+        });
+    }
+
+    function btnSaveEditedCattle()
+    {
+        debugger;
+        var CattleId = document.getElementById("CattleId").innerHTML;
+        var txtCattleName = document.getElementById("txtCattleName").value;
+        var txtCattleSex = document.getElementById("txtCattleSex").value;
+        var txtCattleGenetics_type_num = document.getElementById("txtCattleGenetics_type_num").value;
+        var txtCattleBirthDate = document.getElementById("txtCattleBirthDate").value;
+        var txtCattleMotherID = document.getElementById("txtCattleMotherID").value;
+        var txtCattleLactationNumber = document.getElementById("txtCattleLactationNumber").value;
+        var txtCattleLastCalvingDate = document.getElementById("txtCattleLastCalvingDate").value;
+
+        if (txtCattleSex === 'Sex')
+        {
+            txtCattleSex = "Female";
+        }
+
+        var AllEditedCattle =
+        [
+            CattleId,
+            txtCattleName,
+            txtCattleSex,
+            txtCattleGenetics_type_num,
+            txtCattleBirthDate,
+            txtCattleMotherID,
+            txtCattleLactationNumber,
+            txtCattleLastCalvingDate
+        ];
+
+        $.ajax({
+            url: '@Url.Action("SaveEditedCattle", "Cattle")',
+            type: "POST",
+            data: { "AllEditedCattle": AllEditedCattle },
+            success: function (response) {
+                debugger;
+                $("#Cattle_info").html(response);
+                $("#btnEditCattle").show();
+                $("#btnSaveEditedCattle").hide();
+                $("#btnCancelEditedCattle").hide();
+            },
+            error: function (xhr, error) {
+                debugger;
+            }
+        });
+    }
+
+</script>
+<script>
+    var cultureInfo = '@Thread.CurrentThread.CurrentCulture.Name';
+    if (cultureInfo == "fa-IR")
+    {
+        $('#BirthDateWidget').MdPersianDateTimePicker({
+            Placement: 'bottom',
+            Trigger: 'click',
+            EnableTimePicker: false,
+            TargetSelector: '#txtCattleBirthDate',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'yyyy/MM/dd',
+            IsGregorian: false
+        });
+
+        $('#Last_Calving_Widget').MdPersianDateTimePicker({
+            Placement: 'bottom',
+            Trigger: 'click',
+            EnableTimePicker: false,
+            TargetSelector: '#txtCattleLastCalvingDate',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'yyyy/MM/dd',
+            IsGregorian: false
+        });
+    }
+    else
+    {
+        $('#BirthDateWidget').MdPersianDateTimePicker({
+            Placement: 'bottom',
+            Trigger: 'click',
+            EnableTimePicker: false,
+            TargetSelector: '#txtCattleBirthDate',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'yyyy/MM/dd',
+            IsGregorian: true
+        });
+
+        $('#Last_Calving_Widget').MdPersianDateTimePicker({
+            Placement: 'bottom',
+            Trigger: 'click',
+            EnableTimePicker: false,
+            TargetSelector: '#txtCattleLastCalvingDate',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'yyyy/MM/dd',
+            IsGregorian: true
+        });
+    }
+
+</script>

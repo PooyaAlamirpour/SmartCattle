@@ -1,0 +1,65 @@
+﻿@using SmartCattle.Web.Controllers;
+@model PrivilageViewModel
+@{
+    ViewBag.Title = "Privilage";
+}
+ 
+
+<div class="col-lg-10 col-lg-offset-1">
+    @using (Html.BeginForm("SetAccess", "Setting", null, FormMethod.Post, null))
+    {
+        @Html.AntiForgeryToken()
+        <div class="col-md-8">
+            <select class="form-control" id="roleId" name="roleId">
+                @foreach (var item in Model.FarmRoles)
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-4">
+            <input type="submit" class="btn btn-primary col-lg-6" value="Submit" />
+        </div>
+
+        <div id="permissionWrapper" class="col-md-12 no-padding margin-top-40">
+            @if(Model.FarmRoles.Count > 0)
+            {
+                Html.RenderAction("RolePermissions", new { roleId = Model.FarmRoles.FirstOrDefault().Id });
+            }
+        </div>
+            <input type="hidden" name="permissions" id="permissions" />
+
+                }
+</div>
+
+@section pageScripts{
+    <script>
+        $("body").on("click","#permissionWrapper input[type = checkbox]", function () {
+            var permissions = "";
+            $("#permissionWrapper input[type=checkbox]:checked").each(function () {
+                permissions += $(this).data("roleid") + ",";
+            });
+            if (permissions.length > 1) {
+                permissions = permissions.substring(0, permissions.length - 1);
+            }
+            console.log(permissions)
+            $("#permissions").val(permissions);
+        });
+
+        $("body").on("change","#roleId", function () {
+            $.ajax({
+                url: '@Url.Action("RolePermissions", "setting")',
+                type: "POST",
+                data: { "roleId": $(this).val() },
+                success: function (res) {
+                    $("#permissionWrapper").html(res);
+                }
+
+            });
+        })
+    </script>
+
+}
+
+
+

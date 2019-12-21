@@ -1,0 +1,80 @@
+﻿@using System.Threading;
+@{
+    ViewBag.Title = "Index";
+}
+
+@{
+    if (@PermissionViewer.WillBeShow("Account-CreateRole", @User.Identity.Name))
+    {
+        <div class="col-lg-4 col-sm-6 col-xs-12" style="cursor:pointer" onclick="window.location = '/' + '@Thread.CurrentThread.CurrentCulture.Name' + '/Account/CreateRole'">
+            <div class="well bg-azure bordered-left bordered-blueberry">
+                <h4 class="block">@Localization.getString("Roles")</h4>
+                <p>
+                    @Localization.getString("Create_And_Edit_Roles")
+                </p>
+            </div>
+        </div>
+    }
+}
+
+
+
+@{
+    if (@PermissionViewer.WillBeShow("Setting-CreateAccountWizard", @User.Identity.Name))
+    {
+        <div class="col-lg-4 col-sm-6 col-xs-12" style="cursor:pointer" onclick="window.location = '/' + '@Thread.CurrentThread.CurrentCulture.Name' + '/Setting/CreateAccountWizard'">
+            <div class="well bg-azure bordered-left bordered-blueberry">
+                <h4 class="block">@Localization.getString("Accounts")</h4>
+                <p>
+                    @Localization.getString("Create_New_Account")
+                </p>
+            </div>
+        </div>
+    }
+}
+
+@{
+    if (@PermissionViewer.WillBeShow("Notification-Settings", @User.Identity.Name))
+    {
+        <div class="col-lg-4 col-sm-6 col-xs-12" style="cursor:pointer" onclick="window.location = '/' + '@Thread.CurrentThread.CurrentCulture.Name' + '/Notification/Settings'">
+            <div class="well bg-azure bordered-left bordered-blueberry">
+                <h4 class="block">@Localization.getString("Notification")</h4>
+                <p>
+                    @Localization.getString("Create_New_Notification")
+                </p>
+            </div>
+        </div>
+    }
+}
+
+@{
+    if (Helper.getCurrentFarmId() == -1)
+    {
+        if (@PermissionViewer.WillBeShow("Farm-Index", @User.Identity.Name))
+        {
+            <div class="col-lg-4 col-sm-6 col-xs-12" style="cursor:pointer" onclick="window.location = '/' + '@Thread.CurrentThread.CurrentCulture.Name' + '/Farm/Index'">
+                <div class="well bg-azure bordered-left bordered-blueberry">
+                    <h4 class="block">@Localization.getString("Farm")</h4>
+                    <p>
+                        @Localization.getString("Add_or_Edit_Farm")
+                    </p>
+                </div>
+            </div>
+        }
+    }
+}
+
+@{
+    if (@PermissionViewer.WillBeShow("Farm-List", @User.Identity.Name))
+    {
+        <div class="col-lg-4 col-sm-6 col-xs-12" style="cursor:pointer" onclick="window.location = '/' + '@Thread.CurrentThread.CurrentCulture.Name' + '/Farm/List'">
+            <div class="well bg-azure bordered-left bordered-blueberry">
+                <h4 class="block">@Localization.getString("Farm")</h4>
+                <p>
+                    @Localization.getString("Select_Farm")
+                </p>
+            </div>
+        </div>
+    }
+}
+

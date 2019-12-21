@@ -1,0 +1,747 @@
+﻿@using System.Threading;
+@using SmartCattle.Web.Controllers
+@model SmartCattle.Web.Controllers.NotificationController.NotificationSettingViewModel
+
+<link href="~/assets/Thems/noUiSlider/nouislider.css" rel="stylesheet" />
+<link href="~/assets/Thems/noUiSlider/nouislider.min.css" rel="stylesheet" />
+
+<script src="~/assets/Thems/noUiSlider/nouislider.js"></script>
+<script src="~/assets/Thems/noUiSlider/nouislider.min.js"></script>
+<link href="~/assets/css/dataTables.bootstrap.css" rel="stylesheet" />
+<link rel="shortcut icon" href="~/assets/img/favicon.png" type="image/x-icon">
+<link href="~/assets/css/font-awesome.min.css" rel="stylesheet" />
+<link href="~/assets/css/weather-icons.min.css" rel="stylesheet" />
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300" rel="stylesheet" type="text/css">
+<link id="beyond-link" href="~/assets/css/beyond.min.css" rel="stylesheet" />
+<link href="~/assets/css/demo.min.css" rel="stylesheet" />
+<link href="~/assets/css/typicons.min.css" rel="stylesheet" />
+<link href="~/assets/css/animate.min.css" rel="stylesheet" />
+<script src="~/assets/js/skins.min.js"></script>
+<script src="~/assets/js/datatable/jquery.dataTables.min.js"></script>
+<script src="~/assets/js/datatable/ZeroClipboard.js"></script>
+<script src="~/assets/js/datatable/dataTables.tableTools.min.js"></script>
+<script src="~/assets/js/datatable/dataTables.bootstrap.min.js"></script>
+<script src="~/assets/js/jquery.min.js"></script>
+<script src="~/assets/js/bootstrap.min.js"></script>
+<script src="~/assets/js/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="~/assets/js/datatable/jquery.dataTables.min.js"></script>
+<script src="~/assets/js/datatable/ZeroClipboard.js"></script>
+<script src="~/assets/js/datatable/dataTables.tableTools.min.js"></script>
+<script src="~/assets/js/datatable/dataTables.bootstrap.min.js"></script>
+<script src="~/assets/js/datatable/datatables-init.js"></script>
+<script type="text/javascript">
+    InitiateSimpleDataTable.init();
+    InitiateEditableDataTable.init();
+    InitiateNonExpandableDataTable.init();
+    InitiateSearchableDataTable.init();
+</script>
+<script src="~/assets/js/fuelux/wizard/wizard-custom.js"></script>
+<script src="~/assets/js/toastr/toastr.js"></script>
+
+<script src="~/assets/js/bootstrap.min.js"></script>
+
+<style>
+    .margin-10 {
+        margin-top: 10px
+    }
+
+    .margin-15 {
+        margin-top: 15px
+    }
+
+    .margin-20 {
+        margin-top: 20px
+    }
+
+    .databox {
+        display: inline-block;
+        width: 100%;
+        height: 65px;
+        padding: 0;
+        font-size: 0;
+        margin-bottom: 30px;
+        vertical-align: top;
+        min-width: 130px;
+    }
+
+        .databox .databox-row {
+            width: 100%;
+            margin: 0;
+            position: relative;
+        }
+
+            .databox .databox-row.row-3 {
+                height: 25%;
+            }
+
+    .padding-10 {
+        padding: 10px !important;
+    }
+
+    .databox .databox-text {
+        display: block;
+        font-size: 11px;
+        margin: 4px 0 2px;
+        position: relative;
+    }
+
+    .darkgray {
+        color: #999999 !important;
+    }
+
+    .no-margin {
+        margin: 0 !important;
+    }
+
+    .databox .databox-cell {
+        height: 100%;
+        margin: 0;
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+        padding: 0 10px;
+    }
+
+        .databox .databox-cell.cell-6 {
+            width: 50%;
+        }
+
+    .text-align-center {
+        text-align: center !important;
+    }
+
+    .bg-azure {
+        background-color: #2dc3e8 !important;
+    }
+
+    .box-heigth {
+        height: 60px;
+        padding-top: 20px;
+    }
+
+    .state-icon {
+        left: -5px;
+    }
+
+    .list-group-item-primary {
+        color: rgb(255, 255, 255);
+        background-color: rgb(66, 139, 202);
+    }
+
+    .well .list-group {
+        margin-bottom: 0px;
+    }
+
+    .onoffswitch {
+        position: relative;
+        width: 30px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+    }
+
+    .onoffswitch-checkbox {
+        display: none;
+    }
+
+    .onoffswitch-label {
+        display: block;
+        overflow: hidden;
+        cursor: pointer;
+        height: 13px;
+        padding: 0;
+        line-height: 15px;
+        border: 2px solid #999999;
+        border-radius: 13px;
+        background-color: #EEEEEE;
+        transition: background-color 0.3s ease-in;
+    }
+
+        .onoffswitch-label:before {
+            content: "";
+            display: block;
+            width: 13px;
+            margin: 0px;
+            background: #FFFFFF;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 20px;
+            border: 2px solid #999999;
+            border-radius: 13px;
+            transition: all 0.3s ease-in 0s;
+        }
+
+    .onoffswitch-checkbox:checked + .onoffswitch-label {
+        background-color: #34A7C1;
+    }
+
+        .onoffswitch-checkbox:checked + .onoffswitch-label, .onoffswitch-checkbox:checked + .onoffswitch-label:before {
+            border-color: #34A7C1;
+        }
+
+            .onoffswitch-checkbox:checked + .onoffswitch-label:before {
+                right: 0px;
+            }
+</style>
+
+<h5 class="row-title before-themeprimary"><i class="fa fa-archive themeprimary"></i>@Localization.getString("Define_Freestall_Notification")</h5>
+<div class="row">
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <div class="widget  radius-bordered">
+            <div class="widget-header">
+                <span class="widget-caption">@Localization.getString("Define_Parameters")</span>
+            </div>
+            <div class="widget-body">
+                <div class="docs-example">
+                    <form id="accountForm" method="post" class="form-horizontal bv-form" novalidate="novalidate">
+                        <div class="tab-content tabs-flat">
+                            <div class="tab-pane active" id="address-tab">
+                                <div class="form-group has-feedback">
+                                    <div class="col-lg-2">
+                                        <label class="control-label">
+                                            @Localization.getString("Topic")
+                                        </label>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <label class="control-label">
+                                            @Localization.getString("RoleMessage")
+                                        </label>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label class="control-label">
+                                            @Localization.getString("Group")
+                                        </label>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label class="control-label">
+                                            @Localization.getString("Roles")
+                                        </label>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <label class="control-label">
+                                            @Localization.getString("Peroid")
+                                        </label>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <label class="control-label">
+                                            @Localization.getString("Window")
+                                        </label>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <label class="control-label">
+                                            Snooze
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-lg-2">
+                                        <input type="text" class="form-control" id="txtFreeStallTopic" value="@Model.freestall_notifications[0].Topic"/>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <input type="text" class="form-control" id="txtFreeStallMessage" value="@Model.freestall_notifications[0].Comment"/>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <select class="form-control" id="cbFreeStallGroup">
+                                            <option value="@Model.freestall_notifications[0].GroupName">@Model.freestall_notifications[0].GroupName</option>
+                                            @{
+                                                if (Model.freestall_notifications[0].GroupName != "Health")
+                                                {
+                                                    <option value="Health">Health</option>
+                                                }
+                                                if (Model.freestall_notifications[0].GroupName != "Heath")
+                                                {
+                                                    <option value="Heath">Heath</option>
+                                                }
+                                                if (Model.freestall_notifications[0].GroupName != "Other")
+                                                {
+                                                    <option value="Other">Other</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-2">
+                                        <select class="form-control" id="cbFreeStallRole">
+                                            <option value="@Model.freestall_notifications[0].Roles">@Model.freestall_notifications[0].Roles</option>
+                                            @{
+                                                for (int i = 0; i < Model.userRoles.Count; i++)
+                                                {
+                                                    if (Model.userRoles[i].jName != Model.freestall_notifications[0].Roles)
+                                                    {
+                                                        <option value=@Model.userRoles[i].jName>@Model.userRoles[i].jName</option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <select style="height:34px;width:74px;" id="cbFreeStallPeriod">
+                                            <option value="@Model.freestall_notifications[0].PeroidTime">@Model.freestall_notifications[0].PeroidTime</option>
+                                            <option value="2h">2h</option>
+                                            <option value="3h">3h</option>
+                                            <option value="6h">6h</option>
+                                            <option value="12h">12h</option>
+                                            <option value="24h">24h</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <select style="height:34px;width:74px" id="cbFreeStallWindow">
+                                            <option value="@Model.freestall_notifications[0].WindowTime">@Model.freestall_notifications[0].WindowTime</option>
+                                            <option value="2h">2h</option>
+                                            <option value="3h">3h</option>
+                                            <option value="6h">6h</option>
+                                            <option value="12h">12h</option>
+                                            <option value="24h">24h</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <select style="height:34px;width:74px" id="cbFreeStallSnooze">
+                                            <option value="@Model.freestall_notifications[0].SnoozeTime">@Model.freestall_notifications[0].SnoozeTime</option>
+                                            <option value="2h">2h</option>
+                                            <option value="3h">3h</option>
+                                            <option value="6h">6h</option>
+                                            <option value="12h">12h</option>
+                                            <option value="24h">24h</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="col-lg-4 col-sm-4 col-xs-4">
+        <div class="databox radius-bordered databox-shadowed databox-graded databox-vertical" style="height:60px">
+            <div class="databox-cell cell-6 text-align-center bg-sky">
+                <span class="databox-number" id="skip-value-upper8">@Model.freestall_notifications[0].TempMax</span>
+                <span class="databox-text">@Localization.getString("Maximum")</span>
+            </div>
+            <div class="databox-cell cell-6 text-align-center bg-azure">
+                <span class="databox-number" id="skip-value-lower8">@Model.freestall_notifications[0].TempMin</span>
+                <span class="databox-text">@Localization.getString("Minimum")</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-sm-6 col-xs-6">
+        <div class="widget">
+            <div class="widget-body box-heigth">
+                <div id="skipstep8" class="noUi-target noUi-ltr noUi-horizontal"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-2 col-sm-2 col-xs-2">
+        <div class="widget">
+            <div class="widget-body box-heigth">
+                @Localization.getString("EnvTemp")
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-sm-4 col-xs-4">
+        <div class="databox radius-bordered databox-shadowed databox-graded databox-vertical" style="height:60px">
+            <div class="databox-cell cell-6 text-align-center bg-sky">
+                <span class="databox-number" id="skip-value-upper9">@Model.freestall_notifications[0].HumMax</span>
+                <span class="databox-text">@Localization.getString("Maximum")</span>
+            </div>
+            <div class="databox-cell cell-6 text-align-center bg-azure">
+                <span class="databox-number" id="skip-value-lower9">@Model.freestall_notifications[0].HumMin</span>
+                <span class="databox-text">@Localization.getString("Minimum")</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-sm-6 col-xs-6">
+        <div class="widget">
+            <div class="widget-body box-heigth">
+                <div id="skipstep9" class="noUi-target noUi-ltr noUi-horizontal"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-2 col-sm-2 col-xs-2">
+        <div class="widget">
+            <div class="widget-body box-heigth">
+                @Localization.getString("Humidity")
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-lg-4 col-sm-4 col-xs-4">
+        <div class="databox radius-bordered databox-shadowed databox-graded databox-vertical" style="height:60px">
+            <div class="databox-cell cell-6 text-align-center bg-sky">
+                <span class="databox-number" id="skip-value-upper10">@Model.freestall_notifications[0].THIMax</span>
+                <span class="databox-text">@Localization.getString("Maximum")</span>
+            </div>
+            <div class="databox-cell cell-6 text-align-center bg-azure">
+                <span class="databox-number" id="skip-value-lower10">@Model.freestall_notifications[0].THIMin</span>
+                <span class="databox-text">@Localization.getString("Minimum")</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-sm-6 col-xs-6">
+        <div class="widget">
+            <div class="widget-body box-heigth">
+                <div id="skipstep10" class="noUi-target noUi-ltr noUi-horizontal"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-2 col-sm-2 col-xs-2">
+        <div class="widget">
+            <div class="widget-body box-heigth">
+                @Localization.getString("THI")
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <div class="widget">
+            <div class="clearfix">
+                <input id="btnSaveFreeStall" type="button" class="btn btn-blue btn-block" value="@Localization.getString("Save_Notification_Settings")">
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="~/assets/css/dataTables.bootstrap.css" rel="stylesheet" />
+<script src="~/assets/js/datatable/jquery.dataTables.min.js"></script>
+<script src="~/assets/js/datatable/ZeroClipboard.js"></script>
+<script src="~/assets/js/datatable/dataTables.tableTools.min.js"></script>
+<script src="~/assets/js/datatable/dataTables.bootstrap.min.js"></script>
+<script src="~/assets/js/jquery.min.js"></script>
+<script src="~/assets/js/bootstrap.min.js"></script>
+<script src="~/assets/js/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="~/assets/js/datatable/dataTables.tableTools.min.js"></script>
+<script src="~/assets/js/datatable/datatables-init.js"></script>
+<script src="~/assets/js/fuelux/wizard/wizard-custom.js"></script>
+<script src="~/assets/js/toastr/toastr.js"></script>
+<script src="~/assets/Thems/LoadingDialog/bootstrap-waitingfor.js"></script>
+
+@*Initial all values*@
+<script>
+    function ShowWaitingDialog()
+    {
+        waitingDialog.show('@Localization.getString("Please_Wait")', {
+            headerText: '@Localization.getString("Loading")', dialogSize: 'sm', progressType: 'danger'
+        });
+    }
+
+    var skipSlider1 = document.getElementById('skipstep1');
+    var skipSlider2 = document.getElementById('skipstep2');
+    var skipSlider3 = document.getElementById('skipstep3');
+    var skipSlider4 = document.getElementById('skipstep4');
+    var skipSlider5 = document.getElementById('skipstep5');
+    var skipSlider6 = document.getElementById('skipstep6');
+    var skipSlider7 = document.getElementById('skipstep7');
+    var skipSlider8 = document.getElementById('skipstep8');
+    var skipSlider9 = document.getElementById('skipstep9');
+    var skipSlider10 = document.getElementById('skipstep10');
+
+    InitialAllValues();
+
+    function InitialAllValues()
+    {
+        noUiSlider.create(skipSlider8, {
+            range: {
+                'min': -35,
+                'max': 70
+            },
+            connect: true,
+            start: [parseInt('@Model.freestall_notifications[0].TempMin'), parseInt('@Model.freestall_notifications[0].TempMax')]
+        });
+        noUiSlider.create(skipSlider9, {
+            range: {
+                'min': 0,
+                'max': 100
+            },
+            connect: true,
+            start: [parseInt('@Model.freestall_notifications[0].HumMin'), parseInt('@Model.freestall_notifications[0].HumMax')]
+        });
+        noUiSlider.create(skipSlider10, {
+            range: {
+                'min': 0,
+                'max': 100
+            },
+            connect: true,
+            start: [parseInt('@Model.freestall_notifications[0].THIMin'), parseInt('@Model.freestall_notifications[0].THIMax')]
+        });
+    }
+
+</script>
+
+@*Define all value fields*@
+<script>
+    var skipValues1 = [
+        document.getElementById('skip-value-lower1'),
+        document.getElementById('skip-value-upper1')
+    ];
+    var skipValues2 = [
+        document.getElementById('skip-value-lower2'),
+        document.getElementById('skip-value-upper2')
+    ];
+    var skipValues3 = [
+        document.getElementById('skip-value-lower3'),
+        document.getElementById('skip-value-upper3')
+    ];
+    var skipValues4 = [
+        document.getElementById('skip-value-lower4'),
+        document.getElementById('skip-value-upper4')
+    ];
+    var skipValues5 = [
+        document.getElementById('skip-value-lower5'),
+        document.getElementById('skip-value-upper5')
+    ];
+    var skipValues6 = [
+        document.getElementById('skip-value-lower6'),
+        document.getElementById('skip-value-upper6')
+    ];
+    var skipValues7 = [
+        document.getElementById('skip-value-lower7'),
+        document.getElementById('skip-value-upper7')
+    ];
+    var skipValues8 = [
+        document.getElementById('skip-value-lower8'),
+        document.getElementById('skip-value-upper8')
+    ];
+    var skipValues9 = [
+        document.getElementById('skip-value-lower9'),
+        document.getElementById('skip-value-upper9')
+    ];
+    var skipValues10 = [
+        document.getElementById('skip-value-lower10'),
+        document.getElementById('skip-value-upper10')
+    ];
+
+    skipSlider8.noUiSlider.on('update', function (values, handle) {
+        skipValues8[handle].innerHTML = parseInt(values[handle]);
+    });
+    skipSlider9.noUiSlider.on('update', function (values, handle) {
+        skipValues9[handle].innerHTML = parseInt(values[handle]);
+    });
+    skipSlider10.noUiSlider.on('update', function (values, handle) {
+        skipValues10[handle].innerHTML = parseInt(values[handle]);
+    });
+</script>
+
+@*Cattle handler*@
+<script src="~/assets/js/toastr/toastr.js"></script>
+
+@*FreeStall handler*@
+<script>
+    $("#btnSaveFreeStall").click(function () {
+        ShowWaitingDialog();
+        var txtFreeStallTopic = document.getElementById('txtFreeStallTopic').value;
+        var txtFreeStallMessage = document.getElementById('txtFreeStallMessage').value;
+        var cbFreeStallGroup = $('#cbFreeStallGroup').val();
+        var cbFreeStallRole = $('#cbFreeStallRole').val();
+        var cbFreeStallPeroid = $('#cbFreeStallPeriod').val();
+        var cbFreeStallWindow = $('#cbFreeStallWindow').val();
+        var cbFreeStallSnooze = $('#cbFreeStallSnooze').val();
+
+        var freeStallTempMIN = document.getElementById('skip-value-lower8').innerHTML;
+        var freeStallTempMAX = document.getElementById('skip-value-upper8').innerHTML;
+
+        var freeStallHumgMIN = document.getElementById('skip-value-lower9').innerHTML;
+        var freeStallHumgMAX = document.getElementById('skip-value-upper9').innerHTML;
+
+        var freeStallTHIMIN = document.getElementById('skip-value-lower10').innerHTML;
+        var freeStallTHIMAX = document.getElementById('skip-value-upper10').innerHTML;
+
+        var UpdateFreeStallNotificationSetting = [
+            txtFreeStallTopic,
+            txtFreeStallMessage,
+            cbFreeStallGroup,
+            cbFreeStallRole,
+            cbFreeStallPeroid,
+            cbFreeStallWindow,
+            freeStallTempMIN,
+            freeStallTempMAX,
+            freeStallHumgMIN,
+            freeStallHumgMAX,
+            freeStallTHIMIN,
+            freeStallTHIMAX,
+            cbFreeStallSnooze];
+
+        $.post("/Notification/UpdateFreeStallNotificationSetting",
+        {
+            Settings: UpdateFreeStallNotificationSetting,
+            ID: @Model.freestall_notifications[0].ID
+        },
+        function (data) {
+            Notify('Thank You! All of your information saved successfully.', 'bottom-right', '5000', 'blue', 'fa-check', true);
+            location.reload(true);
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        $('.list-group.checked-list-box .list-group-item').each(function () {
+
+            // Settings
+            var $widget = $(this),
+                $checkbox = $('<input type="checkbox" class="hidden" />'),
+                color = ($widget.data('color') ? $widget.data('color') : "primary"),
+                style = ($widget.data('style') == "button" ? "btn-" : "list-group-item-"),
+                settings = {
+                    on: {
+                        icon: 'glyphicon glyphicon-check'
+                    },
+                    off: {
+                        icon: 'glyphicon glyphicon-unchecked'
+                    }
+                };
+
+            $widget.css('cursor', 'pointer')
+            $widget.append($checkbox);
+
+            // Event Handlers
+            $widget.on('click', function () {
+                $checkbox.prop('checked', !$checkbox.is(':checked'));
+                $checkbox.triggerHandler('change');
+                updateDisplay();
+            });
+            $checkbox.on('change', function () {
+                updateDisplay();
+            });
+
+
+            // Actions
+            function updateDisplay() {
+                var isChecked = $checkbox.is(':checked');
+
+                // Set the button's state
+                $widget.data('state', (isChecked) ? "on" : "off");
+
+                // Set the button's icon
+                $widget.find('.state-icon')
+                    .removeClass()
+                    .addClass('state-icon ' + settings[$widget.data('state')].icon);
+
+                // Update the button's color
+                if (isChecked) {
+                    $widget.addClass(style + color + ' active');
+                } else {
+                    $widget.removeClass(style + color + ' active');
+                }
+            }
+
+            // Initialization
+            function init() {
+
+                if ($widget.data('checked') == true) {
+                    $checkbox.prop('checked', !$checkbox.is(':checked'));
+                }
+
+                updateDisplay();
+
+                // Inject the icon if applicable
+                if ($widget.find('.state-icon').length == 0) {
+                    $widget.prepend('<span class="state-icon ' + settings[$widget.data('state')].icon + '"></span>');
+                }
+            }
+            init();
+        });
+
+        $('#get-checked-data').on('click', function (event) {
+            event.preventDefault();
+            var checkedItems = {}, counter = 0;
+            $("#check-list-box li.active").each(function (idx, li) {
+                checkedItems[counter] = $(li).text();
+                counter++;
+            });
+            $('#display-json').html(JSON.stringify(checkedItems, null, '\t'));
+        });
+    });
+</script>
+
+@*Edit and Remove Notification*@
+<script>
+
+    function RemoveCattleNotification(ID)
+    {
+        if (confirm('@Localization.getString("Are_You_Sure_Delete")'))
+        {
+            ShowWaitingDialog();
+            $.post("/Notification/RemoveCattleSetting",
+            {
+                ID: ID
+            },
+            function (data) {
+                Notify('@Localization.getString("Notification_Setting_Removed")', 'bottom-right', '5000', 'red', 'fa-check', true);
+                location.reload(true);
+            });
+        }
+    }
+
+    function RemoveFreestallNotification(ID)
+    {
+        if (confirm('@Localization.getString("Are_You_Sure_Delete")'))
+        {
+            ShowWaitingDialog();
+            $.post("/Notification/RemoveFreestallSetting",
+                {
+                    ID: ID
+                },
+                function (data) {
+                    Notify('@Localization.getString("Notification_Setting_Removed")', 'bottom-right', '5000', 'red', 'fa-check', true);
+                    location.reload(true);
+                });
+        }
+    }
+
+    function EditCattleNotification(ID)
+    {
+        window.location = '/' + '@Thread.CurrentThread.CurrentCulture.Name' + '/Notification/UpdateCattleSetting/' + ID;
+    }
+
+    function EditFreestallNotification(ID)
+    {
+        window.location = '/' + '@Thread.CurrentThread.CurrentCulture.Name' + '/Notification/UpdateFreeStallSetting/' + ID;
+    }
+
+</script>
+
+@*On Change Notification*@
+<script>
+    function onChangeCattle(element)
+    {
+        $.post("/Notification/ChangeCattleNotiActivation",
+        {
+            ID: element.name.replace("cbActiveCattleName", ""),
+            Status: element.checked
+        },
+        function (data) {
+            if (element.checked) {
+                Notify('@Localization.getString("Notification_Active")', 'bottom-right', '4000', 'blue', 'fa-check', true);
+            }
+            else {
+                Notify('@Localization.getString("Notification_Dective")', 'bottom-right', '4000', 'blue', 'fa-check', true);
+            }
+        });
+    }
+
+
+    function onChangeFreeStall(element)
+    {
+        $.post("/Notification/ChangeFreeStallNotiActivation",
+            {
+                ID: element.name.replace("cbActiveFreeStallName", ""),
+                Status: element.checked
+            },
+            function (data) {
+                if (element.checked) {
+                    Notify('@Localization.getString("Notification_Active")', 'bottom-right', '4000', 'blue', 'fa-check', true);
+                }
+                else {
+                    Notify('@Localization.getString("Notification_Dective")', 'bottom-right', '4000', 'blue', 'fa-check', true);
+                }
+            });
+    }
+</script>

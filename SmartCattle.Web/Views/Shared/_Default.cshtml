@@ -1,0 +1,645 @@
+﻿@using System.Threading
+@using System
+@using BeyondThemes.Bootstrap
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+
+
+    <meta name="description" content="@ViewBag.Description" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="~/assets/img/favicon.png" type="image/x-icon">
+
+    <!--Basic Styles-->
+    @Styles.Render("~/css/bootstrap")
+    @Styles.Render("~/css/bootstrap-rtl")
+    <link href="~/assets/css/alertify.css" rel="stylesheet" />
+
+    <link href="~/assets/css/loading.css" rel="stylesheet" />
+
+    <style>
+        #NotificationWrapper {
+            max-height: 275px;
+            overflow-y: scroll;
+        }
+
+        .flag {
+            max-width: 48px;
+            max-height: 100%;
+            margin: 0px 10px;
+            padding: 10px 0px;
+            cursor: pointer;
+        }
+
+        .alertify-logs div {
+            color: #FFF !important;
+        }
+        .numberCircle {
+            border-radius: 50%;
+            behavior: url(PIE.htc);
+            width: 12px;
+            height: 12px;
+            padding: 20px;
+            background: #eb5945;
+            border: 2px solid #eb5945;
+            color: #FFF;
+            text-align: center;
+            font: 11px Arial, sans-serif, bold;
+        }
+    </style>
+    <!--Fonts-->
+    <style>
+        @@font-face {
+            font-family: 'WYekan';
+            src: url('/assets/fonts/vazir.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+    </style>
+
+    @Styles.Render("~/css/beyond-rtl")
+    
+    <link href="~/assets/css/beyond-rtl.min.css" rel="stylesheet" />
+    <link id="skin-link" href="" rel="stylesheet" type="text/css" />
+
+    @Scripts.Render("~/bundles/skin")
+
+    <style>
+        .Div1
+        {
+            border: 0px solid #ddd;width:24%; background-color: white;float:left;border: 2px solid #c00;margin-right:5px;
+            min-height:50px;
+            position:fixed;
+        }
+    </style>
+</head>
+
+<body>
+
+    @*<audio id="audio"  src="~/assets/mp3/notif.mp3" autostart="false"></audio>*@
+
+    <div class="loader">
+        <span class="ball"></span>
+        <span class="ball2"></span>
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <!-- Loading Container -->
+    <div class="loading-container">
+        <div class="loading-progress">
+            <div class="rotator">
+                <div class="rotator">
+                    <div class="rotator colored">
+                        <div class="rotator">
+                            <div class="rotator colored">
+                                <div class="rotator colored"></div>
+                                <div class="rotator"></div>
+                            </div>
+                            <div class="rotator colored"></div>
+                        </div>
+                        <div class="rotator"></div>
+                    </div>
+                    <div class="rotator"></div>
+                </div>
+                <div class="rotator"></div>
+            </div>
+            <div class="rotator"></div>
+        </div>
+    </div>
+    <!--  /Loading Container -->
+    <!-- Navbar -->
+    <div class="navbar Div1" style="height:60px;width:100%;">
+        <div class="navbar-inner" style="background-color:#f44336;height:60px;">
+            <div class="navbar-container" style="height:60px;">
+                <!-- Account Area and Settings --->
+                <div class="navbar-header fa-pull-right" style="height:60px;">
+                    <div class="navbar-account" >
+                        <ul class="account-area" style="height:60px;position: absolute; right: 0; top: 0; width: 50%;margin-top:10px">
+                            <li><a href="/home/changeLanguage?langCulture=fa-IR"> <img class="flag" src="/assets/img/flags/fa.png" /> </a></li>
+                            <li><a href="/home/changeLanguage?langCulture=en-US"><img class="flag" src="/assets/img/flags/en.png" /></a></li>
+                            <li id="NotificationMenu">
+                                
+                            </li>
+                            <li>
+                                <a class="login-area dropdown-toggle" data-toggle="dropdown">
+                                    <div class="avatar" title="View your public profile">
+                                        <img src="/assets/img/avatars/adam-jansen.jpg">
+                                    </div>
+                                    <section>
+                                        <h2>
+                                            <span class="profile" id="SmartCattleUserName">
+                                                <span>
+                                                    @User.Identity.Name
+                                                    @{ 
+                                                        Helper.setCurrentUser(User.Identity.Name);
+                                                    }
+                                                </span>
+                                            </span>
+                                        </h2>
+                                    </section>
+                                </a>
+                                <!--Login Area Dropdown-->
+                                <ul class="pull-right dropdown-menu dropdown-arrow dropdown-login-area" >
+                                    <li class="email"><a>@User.Identity.Name</a></li>
+                                    <li>
+                                        <div class="avatar-area">
+                                            <img src="~/assets/img/avatars/adam-jansen.jpg" class="avatar">
+                                            <span class="caption">@Localization.getString("change_photo")</span>
+                                        </div>
+                                    </li>
+
+                                    <!--Avatar Area-->
+                                    <li class="edit">
+                                        <a href="/Account/UserProfile" class="pull-left">@Localization.getString("Profile")</a>
+                                        <a href="/Account/Setting" class="pull-right">@Localization.getString("Setting")</a>
+                                    </li>
+
+                                    <li class="dropdown-footer">
+                                        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                                        {
+                                            @Html.AntiForgeryToken();
+                                            <a href="#" onclick="logOff()">
+                                                @Localization.getString("Sign_out")
+                                            </a>
+                                        }
+                                    </li>
+                                </ul>
+                                <!--/Login Area Dropdown-->
+                            </li>
+                            <li>
+                                <a class="login-area dropdown-toggle" data-toggle="dropdown">
+                                    <section>
+                                        <h2>
+                                            <span class="profile" id="SmartCattleInfo">
+                                                <span>
+                                                    @Helper.getCurrentRolejName()
+                                                    ---
+                                                    @Helper.getCurrentFarmName()
+                                                </span>
+                                            </span>
+                                        </h2>
+                                    </section>
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- Settings -->
+                    </div>
+                </div>
+                <!-- /Account Area and Settings -->
+                <div style="height:60px;float:left;margin-top:20px;margin-left:16px;color:aliceblue">@Helper.getGitUpdateTime()</div>
+            </div>
+        </div>
+    </div>
+    <!-- /Navbar -->
+    <!-- Main Container -->
+
+    <div class="main-container container-fluid">
+        <!-- Page Container -->
+        
+        <div class="page-container" style="margin-top:80px;margin-left:20px;">
+            <!-- Page Sidebar -->
+            <div class="page-sidebar Div1" style="display:inline-block;width:220px;" id="sidebar">
+                <div  style="background-color:#f44336; width:218px;height:100px;z-index:99 !important;position:fixed;margin-top:60px" id="divBackgroundAvatar">
+                    <img src="~/assets/Thems/AdminBSB/images/user-img-background.jpg" width="100%" height="100%" />
+                </div>
+                <div style="margin-top:160px">
+                    @Html.MvcSiteMap().Menu()
+                </div>
+            </div>
+
+            <!-- Chat Bar -->
+            <div id="chatbar" class="page-chatbar">
+                <div class="chatbar-contacts">
+                    <div class="contacts-search">
+                        <input type="text" class="searchinput" placeholder="Search Contacts" />
+                        <i class="searchicon fa fa-search"></i>
+                        <div class="searchhelper">Search Your Contacts and Chat History</div>
+                    </div>
+                    <ul class="contacts-list">
+                        <li class="contact">
+                            <div class="contact-avatar">
+                                <img src="~/assets/img/avatars/divyia.jpg" />
+                            </div>
+                            <div class="contact-info">
+                                <div class="contact-name">Divyia Philips</div>
+                                <div class="contact-status">
+                                    <div class="online"></div>
+                                    <div class="status">online</div>
+                                </div>
+                                <div class="last-chat-time">
+                                    last week
+                                </div>
+                            </div>
+                        </li>
+                        <li class="contact">
+                            <div class="contact-avatar">
+                                <img src="~/assets/img/avatars/Nicolai-Larson.jpg" />
+                            </div>
+                            <div class="contact-info">
+                                <div class="contact-name">Adam Johnson</div>
+                                <div class="contact-status">
+                                    <div class="offline"></div>
+                                    <div class="status">left 4 mins ago</div>
+                                </div>
+                                <div class="last-chat-time">
+                                    today
+                                </div>
+                            </div>
+                        </li>
+                        <li class="contact">
+                            <div class="contact-avatar">
+                                <img src="~/assets/img/avatars/John-Smith.jpg" />
+                            </div>
+                            <div class="contact-info">
+                                <div class="contact-name">John Smith</div>
+                                <div class="contact-status">
+                                    <div class="online"></div>
+                                    <div class="status">online</div>
+                                </div>
+                                <div class="last-chat-time">
+                                    1:57 am
+                                </div>
+                            </div>
+                        </li>
+                        <li class="contact">
+                            <div class="contact-avatar">
+                                <img src="~/assets/img/avatars/Osvaldus-Valutis.jpg" />
+                            </div>
+                            <div class="contact-info">
+                                <div class="contact-name">Osvaldus Valutis</div>
+                                <div class="contact-status">
+                                    <div class="online"></div>
+                                    <div class="status">online</div>
+                                </div>
+                                <div class="last-chat-time">
+                                    today
+                                </div>
+                            </div>
+                        </li>
+                        <li class="contact">
+                            <div class="contact-avatar">
+                                <img src="~/assets/img/avatars/Javi-Jimenez.jpg" />
+                            </div>
+                            <div class="contact-info">
+                                <div class="contact-name">Javi Jimenez</div>
+                                <div class="contact-status">
+                                    <div class="online"></div>
+                                    <div class="status">online</div>
+                                </div>
+                                <div class="last-chat-time">
+                                    today
+                                </div>
+                            </div>
+                        </li>
+                        <li class="contact">
+                            <div class="contact-avatar">
+                                <img src="~/assets/img/avatars/Stephanie-Walter.jpg" />
+                            </div>
+                            <div class="contact-info">
+                                <div class="contact-name">Stephanie Walter</div>
+                                <div class="contact-status">
+                                    <div class="online"></div>
+                                    <div class="status">online</div>
+                                </div>
+                                <div class="last-chat-time">
+                                    yesterday
+                                </div>
+                            </div>
+                        </li>
+                        <li class="contact">
+                            <div class="contact-avatar">
+                                <img src="~/assets/img/avatars/Sergey-Azovskiy.jpg" />
+                            </div>
+                            <div class="contact-info">
+                                <div class="contact-name">Sergey Azovskiy</div>
+                                <div class="contact-status">
+                                    <div class="offline"></div>
+                                    <div class="status">offline since oct 24</div>
+                                </div>
+                                <div class="last-chat-time">
+                                    22 oct
+                                </div>
+                            </div>
+                        </li>
+                        <li class="contact">
+                            <div class="contact-avatar">
+                                <img src="~/assets/img/avatars/Lee-Munroe.jpg" />
+                            </div>
+                            <div class="contact-info">
+                                <div class="contact-name">Lee Munroe</div>
+                                <div class="contact-status">
+                                    <div class="online"></div>
+                                    <div class="status">online</div>
+                                </div>
+                                <div class="last-chat-time">
+                                    today
+                                </div>
+                            </div>
+                        </li>
+                        <li class="contact">
+                            <div class="contact-avatar">
+                                <img src="~/assets/img/avatars/divyia.jpg" />
+                            </div>
+                            <div class="contact-info">
+                                <div class="contact-name">Divyia Philips</div>
+                                <div class="contact-status">
+                                    <div class="online"></div>
+                                    <div class="status">online</div>
+                                </div>
+                                <div class="last-chat-time">
+                                    last week
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="chatbar-messages" style="display: none;">
+                    <div class="messages-contact">
+                        <div class="contact-avatar">
+                            <img src="~/assets/img/avatars/divyia.jpg" />
+                        </div>
+                        <div class="contact-info">
+                            <div class="contact-name">Divyia Philips</div>
+                            <div class="contact-status">
+                                <div class="online"></div>
+                                <div class="status">online</div>
+                            </div>
+                            <div class="last-chat-time">
+                                a moment ago
+                            </div>
+                            <div class="back">
+                                <i class="fa fa-arrow-circle-left"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="messages-list">
+                        <li class="message">
+                            <div class="message-info">
+                                <div class="bullet"></div>
+                                <div class="contact-name">Me</div>
+                                <div class="message-time">10:14 AM, Today</div>
+                            </div>
+                            <div class="message-body">
+                                Hi, Hope all is good. Are we meeting today?
+                            </div>
+                        </li>
+                        <li class="message reply">
+                            <div class="message-info">
+                                <div class="bullet"></div>
+                                <div class="contact-name">Divyia</div>
+                                <div class="message-time">10:15 AM, Today</div>
+                            </div>
+                            <div class="message-body">
+                                Hi, Hope all is good. Are we meeting today?
+                            </div>
+                        </li>
+                        <li class="message">
+                            <div class="message-info">
+                                <div class="bullet"></div>
+                                <div class="contact-name">Me</div>
+                                <div class="message-time">10:14 AM, Today</div>
+                            </div>
+                            <div class="message-body">
+                                Hi, Hope all is good. Are we meeting today?
+                            </div>
+                        </li>
+                        <li class="message reply">
+                            <div class="message-info">
+                                <div class="bullet"></div>
+                                <div class="contact-name">Divyia</div>
+                                <div class="message-time">10:15 AM, Today</div>
+                            </div>
+                            <div class="message-body">
+                                Hi, Hope all is good. Are we meeting today?
+                            </div>
+                        </li>
+                        <li class="message">
+                            <div class="message-info">
+                                <div class="bullet"></div>
+                                <div class="contact-name">Me</div>
+                                <div class="message-time">10:14 AM, Today</div>
+                            </div>
+                            <div class="message-body">
+                                Hi, Hope all is good. Are we meeting today?
+                            </div>
+                        </li>
+                        <li class="message reply">
+                            <div class="message-info">
+                                <div class="bullet"></div>
+                                <div class="contact-name">Divyia</div>
+                                <div class="message-time">10:15 AM, Today</div>
+                            </div>
+                            <div class="message-body">
+                                Hi, Hope all is good. Are we meeting today?
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="send-message">
+                        <span class="input-icon icon-right">
+                            <textarea rows="4" class="form-control" placeholder="Type your message"></textarea>
+                            <i class="fa fa-camera themeprimary"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <!-- /Chat Bar -->
+            <!-- Page Content -->
+            <div class="page-content" style="margin-right:230px">
+                <!-- Page Breadcrumb -->
+                <div class="page-breadcrumbs">
+                    @Html.MvcSiteMap().SiteMapPath()
+                </div>
+                <!-- /Page Breadcrumb -->
+                <!-- Page Header -->
+                @*<div class="page-header position-relative" style="height:20px">
+                    @Html.MvcSiteMap().SiteMapTitle()
+                    <!--Header Buttons-->
+                    <div class="header-buttons">
+                        <a class="refresh" id="refresh-toggler" href="">
+                            <i class="glyphicon glyphicon-refresh"></i>
+                        </a>
+                    </div>
+                    <!--Header Buttons End-->
+                </div>*@
+                <!-- /Page Header -->
+                <!-- Page Body -->
+                <div class="page-body">
+                    <!-- Your Content Goes Here -->
+                    @RenderBody()
+                </div>
+                <!-- /Page Body -->
+            </div>
+            <!-- /Page Content -->
+        </div>
+        <!-- /Page Container -->
+        <!-- Main Container -->
+
+    </div>
+
+
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-header bg-green"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button> <h6 class="modal-title" id="myModalLabel">@Localization.getString("Notification")</h6> </div>
+            <div id="notificationModal" class="modal-content padding-10">
+
+            </div>
+        </div>
+    </div>
+
+
+    <!--Basic Scripts-->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <!--Beyond Scripts-->
+    @Scripts.Render("~/bundles/beyond")
+
+    
+    <script src="~/Scripts/jquery.signalR-2.2.2.min.js"></script>
+    <!--Page Related Scripts-->
+    @RenderSection("PageScripts", required: false)
+    <script>
+        function logOff()
+        {
+            $("#logoutForm").submit();
+        }
+    </script>
+
+
+    <script src="~/assets/js/alertify.js"></script>
+
+    <script>
+        @*$(document).ready(function () {
+            $.ajax({
+                url: '@Url.Action("Menu", "Notification")',
+                type: "POST",
+                success: function (res) {
+                    document.getElementById("NotificationMenu").innerHTML = res;
+                }
+            });
+
+            //setInterval(function () {
+
+            //}, 30 * 1000 * 1);
+        });*@
+    </script>
+
+    <script type="text/javascript">
+        var connection = $.connection('/Chat',null,true);
+
+        connection.start(
+            {
+                transport: 'longPolling',
+                jsonp: true
+            }
+        );
+
+        connection.received(function (data) {
+            var sound = document.getElementById("audio");
+            bg = 'bg-gray';
+            console.log(data);
+            sound.play();
+            switch (data.priority)
+            {
+                case 1:
+                    {
+                        bg = 'bg-themeprimary';
+                        break;
+                    }
+                case 2:
+                    {
+                        bg = 'bg-green';
+                        break;
+                    }
+                case 3:
+                    {
+                        bg = 'bg-yellow';
+                        break;
+                    }
+                case 4:
+                    {
+                        bg = 'bg-orange';
+                        break;
+                    }
+                case 5:
+                    {
+                        bg = 'bg-red';
+                        break;
+                    }
+            }
+            var item = $("<li data-content='"+data.content+"' data-msgid='"+data.id+"' data-toggle='modal' data-target='.bs-example-modal-sm'>\
+                                <a href='#'>\
+                                            <div class='clearfix'>\
+                                                <div class='notification-icon'>\
+                                                    <i class='fa fa-bell-o "+bg+" white'></i>\
+                                                </div>\
+                                                <div class='notification-body'>\
+                                                    <span class='title'>"+ data.title + "</span>\
+                                                    <span class='description'>"+ data.date + "</span>\
+                                                </div>\
+                                                <div class='notification-extra'>\
+                                                    <i class='fa fa-clock-o themeprimary'></i>\
+                                                    <span class='description'>"+data.time+"</span>\
+                                                </div>\
+                                            </div>\
+                                        </a>\
+                                    </li>\
+                                    ");
+           $("#NotificationWrapper").prepend(item);
+           connection.send("Recieved:" + data.id)
+        });
+
+        $("#NotificationWrapper").on("click", "li", function () {
+
+            $("#notificationModal").html($(this).data("content"));
+            connection.send("Seen:" + $(this).data("msgid"))
+        });
+    </script>
+    <script src="http://localhost:8080/signalr/hubs"></script>
+    <script src="~/Areas/SignalR/InitialSignalR.js"></script>
+
+    <script>
+        function changeLanguage(lang)
+        {
+            $.post("/Home/changeLanguage",
+            {
+                langCulture: lang
+            },
+            function (data) {
+
+            });
+        }
+    </script>
+    <script>
+        var ContentOfPath = $('.header-title')[0].innerHTML;
+        var Current_Url = window.location.href;
+        if (Current_Url.includes("fa-IR")) {
+            Current_Url = Current_Url.replace("fa-IR", "#");
+        }
+        else if (Current_Url.includes("en-US")) {
+            Current_Url = Current_Url.replace("en-US", "#");
+        }
+        var indexOfSharp = Current_Url.indexOf('#');
+        var substringedUrl = Current_Url.substring(indexOfSharp).replace("#/", "").split('?');
+
+        $.post("/Home/SitePath",
+        {
+            path: substringedUrl[0].replace("/", "_")
+        },
+        function (data) {
+            $('.header-title')[0].innerHTML = "<h1 style="display:block">" + data + "</h1>";
+        });
+    </script>
+</body>
+<!--  /Body -->
+</html>

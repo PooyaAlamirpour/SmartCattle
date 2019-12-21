@@ -1,0 +1,45 @@
+﻿@model SmartCattle.Web.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+    ViewBag.Description = "register";
+    //Layout = "~/Views/Shared/_Empty.cshtml";
+}
+@using (var form = Html.Bootstrap().Begin(new Form().Type(FormType.Vertical)))
+{
+    @Html.AntiForgeryToken()
+    <div class="register-container animated fadeInDown">
+        <div class="registerbox bg-white">
+            <div class="registerbox-title">Register</div>
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+
+            <div class="registerbox-caption ">Please fill in your information</div>
+            <div class="registerbox-textbox">
+                @Html.Bootstrap().TextBoxFor(t => t.Email).Placeholder("Email Address")
+            </div>
+            <div class="registerbox-textbox">
+                @Html.Bootstrap().PasswordFor(t => t.Password).Placeholder("Enter Password")
+            </div>
+            <div class="registerbox-textbox">
+                @Html.Bootstrap().PasswordFor(t => t.ConfirmPassword).Placeholder("Confirm Password")
+            </div>
+            <hr class="wide" /> 
+            <div class="registerbox-textbox no-padding-bottom">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" class="colored-primary" checked="checked">
+                        <span class="text darkgray">I agree to the Company <a class="themeprimary">Terms of Service</a> and Privacy Policy</span>
+                    </label>
+                </div>
+            </div>
+            <div class="registerbox-submit">
+                @Html.Bootstrap().SubmitButton().Text("SUBMIT").Color(BootstrapColors.Primary).HtmlAttributes(new { @class = "pull-right" })
+            </div>
+        </div>
+        <div class="logobox">
+        </div>
+    </div>
+}
+
+@section PageScripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

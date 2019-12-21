@@ -1,0 +1,26 @@
+﻿@model SmartCattle.Web.Models.ExternalLoginListViewModel
+@using Microsoft.Owin.Security
+
+@{
+
+    var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+    if (loginProviders.Count() > 0)
+    {
+        using (Html.BeginForm("ExternalLogin", "Account", new { ReturnUrl = Model.ReturnUrl }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="loginbox-social">
+                <div class="social-title ">Connect with Your Social Accounts</div>
+                <div class="social-buttons" id="socialLoginList">
+                    @foreach (AuthenticationDescription p in loginProviders)
+                    {
+                        <button href="" id="@p.AuthenticationType" class="button-@p.AuthenticationType.ToLower()" name="provider" value="@p.AuthenticationType">
+                            <i class="social-icon fa fa-@p.AuthenticationType.ToLower()"></i>
+                        </button>
+                        
+                    }
+                </div>
+            </div>
+        }
+    }
+}

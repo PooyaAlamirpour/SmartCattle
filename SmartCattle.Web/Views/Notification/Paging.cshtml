@@ -1,0 +1,71 @@
+﻿@using SmartCattle.Web.Controllers;
+@model IList<NotificationController.NotificationsList>
+
+<div id="paging" class="row">
+    <div class="col-sm-6"><div>Showing 
+        @{
+            if (Model.Count != 0)
+            {
+                @((Model[0].current - 1) * 15 + 1) 
+            }
+            else
+            {
+                @(0)
+            }
+        }
+        to 
+        @{
+            if (Model.Count != 0)
+            {
+                @((Model[0].current) * 15)
+            }
+            else
+            {
+                @(0)
+            }
+        }
+        entries
+        </div></div>
+    <div class="col-sm-6">
+        <div class="dataTables_paginate paging_bootstrap" id="searchable_paginate">
+            <ul class="pagination">
+                <li data-index="1"><a href="#">@Localization.getString("FIRST")</a></li>
+                @{
+                    if (Model.Count != 0)
+                    {
+                        if (Model[0].current - 3 > 0)
+                        {
+                            <li><a disabled="disabled">.....</a></li>
+                        }
+                        if (Model[0].current - 2 > 0)
+                        {
+                            <li data-index="@(Model[0].current-2)"><a href="#">@(Model[0].current - 2)</a></li>
+                        }
+                        if (Model[0].current - 1 > 0)
+                        {
+                            <li data-index="@(Model[0].current-1)"><a href="#">@(Model[0].current - 1)</a></li>
+                        }
+                        <li data-index="@(Model[0].current)" class="active"><a href="#">@Model[0].current</a></li>
+
+                        if (Model[0].current + 1 <= Model[0].pages)
+                        {
+                            <li data-index="@(Model[0].current+1)"><a href="#">@(Model[0].current + 1)</a></li>
+                        }
+                        if (Model[0].current + 2 <= Model[0].pages)
+                        {
+                            <li data-index="@(Model[0].current + 2)"><a href="#">@(Model[0].current + 2)</a></li>
+                        }
+                        if (Model[0].current + 3 <= Model[0].pages)
+                        {
+                            <li disabled="disabled"><a>.....</a></li>
+                        }
+                        <li data-index="@Model[0].pages"><a href="#">@Localization.getString("LAST")</a></li>
+                    }
+
+                }
+               
+            </ul>
+        </div>
+    </div>
+</div>
+

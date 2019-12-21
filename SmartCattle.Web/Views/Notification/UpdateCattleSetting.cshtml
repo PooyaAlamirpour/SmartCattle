@@ -1,0 +1,938 @@
+﻿@using System.Threading;
+@model SmartCattle.Web.Controllers.NotificationController.NotificationSettingViewModel
+
+<link href="~/assets/Thems/noUiSlider/nouislider.css" rel="stylesheet" />
+<link href="~/assets/Thems/noUiSlider/nouislider.min.css" rel="stylesheet" />
+
+<script src="~/assets/Thems/noUiSlider/nouislider.js"></script>
+<script src="~/assets/Thems/noUiSlider/nouislider.min.js"></script>
+<link href="~/assets/css/dataTables.bootstrap.css" rel="stylesheet" />
+<link rel="shortcut icon" href="~/assets/img/favicon.png" type="image/x-icon">
+<link href="~/assets/css/font-awesome.min.css" rel="stylesheet" />
+<link href="~/assets/css/weather-icons.min.css" rel="stylesheet" />
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300" rel="stylesheet" type="text/css">
+<link id="beyond-link" href="~/assets/css/beyond.min.css" rel="stylesheet" />
+<link href="~/assets/css/demo.min.css" rel="stylesheet" />
+<link href="~/assets/css/typicons.min.css" rel="stylesheet" />
+<link href="~/assets/css/animate.min.css" rel="stylesheet" />
+<script src="~/assets/js/skins.min.js"></script>
+<script src="~/assets/js/datatable/jquery.dataTables.min.js"></script>
+<script src="~/assets/js/datatable/ZeroClipboard.js"></script>
+<script src="~/assets/js/datatable/dataTables.tableTools.min.js"></script>
+<script src="~/assets/js/datatable/dataTables.bootstrap.min.js"></script>
+<script src="~/assets/js/jquery.min.js"></script>
+<script src="~/assets/js/bootstrap.min.js"></script>
+<script src="~/assets/js/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="~/assets/js/datatable/jquery.dataTables.min.js"></script>
+<script src="~/assets/js/datatable/ZeroClipboard.js"></script>
+<script src="~/assets/js/datatable/dataTables.tableTools.min.js"></script>
+<script src="~/assets/js/datatable/dataTables.bootstrap.min.js"></script>
+<script src="~/assets/js/datatable/datatables-init.js"></script>
+<script type="text/javascript">
+    InitiateSimpleDataTable.init();
+    InitiateEditableDataTable.init();
+    InitiateNonExpandableDataTable.init();
+    InitiateSearchableDataTable.init();
+</script>
+<script src="~/assets/js/fuelux/wizard/wizard-custom.js"></script>
+<script src="~/assets/js/toastr/toastr.js"></script>
+
+<script src="~/assets/js/bootstrap.min.js"></script>
+
+<style>
+    .margin-10 {
+        margin-top: 10px
+    }
+
+    .margin-15 {
+        margin-top: 15px
+    }
+
+    .margin-20 {
+        margin-top: 20px
+    }
+
+    .databox {
+        display: inline-block;
+        width: 100%;
+        height: 65px;
+        padding: 0;
+        font-size: 0;
+        margin-bottom: 30px;
+        vertical-align: top;
+        min-width: 130px;
+    }
+
+        .databox .databox-row {
+            width: 100%;
+            margin: 0;
+            position: relative;
+        }
+
+            .databox .databox-row.row-3 {
+                height: 25%;
+            }
+
+    .padding-10 {
+        padding: 10px !important;
+    }
+
+    .databox .databox-text {
+        display: block;
+        font-size: 11px;
+        margin: 4px 0 2px;
+        position: relative;
+    }
+
+    .darkgray {
+        color: #999999 !important;
+    }
+
+    .no-margin {
+        margin: 0 !important;
+    }
+
+    .databox .databox-cell {
+        height: 100%;
+        margin: 0;
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+        padding: 0 10px;
+    }
+
+        .databox .databox-cell.cell-6 {
+            width: 50%;
+        }
+
+    .text-align-center {
+        text-align: center !important;
+    }
+
+    .bg-azure {
+        background-color: #2dc3e8 !important;
+    }
+
+    .box-heigth {
+        height: 60px;
+        padding-top: 20px;
+    }
+
+    .state-icon {
+        left: -5px;
+    }
+
+    .list-group-item-primary {
+        color: rgb(255, 255, 255);
+        background-color: rgb(66, 139, 202);
+    }
+
+    .well .list-group {
+        margin-bottom: 0px;
+    }
+
+    .onoffswitch {
+        position: relative;
+        width: 30px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+    }
+
+    .onoffswitch-checkbox {
+        display: none;
+    }
+
+    .onoffswitch-label {
+        display: block;
+        overflow: hidden;
+        cursor: pointer;
+        height: 13px;
+        padding: 0;
+        line-height: 15px;
+        border: 2px solid #999999;
+        border-radius: 13px;
+        background-color: #EEEEEE;
+        transition: background-color 0.3s ease-in;
+    }
+
+        .onoffswitch-label:before {
+            content: "";
+            display: block;
+            width: 13px;
+            margin: 0px;
+            background: #FFFFFF;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 20px;
+            border: 2px solid #999999;
+            border-radius: 13px;
+            transition: all 0.3s ease-in 0s;
+        }
+
+    .onoffswitch-checkbox:checked + .onoffswitch-label {
+        background-color: #34A7C1;
+    }
+
+        .onoffswitch-checkbox:checked + .onoffswitch-label, .onoffswitch-checkbox:checked + .onoffswitch-label:before {
+            border-color: #34A7C1;
+        }
+
+            .onoffswitch-checkbox:checked + .onoffswitch-label:before {
+                right: 0px;
+            }
+</style>
+
+<h5 class="row-title before-themeprimary"><i class="fa fa-archive themeprimary"></i>@Localization.getString("Defining_Cattle_Notification")</h5>
+<div class="row">
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <div class="widget  radius-bordered">
+            <div class="widget-header">
+                <span class="widget-caption">@Localization.getString("Define_Parameters")</span>
+            </div>
+            <div class="widget-body">
+                <div class="docs-example">
+                    <form id="accountForm" method="post" class="form-horizontal bv-form" novalidate="novalidate">
+                        <div class="tab-content tabs-flat">
+                            <div class="tab-pane active" id="address-tab">
+                                <div class="form-group has-feedback">
+                                    <div class="col-lg-2">
+                                        <label class="control-label">
+                                            @Localization.getString("Topic")
+                                        </label>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <label class="control-label">
+                                            @Localization.getString("RoleMessage")
+                                        </label>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label class="control-label">
+                                            @Localization.getString("Group")
+                                        </label>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label class="control-label">
+                                            @Localization.getString("Roles")
+                                        </label>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <label class="control-label">
+                                            @Localization.getString("Peroid")
+                                        </label>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <label class="control-label">
+                                            @Localization.getString("Window")
+                                        </label>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <label class="control-label">@Localization.getString("Snooze")</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-lg-2">
+                                        <input type="text" class="form-control" id="txtCattleTopic" value="@Model.cattle_notifications[0].Topic"/>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <input type="text" class="form-control" id="txtCattleMessage" value="@Model.cattle_notifications[0].Comment"/>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <select class="form-control" id="cbCattleGroup">
+                                            <option value="">@Model.cattle_notifications[0].GroupName</option>
+                                            @{
+                                                if (Model.cattle_notifications[0].GroupName != "Health")
+                                                {
+                                                    <option value="Health">Health</option>
+                                                }
+                                                if (Model.cattle_notifications[0].GroupName != "Heath")
+                                                {
+                                                    <option value="Heath">Heath</option>
+                                                }
+                                                if (Model.cattle_notifications[0].GroupName != "Other")
+                                                {
+                                                    <option value="Other">Other</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <select class="form-control" id="cbCattleRole">
+                                            <option value="">@Model.cattle_notifications[0].Roles</option>
+                                            @{
+                                                for (int i = 0; i < Model.userRoles.Count; i++)
+                                                {
+                                                    if (Model.userRoles[i].jName != Model.cattle_notifications[0].Roles)
+                                                    {
+                                                        <option value=@Model.userRoles[i].jName>@Model.userRoles[i].jName</option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <select style="height:34px;width:74px;" id="cbCattlePeroid">
+                                            <option value="@Model.cattle_notifications[0].PeroidTime">@Model.cattle_notifications[0].PeroidTime</option>
+                                            <option value="2h">2h</option>
+                                            <option value="3h">3h</option>
+                                            <option value="6h">6h</option>
+                                            <option value="12h">12h</option>
+                                            <option value="24h">24h</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <select style="height:34px;width:74px" id="cbCattleWindow">
+                                            <option value="@Model.cattle_notifications[0].WindowTime">@Model.cattle_notifications[0].WindowTime</option>
+                                            <option value="2h">2h</option>
+                                            <option value="3h">3h</option>
+                                            <option value="6h">6h</option>
+                                            <option value="12h">12h</option>
+                                            <option value="24h">24h</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <select style="height:34px;width:74px" id="cbCattleSnoozeTime">
+                                            <option value="@Model.cattle_notifications[0].SnoozeTime">@Model.cattle_notifications[0].SnoozeTime</option>
+                                            <option value="2h">2h</option>
+                                            <option value="3h">3h</option>
+                                            <option value="6h">6h</option>
+                                            <option value="12h">12h</option>
+                                            <option value="24h">24h</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="col-lg-4 col-sm-4 col-xs-4">
+        <div class="databox radius-bordered databox-shadowed databox-graded databox-vertical" style="height:60px">
+            <div class="databox-cell cell-6 text-align-center bg-sky">
+                <span class="databox-number" id="skip-value-upper1">@Model.cattle_notifications[0].CattleTempMax</span>
+                <span class="databox-text">@Localization.getString("Maximum")</span>
+            </div>
+            <div class="databox-cell cell-6 text-align-center bg-azure">
+                <span class="databox-number" id="skip-value-lower1">@Model.cattle_notifications[0].CattleTempMin</span>
+                <span class="databox-text">@Localization.getString("Minimum")</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-sm-6 col-xs-6">
+        <div class="widget">
+            <div class="widget-body box-heigth">
+                <div id="skipstep1" class="noUi-target noUi-ltr noUi-horizontal"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-2 col-sm-2 col-xs-2">
+        <div class="widget">
+            <div class="widget-body box-heigth">
+                @Localization.getString("Cattle_Temp")
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-sm-4 col-xs-4">
+        <div class="databox radius-bordered databox-shadowed databox-graded databox-vertical" style="height:60px">
+            <div class="databox-cell cell-6 text-align-center bg-sky">
+                <span class="databox-number" id="skip-value-upper2">@Model.cattle_notifications[0].SittingMax</span>
+                <span class="databox-text">@Localization.getString("Maximum")</span>
+            </div>
+            <div class="databox-cell cell-6 text-align-center bg-azure">
+                <span class="databox-number" id="skip-value-lower2">@Model.cattle_notifications[0].SittingMin</span>
+                <span class="databox-text">@Localization.getString("Minimum")</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-sm-6 col-xs-6">
+        <div class="widget">
+            <div class="widget-body box-heigth">
+                <div id="skipstep2" class="noUi-target noUi-ltr noUi-horizontal"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-2 col-sm-2 col-xs-2">
+        <div class="widget">
+            <div class="widget-body box-heigth">
+                @Localization.getString("Sitting")
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-sm-4 col-xs-4">
+        <div class="databox radius-bordered databox-shadowed databox-graded databox-vertical" style="height:60px">
+            <div class="databox-cell cell-6 text-align-center bg-sky">
+                <span class="databox-number" id="skip-value-upper3">@Model.cattle_notifications[0].WalkingMax</span>
+                <span class="databox-text">@Localization.getString("Maximum")</span>
+            </div>
+            <div class="databox-cell cell-6 text-align-center bg-azure">
+                <span class="databox-number" id="skip-value-lower3">@Model.cattle_notifications[0].WalkingMin</span>
+                <span class="databox-text">@Localization.getString("Minimum")</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-sm-6 col-xs-6">
+        <div class="widget">
+            <div class="widget-body box-heigth">
+                <div id="skipstep3" class="noUi-target noUi-ltr noUi-horizontal"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-2 col-sm-2 col-xs-2">
+        <div class="widget">
+            <div class="widget-body box-heigth">
+                @Localization.getString("walking")
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-sm-4 col-xs-4">
+        <div class="databox radius-bordered databox-shadowed databox-graded databox-vertical" style="height:60px">
+            <div class="databox-cell cell-6 text-align-center bg-sky">
+                <span class="databox-number" id="skip-value-upper4">@Model.cattle_notifications[0].RuminationMax</span>
+                <span class="databox-text">@Localization.getString("Maximum")</span>
+            </div>
+            <div class="databox-cell cell-6 text-align-center bg-azure">
+                <span class="databox-number" id="skip-value-lower4">@Model.cattle_notifications[0].RuminationMin</span>
+                <span class="databox-text">@Localization.getString("Minimum")</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-sm-6 col-xs-6">
+        <div class="widget">
+            <div class="widget-body box-heigth">
+                <div id="skipstep4" class="noUi-target noUi-ltr noUi-horizontal"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-2 col-sm-2 col-xs-2">
+        <div class="widget">
+            <div class="widget-body box-heigth">
+                @Localization.getString("Rumination")
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-sm-4 col-xs-4">
+        <div class="databox radius-bordered databox-shadowed databox-graded databox-vertical" style="height:60px">
+            <div class="databox-cell cell-6 text-align-center bg-sky">
+                <span class="databox-number" id="skip-value-upper5">@Model.cattle_notifications[0].WalkingMax</span>
+                <span class="databox-text">@Localization.getString("Maximum")</span>
+            </div>
+            <div class="databox-cell cell-6 text-align-center bg-azure">
+                <span class="databox-number" id="skip-value-lower5">@Model.cattle_notifications[0].WalkingMin</span>
+                <span class="databox-text">@Localization.getString("Minimum")</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-sm-6 col-xs-6">
+        <div class="widget">
+            <div class="widget-body box-heigth">
+                <div id="skipstep5" class="noUi-target noUi-ltr noUi-horizontal"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-2 col-sm-2 col-xs-2">
+        <div class="widget">
+            <div class="widget-body box-heigth">
+                @Localization.getString("watering")
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-sm-4 col-xs-4">
+        <div class="databox radius-bordered databox-shadowed databox-graded databox-vertical" style="height:60px">
+            <div class="databox-cell cell-6 text-align-center bg-sky">
+                <span class="databox-number" id="skip-value-upper6">@Model.cattle_notifications[0].EatingMax</span>
+                <span class="databox-text">@Localization.getString("Maximum")</span>
+            </div>
+            <div class="databox-cell cell-6 text-align-center bg-azure">
+                <span class="databox-number" id="skip-value-lower6">@Model.cattle_notifications[0].EatingMin</span>
+                <span class="databox-text">@Localization.getString("Minimum")</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-sm-6 col-xs-6">
+        <div class="widget">
+            <div class="widget-body box-heigth">
+                <div id="skipstep6" class="noUi-target noUi-ltr noUi-horizontal"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-2 col-sm-2 col-xs-2">
+        <div class="widget">
+            <div class="widget-body box-heigth">
+                @Localization.getString("Eating")
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-sm-4 col-xs-4">
+        <div class="databox radius-bordered databox-shadowed databox-graded databox-vertical" style="height:60px">
+            <div class="databox-cell cell-6 text-align-center bg-sky">
+                <span class="databox-number" id="skip-value-upper7">@Model.cattle_notifications[0].StandingMax</span>
+                <span class="databox-text">@Localization.getString("Maximum")</span>
+            </div>
+            <div class="databox-cell cell-6 text-align-center bg-azure">
+                <span class="databox-number" id="skip-value-lower7">@Model.cattle_notifications[0].StandingMin</span>
+                <span class="databox-text">@Localization.getString("Minimum")</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-sm-6 col-xs-6">
+        <div class="widget">
+            <div class="widget-body box-heigth">
+                <div id="skipstep7" class="noUi-target noUi-ltr noUi-horizontal"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-2 col-sm-2 col-xs-2">
+        <div class="widget">
+            <div class="widget-body box-heigth">
+                @Localization.getString("standing")
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <div class="widget">
+            <div class="clearfix">
+                <input id="btnSaveCattle" type="button" class="btn btn-blue btn-block" value="@Localization.getString("Save_Notification_Settings")">
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="~/assets/css/dataTables.bootstrap.css" rel="stylesheet" />
+<script src="~/assets/js/datatable/jquery.dataTables.min.js"></script>
+<script src="~/assets/js/datatable/ZeroClipboard.js"></script>
+<script src="~/assets/js/datatable/dataTables.tableTools.min.js"></script>
+<script src="~/assets/js/datatable/dataTables.bootstrap.min.js"></script>
+<script src="~/assets/js/jquery.min.js"></script>
+<script src="~/assets/js/bootstrap.min.js"></script>
+<script src="~/assets/js/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="~/assets/js/datatable/dataTables.tableTools.min.js"></script>
+<script src="~/assets/js/datatable/datatables-init.js"></script>
+<script src="~/assets/js/fuelux/wizard/wizard-custom.js"></script>
+<script src="~/assets/js/toastr/toastr.js"></script>
+<script src="~/assets/Thems/LoadingDialog/bootstrap-waitingfor.js"></script>
+
+@*Initial all values*@
+<script>
+    function ShowWaitingDialog()
+    {
+        waitingDialog.show('@Localization.getString("Please_Wait")', {
+            headerText: '@Localization.getString("Loading")', dialogSize: 'sm', progressType: 'danger'
+        });
+    }
+
+    var skipSlider1 = document.getElementById('skipstep1');
+    var skipSlider2 = document.getElementById('skipstep2');
+    var skipSlider3 = document.getElementById('skipstep3');
+    var skipSlider4 = document.getElementById('skipstep4');
+    var skipSlider5 = document.getElementById('skipstep5');
+    var skipSlider6 = document.getElementById('skipstep6');
+    var skipSlider7 = document.getElementById('skipstep7');
+    var skipSlider8 = document.getElementById('skipstep8');
+    var skipSlider9 = document.getElementById('skipstep9');
+    var skipSlider10 = document.getElementById('skipstep10');
+
+    InitialAllValues();
+
+    function InitialAllValues()
+    {
+
+        noUiSlider.create(skipSlider1, {
+            range: {
+                'min': -5,
+                'max': 40
+            },
+            connect: true,
+            start: [parseInt('@Model.cattle_notifications[0].CattleTempMin'), parseInt('@Model.cattle_notifications[0].CattleTempMax')]
+        });
+        noUiSlider.create(skipSlider2, {
+            range: {
+                'min': 0,
+                'max': 100
+            },
+            connect: true,
+            start: [parseInt('@Model.cattle_notifications[0].SittingMin'), parseInt('@Model.cattle_notifications[0].SittingMax')]
+        });
+        noUiSlider.create(skipSlider3, {
+            range: {
+                'min': 0,
+                'max': 100
+            },
+            connect: true,
+            start: [parseInt('@Model.cattle_notifications[0].WalkingMin'), parseInt('@Model.cattle_notifications[0].WalkingMax')]
+        });
+        noUiSlider.create(skipSlider4, {
+            range: {
+                'min': 0,
+                'max': 100
+            },
+            connect: true,
+            start: [parseInt('@Model.cattle_notifications[0].RuminationMin'), parseInt('@Model.cattle_notifications[0].RuminationMax')]
+        });
+        noUiSlider.create(skipSlider5, {
+            range: {
+                'min': 0,
+                'max': 100
+            },
+            connect: true,
+            start: [parseInt('@Model.cattle_notifications[0].DrinkingMin'), parseInt('@Model.cattle_notifications[0].DrinkingMax')]
+        });
+        noUiSlider.create(skipSlider6, {
+            range: {
+                'min': 0,
+                'max': 100
+            },
+            connect: true,
+            start: [parseInt('@Model.cattle_notifications[0].EatingMin'), parseInt('@Model.cattle_notifications[0].EatingMax')]
+        });
+        noUiSlider.create(skipSlider7, {
+            range: {
+                'min': 0,
+                'max': 100
+            },
+            connect: true,
+            start: [parseInt('@Model.cattle_notifications[0].StandingMin'), parseInt('@Model.cattle_notifications[0].StandingMax')]
+        });
+    }
+
+</script>
+
+@*Define all value fields*@
+<script>
+    var skipValues1 = [
+        document.getElementById('skip-value-lower1'),
+        document.getElementById('skip-value-upper1')
+    ];
+    var skipValues2 = [
+        document.getElementById('skip-value-lower2'),
+        document.getElementById('skip-value-upper2')
+    ];
+    var skipValues3 = [
+        document.getElementById('skip-value-lower3'),
+        document.getElementById('skip-value-upper3')
+    ];
+    var skipValues4 = [
+        document.getElementById('skip-value-lower4'),
+        document.getElementById('skip-value-upper4')
+    ];
+    var skipValues5 = [
+        document.getElementById('skip-value-lower5'),
+        document.getElementById('skip-value-upper5')
+    ];
+    var skipValues6 = [
+        document.getElementById('skip-value-lower6'),
+        document.getElementById('skip-value-upper6')
+    ];
+    var skipValues7 = [
+        document.getElementById('skip-value-lower7'),
+        document.getElementById('skip-value-upper7')
+    ];
+    var skipValues8 = [
+        document.getElementById('skip-value-lower8'),
+        document.getElementById('skip-value-upper8')
+    ];
+    var skipValues9 = [
+        document.getElementById('skip-value-lower9'),
+        document.getElementById('skip-value-upper9')
+    ];
+    var skipValues10 = [
+        document.getElementById('skip-value-lower10'),
+        document.getElementById('skip-value-upper10')
+    ];
+
+    skipSlider1.noUiSlider.on('update', function (values, handle) {
+        skipValues1[handle].innerHTML = parseInt(values[handle]);
+    });
+    skipSlider2.noUiSlider.on('update', function (values, handle) {
+        skipValues2[handle].innerHTML = parseInt(values[handle]);
+    });
+    skipSlider3.noUiSlider.on('update', function (values, handle) {
+        skipValues3[handle].innerHTML = parseInt(values[handle]);
+    });
+    skipSlider4.noUiSlider.on('update', function (values, handle) {
+        skipValues4[handle].innerHTML = parseInt(values[handle]);
+    });
+    skipSlider5.noUiSlider.on('update', function (values, handle) {
+        skipValues5[handle].innerHTML = parseInt(values[handle]);
+    });
+    skipSlider6.noUiSlider.on('update', function (values, handle) {
+        skipValues6[handle].innerHTML = parseInt(values[handle]);
+    });
+    skipSlider7.noUiSlider.on('update', function (values, handle) {
+        skipValues7[handle].innerHTML = parseInt(values[handle]);
+    });
+    skipSlider8.noUiSlider.on('update', function (values, handle) {
+        skipValues8[handle].innerHTML = parseInt(values[handle]);
+    });
+    skipSlider9.noUiSlider.on('update', function (values, handle) {
+        skipValues9[handle].innerHTML = parseInt(values[handle]);
+    });
+    skipSlider10.noUiSlider.on('update', function (values, handle) {
+        skipValues10[handle].innerHTML = parseInt(values[handle]);
+    });
+</script>
+
+@*Cattle handler*@
+<script src="~/assets/js/toastr/toastr.js"></script>
+<script>
+    $("#btnSaveCattle").click(function () {
+        ShowWaitingDialog();
+        var txtCattleTopic = document.getElementById('txtCattleTopic').value;
+        var txtCattleMessage = document.getElementById('txtCattleMessage').value;
+        var cbCattleGroup = $('#cbCattleGroup').val();
+        var cbCattleRole = $('#cbCattleRole').val();
+        var cbCattlePeroid = $('#cbCattlePeroid').val();
+        var cbCattleWindow = $('#cbCattleWindow').val();
+        var cbCattleSnoozeTime = $('#cbCattleSnoozeTime').val();
+
+        var cattleTempMIN = document.getElementById('skip-value-lower1').innerHTML;
+        var cattleTempMAX = document.getElementById('skip-value-upper1').innerHTML;
+
+        var cattleSittingMIN = document.getElementById('skip-value-lower2').innerHTML;
+        var cattleSittingMAX = document.getElementById('skip-value-upper2').innerHTML;
+
+        var cattleWalkibngMIN = document.getElementById('skip-value-lower3').innerHTML;
+        var cattleWalkibngMAX = document.getElementById('skip-value-upper3').innerHTML;
+
+        var cattleRuminationMIN = document.getElementById('skip-value-lower4').innerHTML;
+        var cattleRuminationMAX = document.getElementById('skip-value-upper4').innerHTML;
+
+        var cattleDrinkingMIN = document.getElementById('skip-value-lower5').innerHTML;
+        var cattleDrinkingMAX = document.getElementById('skip-value-upper5').innerHTML;
+
+        var cattleEattingMIN = document.getElementById('skip-value-lower6').innerHTML;
+        var cattleEattingMAX = document.getElementById('skip-value-upper6').innerHTML;
+
+        var cattleStandingMIN = document.getElementById('skip-value-lower7').innerHTML;
+        var cattleStandingMAX = document.getElementById('skip-value-upper7').innerHTML;
+
+        var UpdateCattleSetting = [
+            txtCattleTopic,
+            txtCattleMessage,
+            cbCattleGroup,
+            cbCattleRole,
+            cbCattlePeroid,
+            cbCattleWindow,
+            cattleTempMIN,
+            cattleTempMAX,
+            cattleSittingMIN,
+            cattleSittingMAX,
+            cattleWalkibngMIN,
+            cattleWalkibngMAX,
+            cattleRuminationMIN,
+            cattleRuminationMAX,
+            cattleDrinkingMIN,
+            cattleDrinkingMAX,
+            cattleEattingMIN,
+            cattleEattingMAX,
+            cattleStandingMIN,
+            cattleStandingMAX,
+            cbCattleSnoozeTime];
+
+        $.post("/Notification/UpdateCattleNotificationSetting",
+            {
+                Settings: UpdateCattleSetting,
+                ID: @Model.cattle_notifications[0].ID
+        },
+        function (data) {
+            Notify('Thank You! All of your information saved successfully.', 'bottom-right', '5000', 'blue', 'fa-check', true);
+            window.location = '/' + '@Thread.CurrentThread.CurrentCulture.Name' + '/Notification/Settings';
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        $('.list-group.checked-list-box .list-group-item').each(function () {
+
+            // Settings
+            var $widget = $(this),
+                $checkbox = $('<input type="checkbox" class="hidden" />'),
+                color = ($widget.data('color') ? $widget.data('color') : "primary"),
+                style = ($widget.data('style') == "button" ? "btn-" : "list-group-item-"),
+                settings = {
+                    on: {
+                        icon: 'glyphicon glyphicon-check'
+                    },
+                    off: {
+                        icon: 'glyphicon glyphicon-unchecked'
+                    }
+                };
+
+            $widget.css('cursor', 'pointer')
+            $widget.append($checkbox);
+
+            // Event Handlers
+            $widget.on('click', function () {
+                $checkbox.prop('checked', !$checkbox.is(':checked'));
+                $checkbox.triggerHandler('change');
+                updateDisplay();
+            });
+            $checkbox.on('change', function () {
+                updateDisplay();
+            });
+
+
+            // Actions
+            function updateDisplay() {
+                var isChecked = $checkbox.is(':checked');
+
+                // Set the button's state
+                $widget.data('state', (isChecked) ? "on" : "off");
+
+                // Set the button's icon
+                $widget.find('.state-icon')
+                    .removeClass()
+                    .addClass('state-icon ' + settings[$widget.data('state')].icon);
+
+                // Update the button's color
+                if (isChecked) {
+                    $widget.addClass(style + color + ' active');
+                } else {
+                    $widget.removeClass(style + color + ' active');
+                }
+            }
+
+            // Initialization
+            function init() {
+
+                if ($widget.data('checked') == true) {
+                    $checkbox.prop('checked', !$checkbox.is(':checked'));
+                }
+
+                updateDisplay();
+
+                // Inject the icon if applicable
+                if ($widget.find('.state-icon').length == 0) {
+                    $widget.prepend('<span class="state-icon ' + settings[$widget.data('state')].icon + '"></span>');
+                }
+            }
+            init();
+        });
+
+        $('#get-checked-data').on('click', function (event) {
+            event.preventDefault();
+            var checkedItems = {}, counter = 0;
+            $("#check-list-box li.active").each(function (idx, li) {
+                checkedItems[counter] = $(li).text();
+                counter++;
+            });
+            $('#display-json').html(JSON.stringify(checkedItems, null, '\t'));
+        });
+    });
+</script>
+
+@*Edit and Remove Notification*@
+<script>
+
+    function RemoveCattleNotification(ID)
+    {
+        ShowWaitingDialog();
+        if (confirm('@Localization.getString("Are_You_Sure_Delete")'))
+        {
+            $.post("/Notification/RemoveCattleSetting",
+            {
+                ID: ID
+            },
+            function (data) {
+                Notify('@Localization.getString("Notification_Setting_Removed")', 'bottom-right', '5000', 'red', 'fa-check', true);
+                location.reload(true);
+            });
+        }
+    }
+
+    function RemoveFreestallNotification(ID)
+    {
+        ShowWaitingDialog();
+        if (confirm('@Localization.getString("Are_You_Sure_Delete")'))
+        {
+            $.post("/Notification/RemoveFreestallSetting",
+                {
+                    ID: ID
+                },
+                function (data) {
+                    Notify('@Localization.getString("Notification_Setting_Removed")', 'bottom-right', '5000', 'red', 'fa-check', true);
+                    location.reload(true);
+                });
+        }
+    }
+
+    function EditCattleNotification(ID)
+    {
+        $.post("/Notification/UpdateCattleSetting",
+        {
+            ID: ID
+        },
+        function (data) {
+            Notify('Thank You! All of your information saved successfully.', 'bottom-right', '5000', 'blue', 'fa-check', true);
+            location.reload(true);
+        });
+    }
+
+    function EditFreestallNotification(ID)
+    {
+        alert(ID);
+
+        $.post("/Notification/UpdateFreeStallSetting",
+        {
+            ID: ID
+        },
+        function (data) {
+            Notify('Thank You! All of your information saved successfully.', 'bottom-right', '5000', 'blue', 'fa-check', true);
+            location.reload(true);
+        });
+    }
+
+</script>
+
+@*On Change Notification*@
+<script>
+    function onChangeCattle(element)
+    {
+        $.post("/Notification/ChangeCattleNotiActivation",
+        {
+            ID: element.name.replace("cbActiveCattleName", ""),
+            Status: element.checked
+        },
+        function (data) {
+            if (element.checked) {
+                Notify('@Localization.getString("Notification_Active")', 'bottom-right', '4000', 'blue', 'fa-check', true);
+            }
+            else {
+                Notify('@Localization.getString("Notification_Dective")', 'bottom-right', '4000', 'blue', 'fa-check', true);
+            }
+        });
+    }
+
+
+    function onChangeFreeStall(element)
+    {
+        $.post("/Notification/ChangeFreeStallNotiActivation",
+            {
+                ID: element.name.replace("cbActiveFreeStallName", ""),
+                Status: element.checked
+            },
+            function (data) {
+                if (element.checked) {
+                    Notify('@Localization.getString("Notification_Active")', 'bottom-right', '4000', 'blue', 'fa-check', true);
+                }
+                else {
+                    Notify('@Localization.getString("Notification_Dective")', 'bottom-right', '4000', 'blue', 'fa-check', true);
+                }
+            });
+    }
+</script>

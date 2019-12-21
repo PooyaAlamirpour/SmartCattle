@@ -1,0 +1,455 @@
+﻿@using System.Threading
+@model SmartCattle.Web.Controllers.SensorController.AssignSensorModel
+@{
+    ViewBag.Title = "AssignToCattle";
+    //Layout = "~/Views/Shared/_Default.cshtml";
+    //This cause layout change to right to left
+}
+
+<div class="row margin-bottom-20">
+    <div class="col-lg-4 col-sm-4 col-xs-12">
+        <div>
+            <select id="CattleId" name="CattleId" style="width:100%;">
+                <option value="null" />@Localization.getString("Cattle_Id_sensor")
+                @foreach (var item in Model.Cattles)
+                {
+                    <option value="@item.ID" />@item.animalNumber
+                }
+             </select>
+        </div>
+    </div>
+    <div class="col-lg-4 col-sm-4 col-xs-12">
+        <div>
+            <select id="SensorId" name="SensorId" style="width:100%;">
+                <option value="null" />@Localization.getString("Sensor_ID")
+                @foreach (var item in Model.Sensors)
+                {
+                <option value="@item.ID" />@item.MacAddress
+                }
+            </select>
+        </div>
+    </div>
+    <div class="col-lg-4 col-sm-4 col-xs-12">
+        <button id="SensorAssign" class="btn btn-palegreen col-lg-6 col-sm-6 col-xs-12" > @Localization.getString("Assign")</button>
+    </div>
+    <hr class="wide">
+</div>
+
+<div id="sensorList">
+    <div class="col-lg-12 col-sm-12 col-xs-12 no-padding">
+        <div class="col-xs-12 col-md-12 col-lg-12 no-padding">
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-yellow">
+                    <div class="widget-buttons">
+                        <a href="#" data-toggle="dispose">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="widget-body no-padding" id="searchableGridWrapper">
+                    <table class="table table-bordered table-hover table-striped" id="searchable">
+                        @{
+                            if (PermissionViewer.WillBeShow("Sensor-AdvanceSensorfilter", User.Identity.Name))
+                            {
+                                <thead class="bordered-darkorange">
+                                    <tr role="row">
+                                        <th>
+                                            @Localization.getString("Sensor_serialNumber")
+                                        </th>
+                                        <th>
+                                            @Localization.getString("Mac_Address")
+                                        </th>
+                                        @*<th>
+                            @Localization.getString("Status")
+                        </th>*@
+                                        <th>
+                                            @Localization.getString("Cattle_Number")
+                                        </th>
+                                        @{
+                                            if (PermissionViewer.WillBeShow("Sensor-UnassignSensor", User.Identity.Name))
+                                            {
+                                                <th>
+                                                    @Localization.getString("Unassign")
+                                                </th>
+                                            }
+                                        }
+
+                                    </tr>
+                                    <tr>
+                                        <th class="relative ">
+                                            <input id="SerialNumber_Input" type="text" class="filter-input" />
+                                        </th>
+                                        <th class="relative ">
+                                            <input id="MacAddress_Input" type="text" class="filter-input" />
+                                        </th>
+                                        <th class="relative ">
+                                            <input id="CattleId_Input" type="text" class="filter-input" />
+                                        </th>
+                                        @{
+                                            if (PermissionViewer.WillBeShow("Sensor-UnassignSensor", User.Identity.Name))
+                                            {
+                                                <th class="relative ">
+                                                </th>
+                                            }
+                                        }
+                                    </tr>
+                                </thead>
+                            }
+
+                        }
+
+
+                        <tfoot>
+                            <tr></tr>
+                        </tfoot>
+                        <tbody>
+                            @if (Model.PagedSensors != null && Model.PagedSensors.Any())
+                            {
+                                foreach (var item in Model.PagedSensors)
+                                {
+                            <tr class="rowData" data-rowid="@item.ID">
+                                <td>@item.Equipmentid</td>
+                                <td>@item.MacAddress</td>
+                                @if (item.cattleId != null)
+                                {
+                                    if (Model.Cattles.FirstOrDefault(c => c.ID == item.cattleId) != null)
+                                    {
+                                        <td>@Model.Cattles.FirstOrDefault(c => c.ID == item.cattleId).animalNumber </td>
+                                    }
+                                    else
+                                    {
+                                        if (@item.cattleId == 0)
+                                        {
+                                            <td class="gray">@Localization.getString("Not_Linked")</td>
+                                        }
+                                        else
+                                        {
+                                            <td class="gray">@Localization.getString("Cattle_was_killed")</td>
+                                        }
+                                    }
+                                }
+                                @{
+                                    if (PermissionViewer.WillBeShow("Sensor-UnassignSensor", User.Identity.Name))
+                                    {
+                                        <td>
+                                            <span>
+                                                @if (Model.Cattles.FirstOrDefault(c => c.ID == item.cattleId) != null)
+                                                {
+                                                var tag_name = "Sensor_" + item.ID;
+                                                <a href="#" data-id="@tag_name" class="btn btn-info btn-xs edit" onclick="UnassignSensor('@tag_name')">
+                                                    <i class="fa fa-edge"></i> @Localization.getString("Unassign")
+                                                </a>
+                                                }
+                                                else
+                                                {
+
+                                                }
+                                            </span>
+                                        </td>
+                                    }
+                                }
+
+                            </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    <!-- start paging -->
+                    <br />
+                    <br />
+                    <div id="paging" class="row">
+                        <div class="col-sm-5"><div>@*40Showing @((Model.current - 1) * 15 + 1) to @((Model.current) * 15) entries*@</div></div>
+                        <div class="col-sm-6">
+                            @{
+                                if (PermissionViewer.WillBeShow("Sensor-paging", User.Identity.Name))
+                                {
+                                    <div class="dataTables_paginate paging_bootstrap" id="@*searchable_paginate*@">
+                                        <ul class="pagination">
+                                            <li data-index="1"><a href="#">first</a></li>
+                                            @if (Model.current - 3 > 0)
+                                            {
+                                                <li><a disabled="disabled">.....</a></li>
+                                            }
+                                            @if (Model.current - 2 > 0)
+                                            {
+                                                <li data-index="@(Model.current-2)"><a href="#">@(Model.current - 2)</a></li>
+                                            }
+                                            @if (Model.current - 1 > 0)
+                                            {
+                                                <li data-index="@(Model.current-1)"><a href="#">@(Model.current - 1)</a></li>
+                                            }
+                                            <li data-index="@(Model.current)" class="active"><a href="#">@Model.current</a></li>
+
+                                            @if (Model.current + 1 <= Model.pages)
+                                            {
+                                                <li data-index="@(Model.current+1)"><a href="#">@(Model.current + 1)</a></li>
+                                            }
+                                            @if (Model.current + 2 <= Model.pages)
+                                            {
+                                                <li data-index="@(Model.current+2)"><a href="#">@(Model.current + 2)</a></li>
+                                            }
+                                            @if (Model.current + 3 <= Model.pages)
+                                            {
+                                                <li disabled="disabled"><a>.....</a></li>
+                                            }
+                                            <li data-index="@Model.pages"><a href="#">last</a></li>
+                                        </ul>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <!-- end paging -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*@Html.AntiForgeryToken()*@
+
+@section PageScripts{
+<script src="/assets/js/datatable/jquery.dataTables.min.js"></script>
+<script src="/assets/js/datatable/dataTables.bootstrap.min.js"></script>
+<script src="/assets/js/datatable/datatables-init.js"></script>
+<script src="~/assets/js/jquery.min.js"></script>
+<script src="~/assets/js/bootstrap.min.js"></script>
+<script src="~/assets/js/slimscroll/jquery.slimscroll.min.js"></script>
+@*<script src="~/assets/js/beyond.min.js"></script>*@
+<script src="~/assets/js/select2/select2.js"></script>
+<script src="~/assets/js/tagsinput/bootstrap-tagsinput.js"></script>
+<script src="~/assets/js/datetime/bootstrap-datepicker.js"></script>
+<script src="~/assets/js/datetime/bootstrap-timepicker.js"></script>
+<script src="~/assets/js/datetime/moment.js"></script>
+<script src="~/assets/js/datetime/daterangepicker.js"></script>
+<script src="~/assets/js/textarea/jquery.autosize.js"></script>
+<script src="~/assets/js/fuelux/spinbox/fuelux.spinbox.min.js"></script>
+<script src="~/assets/js/knob/jquery.knob.js"></script>
+<script src="~/assets/js/slider/jquery.nouislider.js"></script>
+<script src="~/assets/js/jquery-ui-1.10.4.custom.js"></script>
+<script src="~/assets/js/slider/jQRangeSlider/jQAllRangeSliders-withRuler-min.js"></script>
+<script src="~/assets/js/dropzone/dropzone.min.js"></script>
+    <script>
+        $("#CattleId").select2();
+        $("#SensorId").select2();
+
+        debugger;
+        var select_CattleId = document.getElementById("select2-CattleId-container");
+        var select_SensorId = document.getElementById("select2-SensorId-container");
+        
+        select_CattleId.setAttribute('dir', 'rtl');
+        select_SensorId.setAttribute('dir', 'rtl');
+    </script>
+    <script>
+        SyncMenuAgain();
+
+        function SyncMenuAgain()
+        {
+            //--------------------------------------------------------
+            $.post("/Sensor/SyncMenuAgain",
+            {
+                page: $(".pagination li.active").data("index")
+            },
+            function (data) {
+                debugger;
+                var SensorIdData = [];
+                var CattleIdData = [];
+                SensorIdData.push(
+                    {
+                        id: 0,
+                        text: 'MAC Address'
+                    });
+                CattleIdData.push(
+                    {
+                        id: 0,
+                        text: 'Cattle Number'
+                    });
+                for (var i = 0; i < data.Sensors.length; i++) {
+                    SensorIdData.push(
+                        {
+                            id: data.Sensors[i].ID,
+                            text: data.Sensors[i].MacAddress
+                        });
+                }
+                for (var i = 0; i < data.Cattles.length; i++) {
+                    CattleIdData.push(
+                        {
+                            id: data.Cattles[i].ID,
+                            text: data.Cattles[i].animalNumber
+                        });
+                }
+
+                $("#SensorId").html('').select2({
+                    data: SensorIdData
+                });
+
+                $("#CattleId").html('').select2({
+                    data: CattleIdData
+                });
+
+                var select_CattleId = document.getElementById("select2-CattleId-container");
+                var select_SensorId = document.getElementById("select2-SensorId-container");
+
+                select_CattleId.setAttribute('dir', 'rtl');
+                select_SensorId.setAttribute('dir', 'rtl');
+            });
+            //--------------------------------------------------------
+        }
+
+        $("body").on("click", "#paging li a", function (e) {
+            Waite();
+            page = $(this).parent().data("index");
+            SerialNumber_Input = document.getElementById("SerialNumber_Input").value;
+            MacAddress_Input = document.getElementById("MacAddress_Input").value;
+            CattleId_Input = document.getElementById("CattleId_Input").value;
+
+            var AllFields =
+            [
+                page,
+                SerialNumber_Input,
+                MacAddress_Input,
+                CattleId_Input
+            ];
+
+            $.post("/Sensor/paging",
+            {
+                AllFields: AllFields,
+                page: $(this).parent().data("index")
+            },
+            function (data) {
+                parser = new DOMParser();
+                tmpBody = $(parser.parseFromString(data, "text/html")).find("tbody").html();
+                $("#searchableGridWrapper tbody").html(tmpBody);
+                parser = new DOMParser();
+                tmpHtml = $(parser.parseFromString(data, "text/html")).find("#paging").html();
+                $("#searchableGridWrapper #paging").html(tmpHtml);
+                unWait();
+            });
+
+            e.preventDefault();
+        });
+
+        $("body").on("click", "#SensorAssign", function (e)
+        {
+            Waite();
+            $.ajax({
+                url: '@Url.Action("AssignToCattle", "Sensor")',
+                type: "POST",
+                data: AddAntiForgeryToken({ "CattleId": $("#CattleId").val(), "SensorId": $("#SensorId").val(), "page": $(".pagination li.active").data("index") }),
+                success: function (data) {
+                    debugger;
+                    parser = new DOMParser();
+                    tmpBody = $(parser.parseFromString(data, "text/html")).find("tbody").html();
+                    $("#searchableGridWrapper tbody").html(tmpBody);
+                    parser = new DOMParser();
+                    tmpHtml = $(parser.parseFromString(data, "text/html")).find("#paging").html();
+                    $("#searchableGridWrapper #paging").html(tmpHtml);
+                    SyncMenuAgain();
+                    unWait();
+                }
+            })
+            e.preventDefault();
+        });
+
+        AddAntiForgeryToken = function (data) {
+            data.__RequestVerificationToken = $('input[name=__RequestVerificationToken]').val();
+            return data;
+        };
+    </script>    
+    <script>
+        function UnassignSensor(element)
+        {
+            Waite();
+            $.ajax({
+                url: '@Url.Action("UnassignSensor", "Sensor")',
+                type: "POST",
+                data: AddAntiForgeryToken({ "ID": element.replace("Sensor_", ""), "page": $(".pagination li.active").data("index") }),
+                success: function (data) {
+                    debugger;
+                    parser = new DOMParser();
+                    tmpBody = $(parser.parseFromString(data, "text/html")).find("tbody").html();
+                    $("#searchableGridWrapper tbody").html(tmpBody);
+                    parser = new DOMParser();
+                    tmpHtml = $(parser.parseFromString(data, "text/html")).find("#paging").html();
+                    $("#searchableGridWrapper #paging").html(tmpHtml);
+                    SyncMenuAgain();
+                    unWait();
+                }
+            });
+        }
+    </script>   
+    <script>
+        window.onload = function (e) {
+            var SerialNumber_Input = document.getElementById("SerialNumber_Input");
+            var MacAddress_Input = document.getElementById("MacAddress_Input");
+            var CattleId_Input = document.getElementById("CattleId_Input");
+
+            SerialNumber_Input.addEventListener("keyup", function (event) {
+                event.preventDefault();
+                if (event.keyCode === 13) {
+                    Advancefilter();
+                }
+            });
+
+            MacAddress_Input.addEventListener("keyup", function (event) {
+                event.preventDefault();
+                if (event.keyCode === 13) {
+                    Advancefilter();
+                }
+            });
+
+            CattleId_Input.addEventListener("keyup", function (event) {
+                event.preventDefault();
+                if (event.keyCode === 13) {
+                    Advancefilter();
+                }
+            });
+        }
+
+        function Advancefilter() {
+            page = $(this).parent().data("index");
+            SerialNumber_Input = document.getElementById("SerialNumber_Input").value;
+            MacAddress_Input = document.getElementById("MacAddress_Input").value;
+            CattleId_Input = document.getElementById("CattleId_Input").value;
+
+            var AllFields =
+            [
+                page,
+                SerialNumber_Input,
+                MacAddress_Input,
+                CattleId_Input
+            ];
+
+            Waite();
+
+            $.post("/Sensor/AdvanceSensorfilter",
+            {
+                AllFields: AllFields,
+                page: page
+            },
+            function (data) {
+                parser = new DOMParser();
+                tmpBody = $(parser.parseFromString(data, "text/html")).find("tbody").html();
+                $("#searchableGridWrapper tbody").html(tmpBody);
+                parser = new DOMParser();
+                tmpHtml = $(parser.parseFromString(data, "text/html")).find("#paging").html();
+                $("#searchableGridWrapper #paging").html(tmpHtml);
+                unWait();
+            });
+        }
+    </script>
+    <script>
+        function Waite()
+        {
+            $("#searchableGridWrapper tbody").animate({ opacity: 0 }, 200);
+            $(".loader").fadeIn(300);
+        }
+
+        function unWait()
+        {
+            $(".loader").hide(100);
+            $("#searchableGridWrapper tbody").animate({ opacity: 1 }, 200);
+        }
+    </script>
+}
+ 

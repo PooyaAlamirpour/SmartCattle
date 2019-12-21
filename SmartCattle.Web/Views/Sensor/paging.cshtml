@@ -1,0 +1,160 @@
+﻿@using System.Threading
+@model SmartCattle.Web.Controllers.SensorController.AssignSensorModel
+@{
+    ViewBag.Title = "AssignToCattle"; 
+}
+
+<div id="sensorList">
+    <div class="col-lg-12 col-sm-12 col-xs-12 no-padding">
+        <div class="col-xs-12 col-md-12 col-lg-12 no-padding">
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-yellow">
+                    <div class="widget-buttons">
+                        <a href="#" data-toggle="dispose">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="widget-body no-padding" id="searchableGridWrapper">
+                    <table class="table table-bordered table-hover table-striped" id="searchable">
+                        <thead class="bordered-darkorange">
+                            <tr role="row">
+                                <th>
+                                    @Localization.getString("Sensor_serialNumber")
+                                </th>
+                                <th>
+                                    @Localization.getString("Mac_Address")
+                                </th>
+                                <th>
+                                    @Localization.getString("Cattle_Number")
+                                </th>
+                                <th>
+                                    @Localization.getString("Unassign")
+                                </th>
+                            </tr>
+                            <tr>
+                                <th class="relative ">
+                                    <input id="SerialNumber_Input" type="text" class="filter-input" />
+                                </th>
+                                <th class="relative ">
+                                    <input id="MacAddress_Input" type="text" class="filter-input" />
+                                </th>
+                                <th class="relative ">
+                                    <input id="CattleId_Input" type="text" class="filter-input" />
+                                </th>
+                                <th class="relative ">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                @*<th rowspan="1" colspan="1"><input type="text" name="search_engine" placeholder="@Localization.getString(" Search")" class="form-control input-sm"></th>
+                                <th rowspan="1" colspan="1"><input type="text" name="search_browser" placeholder="@Localization.getString(" Search")" class="form-control input-sm"></th>
+                                <th rowspan="1" colspan="1"><input type="text" name="search_platform" placeholder="@Localization.getString(" Search")" class="form-control input-sm"></th>*@
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            @if (Model.PagedSensors != null && Model.PagedSensors.Any())
+                            {
+                                foreach (var item in Model.PagedSensors)
+                                {
+                                    <tr class="rowData" data-rowid="@item.ID">
+                                        <td>@item.Equipmentid</td>
+                                        <td>@item.MacAddress</td>
+                                        @if (item.cattleId != null)
+                                        {
+                                            if (Model.Cattles.FirstOrDefault(c => c.ID == item.cattleId) != null)
+                                            {
+                                                <td @*class="info"*@>
+                                                    @Model.Cattles.FirstOrDefault(c => c.ID == item.cattleId).animalNumber
+                                                </td>
+
+                                            }
+                                            else
+                                            {
+                                                if (@item.cattleId == 0)
+                                                {
+                                                    <td class="gray">@Localization.getString("Not_Linked")</td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="gray">@Localization.getString("Cattle_was_killed")</td>
+                                                }
+                                            }
+                                        }
+                                        <td @*class="info"*@>
+                                            <span>
+                                                @{
+                                                    if (Model.Cattles.FirstOrDefault(c => c.ID == item.cattleId) != null)
+                                                    {
+                                                        var tag_name = "Sensor_" + item.ID;
+                                                        <a href="#" data-id="@tag_name" class="btn btn-info btn-xs edit" onclick="UnassignSensor('@tag_name')">
+                                                            <i class="fa fa-edge"></i> @Localization.getString("Unassign")
+                                                        </a>
+                                                    }
+                                                    else
+                                                    {
+
+                                                    }
+                                                }
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    <!-- start paging -->
+
+                    <br />
+                    <br />
+                    <div id="paging" class="row">
+                        <div class="col-sm-5"><div>@*32Showing @((Model.current - 1) * 15 + 1) to @((Model.current) * 15) entries*@</div></div>
+                        <div class="col-sm-6">
+                            <div class="dataTables_paginate paging_bootstrap" id="searchable_paginate">
+                                <ul class="pagination">
+                                    <li data-index="1"><a href="#">first</a></li>
+                                    @if (Model.current - 3 > 0)
+                                    {
+                                        <li><a disabled="disabled">.....</a></li>
+                                    }
+                                    @if (Model.current - 2 > 0)
+                                    {
+                                        <li data-index="@(Model.current-2)"><a href="#">@(Model.current - 2)</a></li>
+                                    }
+                                    @if (Model.current - 1 > 0)
+                                    {
+                                        <li data-index="@(Model.current-1)"><a href="#">@(Model.current - 1)</a></li>
+                                    }
+                                    <li data-index="@(Model.current)" class="active"><a href="#">@Model.current</a></li>
+
+                                    @if (Model.current + 1 <= Model.pages)
+                                    {
+                                        <li data-index="@(Model.current+1)"><a href="#">@(Model.current + 1)</a></li>
+                                    }
+                                    @if (Model.current + 2 <= Model.pages)
+                                    {
+                                        <li data-index="@(Model.current+2)"><a href="#">@(Model.current + 2)</a></li>
+                                    }
+                                    @if (Model.current + 3 <= Model.pages)
+                                    {
+                                        <li disabled="disabled"><a>.....</a></li>
+                                    }
+                                    <li data-index="@Model.pages"><a href="#">last</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end paging -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.AntiForgeryToken()
+
+       
+
+

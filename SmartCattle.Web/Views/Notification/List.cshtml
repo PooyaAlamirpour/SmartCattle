@@ -1,0 +1,1267 @@
+﻿@using SmartCattle.Web.Domain;
+@using System.Threading;
+@model IList<NotificationController.NotificationsList>
+@using SmartCattle.DomainClass;
+@using SmartCattle.Web.Controllers;
+
+@{
+    ViewBag.Title = "لیست نوتیفیکیشن ها";
+}
+
+<link href="~/assets/css/MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.css" rel="stylesheet" />
+<style>
+    tr {
+        cursor: pointer;
+    }
+
+    th, td {
+        max-width: 110px !important;
+        min-width: 110px !important;
+        display: table-cell;
+        font-size: 95%;
+    }
+
+        th input {
+            width: 110px !important;
+            height: 25px;
+            display: inline-block;
+        }
+
+    tr i.fa {
+        display: inline-block !important;
+        padding: 2px 4px;
+        border: 1px solid #808080;
+        background-color: #b9b9b9;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .widget-body {
+        overflow-y: hidden;
+        overflow-x: auto;
+    }
+
+    .filter-input {
+        display: inline-block !important;
+        width: 55px !important;
+        height: 25px !important;
+    }
+
+    #dateInput {
+        height: 25px !important;
+        float: left;
+        padding: 2px !important;
+    }
+
+    .FilterBox {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: none;
+        z-index: 200;
+    }
+
+    .relative {
+        position: relative;
+    }
+
+    #datePickerbtn {
+        border: none !important;
+    }
+
+    .input-group-addon {
+        padding: 0px 6px;
+        border: none;
+        display: inline-block;
+    }
+
+    #dateHeader {
+        max-width: 170px !important;
+        min-width: 170px !important;
+        padding: 8px 2px;
+    }
+
+    .popover table td, th {
+        min-width: 5px !important;
+        max-width: none !important;
+        font-family: 'WYekan';
+    }
+
+    .selectedFilter {
+        font-size: 10px;
+        display: block;
+        margin: 2px auto;
+        text-align: center;
+        background-color: #EE7469;
+        padding: 2px;
+        cursor: no-drop;
+        border-radius: 2px;
+        clear: both;
+        height: 20px;
+        visibility: hidden;
+        color: #fefefe;
+    }
+</style>
+
+<div class="row no-padding" id="cattleList">
+    <div class="well with-header with-footer col-lg-12 col-sm-12 col-xs-12 no-padding">
+        <div class="col-lg-12 col-sm-12 col-xs-12 no-padding">
+            <div class="tabbable">
+                <div class="tab-content col-lg-12 col-md-12 col-xs-12 ">
+                    <div class="col-xs-12 col-md-12 col-lg-12 no-padding">
+                        <div class="widget">
+                            <div class="widget-header bordered-bottom bordered-darkorange">
+                                <div class="widget-buttons">
+                                </div>
+                            </div>
+                            <div class="widget-body no-padding" id="searchableGridWrapper">
+                                <table class="table table-bordered table-hover table-striped" id="searchable">
+                                    <thead class="bordered-darkorange">
+                                        <tr role="row">
+                                            <th>
+                                                @Localization.getString("AlarmID")
+                                            </th>
+                                            <th>
+                                                @Localization.getString("CattleFreestallID")
+                                            </th>
+                                            <th>
+                                                @Localization.getString("AlarmType")
+                                            </th>
+                                            <th>
+                                                @Localization.getString("AlarmSubject")
+                                            </th>
+                                            <th>
+                                                @Localization.getString("AlarmDescription")
+                                            </th>
+                                            <th>
+                                                @Localization.getString("TimeIssued")
+                                            </th>
+                                            <th>
+                                                @Localization.getString("AlarmState")
+                                            </th>
+                                            <th>
+                                                @Localization.getString("Ack")
+                                            </th>
+                                            <th>
+                                                @Localization.getString("AlarmUser")
+                                            </th>
+                                            <th>
+                                                @Localization.getString("AlarmNote")
+                                            </th>
+                                            <th>
+                                                @Localization.getString("ActTime")
+                                            </th>
+                                            <th>
+                                                @Localization.getString("DeactivationTime")
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th class="relative ">
+                                                <i data-filter="NotificationID_Filter" data-column="NotificationID" class="fa fa-filter" aria-hidden="true"></i> 
+                                                <input id="NotificationID_Input" type="text" class="filter-input" onchange="test(this)"/>
+                                                <i id="NotificationID_Label" class="selectedFilter"></i>
+                                            </th>
+                                            <th class="relative ">
+                                                <i data-filter="NotificationCattleFreestallID_Filter" data-column="NotificationCattleFreestallID" class="fa fa-filter" aria-hidden="true"></i>
+                                                <input id="NotificationCattleFreestallID_Input" type="text" class="filter-input" />
+                                                <i id="NotificationCattleFreestallID_Label" class="selectedFilter"></i>
+                                            </th>
+                                            <th class="relative ">
+                                                <i data-filter="NotificationType_Filter" data-column="NotificationType" class="fa fa-filter" aria-hidden="true"></i>
+                                                <input id="NotificationType_Input" type="text" class="filter-input" />
+                                                <i id="NotificationType_Label" class="selectedFilter"></i>
+                                            </th>
+                                            <th class="relative ">
+                                                <input id="NotificationTopic_Input" type="text" class="filter-input" />
+                                                <i id="NotificationTopic_Label" class="selectedFilter"></i>
+                                            </th>
+                                            <th class="relative ">
+                                                <input id="NotificationMessage_Input" type="text" class="filter-input" />
+                                                <i id="NotificationMessage_Label" class="selectedFilter"></i>
+                                            </th>
+                                            <th class="relative ">
+                                                <i data-filter="NotificationEventDate_Filter" data-column="NotificationEventDate" class="fa fa-filter" aria-hidden="true"></i>
+                                                <input id="NotificationEventDate_Input" type="text" class="filter-input" />
+                                                <i id="NotificationEventDate_Label" class="selectedFilter"></i>
+                                            </th>
+                                            <th class="relative ">
+                                                <i data-filter="NotificationState_Filter" data-column="NotificationState" class="fa fa-filter" aria-hidden="true"></i>
+                                                <input id="NotificationState_Input" type="text" class="filter-input" />
+                                                <i id="NotificationState_Label" class="selectedFilter"></i>
+                                            </th>
+                                            <th class="relative ">
+                                                <i data-filter="NotificationAct_Filter" data-column="NotificationAct" class="fa fa-filter" aria-hidden="true"></i>
+                                                <input id="NotificationAct_Input" type="text" class="filter-input" />
+                                                <i id="NotificationAct_Label" class="selectedFilter"></i>
+                                            </th>
+                                            <th class="relative ">
+                                                <input id="NotificationUsername_Input" type="text" class="filter-input" />
+                                                <i id="NotificationUsername_Label" class="selectedFilter"></i>
+                                            </th>
+                                            <th class="relative ">
+                                                <input id="NotificationActComment_Input" type="text" class="filter-input" />
+                                                <i id="NotificationActComment_Label" class="selectedFilter"></i>
+                                            </th>
+                                            <th class="relative ">
+                                                <i data-filter="NotificationActDate_Filter" data-column="NotificationActDate" class="fa fa-filter" aria-hidden="true"></i>
+                                                <input id="NotificationActDate_Input" type="text" class="filter-input" />
+                                                <i id="NotificationActDate_Label" class="selectedFilter"></i>
+                                            </th>
+                                            <th class="relative ">
+                                                <i data-filter="NotificationDeactiveDate_Filter" data-column="NotificationDeactiveDate" class="fa fa-filter" aria-hidden="true"></i>
+                                                <input id="NotificationDeactiveDate_Input" type="text" class="filter-input" />
+                                                <i id="NotificationDeactiveDate_Label" class="selectedFilter"></i>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            @*<th rowspan="1" colspan="1"><input type="text" name="search_engine" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                                            <th rowspan="1" colspan="1"><input type="text" name="search_browser" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                                            <th rowspan="1" colspan="1"><input type="text" name="search_platform" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                                            <th rowspan="1" colspan="1"><input type="text" name="search_version" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                                            <th rowspan="1" colspan="1"><input type="text" name="search_grade" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                                            <th rowspan="1" colspan="1"><input type="text" name="search_engine" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                                            <th rowspan="1" colspan="1"><input type="text" name="search_browser" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                                            <th rowspan="1" colspan="1"><input type="text" name="search_platform" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                                            <th rowspan="1" colspan="1"><input type="text" name="search_engine" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                                            <th rowspan="1" colspan="1"><input type="text" name="search_browser" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>
+                                            <th rowspan="1" colspan="1"><input type="text" name="search_platform" placeholder="@Localization.getString("Search")" class="form-control input-sm"></th>*@
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        @{
+                                            for (int i = 0; i < Model.Count; i++)
+                                            {
+                                                var Color = Model[i].Color;
+                                                var RowId = "RowId" + @Model[i].ID.ToString();
+
+                                                <tr class="rowData" data-rowid="@i" id="@RowId" onclick="onClickRow(this)" style="background-color:@Color">
+                                                    <td class="center">@Model[i].ID</td>
+                                                    <td class="center">@Model[i].Cattle_Freestall_Id</td>
+                                                    <td class="center">@Model[i].NotificationType</td>
+                                                    <td class="center">@Model[i].Topic</td>
+                                                    <td class="center">@Model[i].Comment</td>
+                                                    <td class="center">@Model[i].CreatedDate</td>
+                                                    <td class="center">@Model[i].Status</td>
+                                                    <td class="center">@Model[i].Act</td>
+                                                    <td class="center">@Model[i].Username</td>
+                                                    <td class="center">@Model[i].ActionComment</td>
+                                                    <td class="center">@Model[i].ActDate</td>
+                                                    <td class="center">@Model[i].DeactiveAt</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                                @{Html.RenderPartial("Paging", Model);}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- start filter boxes -->
+        <div id="NotificationID_Filter_Menu" class="dropdown-container FilterBox">
+            <div class="dropdown-preview">
+                <ul class="dropdown-menu dropdown-darkorange">
+                    <li>
+                        <a class="filterItem" title="" data-value="WitoutFilter" href="#" tabindex="-1">@Localization.getString("WitoutFilter")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.Equal" href="#" tabindex="-1">@Localization.getString("Equal")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.NotEqual" href="#" tabindex="-1">@Localization.getString("NotEqual")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.GreateThan" href="#" tabindex="-1">@Localization.getString("GreateThan")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.LessThan" href="#" tabindex="-1">@Localization.getString("LessThan")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.GreateThanOrEqualTo" href="#" tabindex="-1">@Localization.getString("GreateThanOrEqualTo")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.LessThanOrEqualTo" href="#" tabindex="-1">@Localization.getString("LessThanOrEqualTo")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.IsNull" href="#" tabindex="-1">@Localization.getString("IsNull")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.NotIsNull" href="#" tabindex="-1">@Localization.getString("NotIsNull")</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="NotificationCattleFreestallID_Filter_Menu" class="dropdown-container FilterBox">
+            <div class="dropdown-preview">
+                <ul class="dropdown-menu dropdown-darkorange">
+                    <li>
+                        <a class="filterItem" title="" data-value="WitoutFilter" href="#" tabindex="-1">@Localization.getString("WitoutFilter")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.Equal" href="#" tabindex="-1">@Localization.getString("Equal")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.NotEqual" href="#" tabindex="-1">@Localization.getString("NotEqual")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.GreateThan" href="#" tabindex="-1">@Localization.getString("GreateThan")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.LessThan" href="#" tabindex="-1">@Localization.getString("LessThan")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.GreateThanOrEqualTo" href="#" tabindex="-1">@Localization.getString("GreateThanOrEqualTo")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.LessThanOrEqualTo" href="#" tabindex="-1">@Localization.getString("LessThanOrEqualTo")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.IsNull" href="#" tabindex="-1">@Localization.getString("IsNull")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.NotIsNull" href="#" tabindex="-1">@Localization.getString("NotIsNull")</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="NotificationType_Filter_Menu" class="dropdown-container FilterBox">
+            <div class="dropdown-preview">
+                <ul class="dropdown-menu dropdown-darkorange">
+                    <li>
+                        <a class="filterItem" title="" data-value="WitoutFilter" href="#" tabindex="-1">@Localization.getString("WitoutFilter")</a>
+                        <a class="filterItem" data-value="CATTLE" href="#" tabindex="-1">CATTLE</a>
+                        <a class="filterItem" data-value="FREESTALL" href="#" tabindex="-1">FREESTALL</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="NotificationState_Filter_Menu" class="dropdown-container FilterBox">
+            <div class="dropdown-preview">
+                <ul class="dropdown-menu dropdown-darkorange">
+                    <li>
+                        <a class="filterItem" title="" data-value="WitoutFilter" href="#" tabindex="-1">@Localization.getString("WitoutFilter")</a>
+                        <a class="filterItem" data-value="1" href="#" tabindex="-1">1</a>
+                        <a class="filterItem" data-value="0" href="#" tabindex="-1">0</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="NotificationAct_Filter_Menu" class="dropdown-container FilterBox">
+            <div class="dropdown-preview">
+                <ul class="dropdown-menu dropdown-darkorange">
+                    <li>
+                        <a class="filterItem" title="" data-value="WitoutFilter" href="#" tabindex="-1">@Localization.getString("WitoutFilter")</a>
+                        <a class="filterItem" data-value="YES" href="#" tabindex="-1">YES</a>
+                        <a class="filterItem" data-value="NO" href="#" tabindex="-1">NO</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="NotificationEventDate_Filter_Menu" class="dropdown-container FilterBox">
+            <div class="dropdown-preview">
+                <ul class="dropdown-menu dropdown-darkorange">
+                    <li>
+                        <a class="filterItem" title="" data-value="WitoutFilter" href="#" tabindex="-1">@Localization.getString("WitoutFilter")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.Equal" href="#" tabindex="-1">@Localization.getString("Equal")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.GreateThan" href="#" tabindex="-1">@Localization.getString("GreateThan")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.LessThan" href="#" tabindex="-1">@Localization.getString("LessThan")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.GreateThanOrEqualTo" href="#" tabindex="-1">@Localization.getString("GreateThanOrEqualTo")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.LessThanOrEqualTo" href="#" tabindex="-1">@Localization.getString("LessThanOrEqualTo")</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="NotificationDeactiveDate_Filter_Menu" class="dropdown-container FilterBox">
+            <div class="dropdown-preview">
+                <ul class="dropdown-menu dropdown-darkorange">
+                    <li>
+                        <a class="filterItem" title="" data-value="WitoutFilter" href="#" tabindex="-1">@Localization.getString("WitoutFilter")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.Equal" href="#" tabindex="-1">@Localization.getString("Equal")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.GreateThan" href="#" tabindex="-1">@Localization.getString("GreateThan")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.LessThan" href="#" tabindex="-1">@Localization.getString("LessThan")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.GreateThanOrEqualTo" href="#" tabindex="-1">@Localization.getString("GreateThanOrEqualTo")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.LessThanOrEqualTo" href="#" tabindex="-1">@Localization.getString("LessThanOrEqualTo")</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="NotificationActDate_Filter_Menu" class="dropdown-container FilterBox">
+            <div class="dropdown-preview">
+                <ul class="dropdown-menu dropdown-darkorange">
+                    <li>
+                        <a class="filterItem" title="" data-value="WitoutFilter" href="#" tabindex="-1">@Localization.getString("WitoutFilter")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.Equal" href="#" tabindex="-1">@Localization.getString("Equal")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.GreateThan" href="#" tabindex="-1">@Localization.getString("GreateThan")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.LessThan" href="#" tabindex="-1">@Localization.getString("LessThan")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.GreateThanOrEqualTo" href="#" tabindex="-1">@Localization.getString("GreateThanOrEqualTo")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.LessThanOrEqualTo" href="#" tabindex="-1">@Localization.getString("LessThanOrEqualTo")</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- end filter boxes -->
+    </div>
+</div>
+
+<button type="button" id="btnActionMenu" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" style="display:none">Click Me</button>
+
+<button type="button" id="btnActionModal" class="btn btn-primary" data-toggle="modal" data-target="#ActionModal" style="display:none"></button>
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h5 class="modal-title" id="exampleModalLongTitle">@Localization.getString("SelectItem")</h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnCloseModal" class="btn btn-secondary" data-dismiss="modal">@Localization.getString("Close")</button>
+
+                @{
+                    if (PermissionViewer.WillBeShow("Notification-DeactiveAction", User.Identity.Name))
+                    {
+                        <button type="button" id="btnDeactiveModal" class="btn btn-darkorange" onclick="onDeactiveClick()">@Localization.getString("Deactive")</button>
+                    }
+
+                }
+
+                @{
+                    if (PermissionViewer.WillBeShow("Notification-SaveAction", User.Identity.Name))
+                    {
+                        <button type="button" id="btnActionModalButton" class="btn btn-primary" onclick="onActionClick()">@Localization.getString("Action")</button>
+                    }
+                }
+                @{
+                    if (PermissionViewer.WillBeShow("Notification-ActiveAgainAction", User.Identity.Name))
+                    {
+                        <button type="button" id="btnActive_AgainModal" class="btn btn-secondary" style="display:none" onclick="onActive_AgainClick()">@Localization.getString("Active_Again")</button>
+                    }
+
+                }
+                <button type="button" id="btnHistoryModal" class="btn btn-warning" onclick="onHistoryClick()">@Localization.getString("History")</button>
+                @*@{
+                    if (PermissionViewer.WillBeShow("", User.Identity.Name))
+                    {
+                        <button type="button" id="btnHistoryModal" class="btn btn-warning" onclick="onHistoryClick()">@Localization.getString("History")</button>
+                    }
+                    else
+                    {
+                        <button style="display:none" type="button" id="btnHistoryModal" class="btn btn-warning" onclick="onHistoryClick()">@Localization.getString("History")</button>
+                    }
+                }*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ActionModal" tabindex="-1" role="dialog" aria-labelledby="ActionModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h5 class="modal-title" id="exampleModalLongTitle">@Localization.getString("SnoozeResean")</h5>
+            </div>
+            <div class="modal-body">
+                <textarea id="txtActionMessage" style="width:100%;resize:none;" rows="4" cols="50"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnCloseActionModal" class="btn btn-secondary" onclick="CloseModal()" data-dismiss="modal">@Localization.getString("Close")</button>
+                <button type="button" class="btn btn-primary" onclick="onSaveActionClick()">@Localization.getString("Save")</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="myModal" class="modal" style="width:70%;margin:auto;margin-top:50px">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button id="btnCloseDetail" type="button" class="close" aria-label="Close" onclick="CloseDetail()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" style="margin-top:20px">
+            <div id="divContentDetail">
+                <div class="col-xs-12 col-md-12">
+                    <div class="widget">
+                        <div class="widget-header bordered-bottom bordered-darkorange">
+                            <span class="widget-caption">جزییات نوتیفیکیشن</span>
+                        </div>
+                        <div class="widget-body">
+                            <div class="btn-group pull-right">
+                                <ul class="dropdown-menu dropdown-default">
+                                    <li>
+                                        Num
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0);">Action</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0);">Another action</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0);">Something else here</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0);">Separated link</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0);">Another action</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0);">Something else here</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0);">Separated link</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <table class="table table-striped table-hover table-bordered" id="editabledatatable">
+                                <thead>
+                                    <tr role="row">
+                                        <th>                                            
+                                             @Localization.getString("Row")
+                                        </th>
+                                        <th>
+                                            @Localization.getString("AlarmState")
+                                        </th>
+                                        <th>
+                                            @Localization.getString("TimeIssued")
+                                        </th>
+                                        <th>
+                                            @Localization.getString("Ack")
+                                        </th>
+                                        <th>
+                                            @Localization.getString("AlarmUser")
+                                        </th>
+                                        <th>
+                                            @Localization.getString("AlarmNote")
+                                        </th>
+                                        <th>
+                                            @Localization.getString("ActTime")
+                                        </th>
+                                        <th>
+                                            @Localization.getString("DeactivationTime")
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="myTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/js/datatable/jquery.dataTables.min.js"></script>
+<script src="~/assets/js/datatable/dataTables.bootstrap.min.js"></script>
+<script src="~/assets/js/datatable/datatables-init.js"></script>
+<script src="~/assets/js/MdBootstrapPersianDateTimePicker/jalaali.js"></script>
+<script src="~/assets/js/MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="~/assets/js/toastr/toastr.js"></script>
+<script src="~/assets/js/datatable/jquery.dataTables.min.js"></script>
+<script src="~/assets/js/datatable/ZeroClipboard.js"></script>
+<script src="~/assets/js/datatable/dataTables.tableTools.min.js"></script>
+<script src="~/assets/js/datatable/dataTables.bootstrap.min.js"></script>
+<script src="~/assets/js/jquery.min.js"></script>
+@*<script src="~/assets/js/bootstrap.min.js"></script>*@
+<script src="~/assets/js/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="~/assets/js/datatable/jquery.dataTables.min.js"></script>
+<script src="~/assets/js/datatable/jquery.dataTables.js"></script>
+<script src="~/assets/js/datatable/ZeroClipboard.js"></script>
+<script src="~/assets/js/datatable/dataTables.tableTools.min.js"></script>
+<script src="~/assets/js/datatable/dataTables.bootstrap.min.js"></script>
+<script src="~/assets/js/datatable/datatables-init.js"></script>
+
+<script type="text/javascript">
+    var mInitiateEditableDataTable;
+    var oTable;
+    InitialTable();
+
+    function InitialTable() {
+        mInitiateEditableDataTable = function () {
+            return {
+                init: function () {
+                    //Datatable Initiating
+                    oTable = $('#editabledatatable').dataTable({
+                        "aLengthMenu": [
+                            [5, 15, 20, 100, -1],
+                            [5, 15, 20, 100, "All"]
+                        ],
+                        "iDisplayLength": 5,
+                        "sPaginationType": "bootstrap",
+                        "sDom": "Tflt<'row DTTTFooter'<'col-sm-6'i><'col-sm-6'p>>",
+                        "language": {
+                            "search": "",
+                            "sLengthMenu": "_MENU_",
+                            "oPaginate": {
+                                "sPrevious": "Prev",
+                                "sNext": "Next"
+                            }
+                        },
+                        "aoColumns": [
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            { "bSortable": true }
+                        ]
+                    });
+
+                    var isEditing = null;
+
+                    function restoreRow(oTable, nRow) {
+                        var aData = oTable.fnGetData(nRow);
+                        var jqTds = $('>td', nRow);
+
+                        for (var i = 0, iLen = jqTds.length; i < iLen; i++) {
+                            oTable.fnUpdate(aData[i], nRow, i, false);
+                        }
+
+                        oTable.fnDraw();
+                    }
+
+                    
+                }
+
+            };
+        }();
+        mInitiateEditableDataTable.init();
+    }
+
+</script>
+<script>
+    window.onload = function (e) {
+        //$('#NotificationID_Input').on('input', function (e) {
+        //    Advancefilter();
+        //});
+
+        document.getElementById("NotificationID_Input").addEventListener("keyup", function (event) {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                Advancefilter();
+            }
+        });
+
+        //$('#NotificationCattleFreestallID_Input').on('input', function (e) {
+        //    Advancefilter();
+        //});
+
+        document.getElementById("NotificationCattleFreestallID_Input").addEventListener("keyup", function (event) {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                Advancefilter();
+            }
+        });
+
+        //$('#NotificationType_Input').on('input', function (e) {
+        //    Advancefilter();
+        //});
+
+        document.getElementById("NotificationType_Input").addEventListener("keyup", function (event) {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                Advancefilter();
+            }
+        });
+
+        //$('#NotificationTopic_Input').on('input', function (e) {
+        //    Advancefilter();
+        //});
+
+        document.getElementById("NotificationTopic_Input").addEventListener("keyup", function (event) {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                Advancefilter();
+            }
+        });
+
+        //$('#NotificationMessage_Input').on('input', function (e) {
+        //    Advancefilter();
+        //});
+
+        document.getElementById("NotificationMessage_Input").addEventListener("keyup", function (event) {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                Advancefilter();
+            }
+        });
+
+        //$('#NotificationEventDate_Input').bind('keypress', function (e) {
+        //    var code = e.keyCode || e.which;
+        //    if (code == 13) {
+        //        Advancefilter();
+        //    }
+        //});
+
+        document.getElementById("NotificationEventDate_Input").addEventListener("keyup", function (event) {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                Advancefilter();
+            }
+        });
+
+        //$('#NotificationState_Input').on('input', function (e) {
+        //    Advancefilter();
+        //});
+
+        document.getElementById("NotificationState_Input").addEventListener("keyup", function (event) {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                Advancefilter();
+            }
+        });
+
+        //$('#NotificationAct_Input').on('input', function (e) {
+        //    Advancefilter();
+        //});
+
+        document.getElementById("NotificationAct_Input").addEventListener("keyup", function (event) {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                Advancefilter();
+            }
+        });
+
+        //$('#NotificationUsername_Input').on('input', function (e) {
+        //    Advancefilter();
+        //});
+
+        document.getElementById("NotificationUsername_Input").addEventListener("keyup", function (event) {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                Advancefilter();
+            }
+        });
+
+        //$('#NotificationActComment_Input').on('input', function (e) {
+        //    Advancefilter();
+        //});
+
+        document.getElementById("NotificationActComment_Input").addEventListener("keyup", function (event) {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                Advancefilter();
+            }
+        });
+
+        //$('#NotificationActDate_Input').bind('keypress', function (e) {
+        //    var code = e.keyCode || e.which;
+        //    if (code == 13) {
+        //        Advancefilter();
+        //    }
+        //});
+
+        document.getElementById("NotificationActDate_Input").addEventListener("keyup", function (event) {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                Advancefilter();
+            }
+        });
+
+        //$('#NotificationDeactiveDate_Input').bind('keypress', function (e) {
+        //    var code = e.keyCode || e.which;
+        //    if (code == 13) {
+        //        Advancefilter();
+        //    }
+        //});
+
+        document.getElementById("NotificationDeactiveDate_Input").addEventListener("keyup", function (event) {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                Advancefilter();
+            }
+        });
+    }
+
+    function Advancefilter()
+    {
+        NotificationID_Input = document.getElementById("NotificationID_Input").value;
+        NotificationCattleFreestallID_Input = document.getElementById("NotificationCattleFreestallID_Input").value;
+        NotificationType_Input = document.getElementById("NotificationType_Input").value;
+        NotificationTopic_Input = document.getElementById("NotificationTopic_Input").value;
+        NotificationMessage_Input = document.getElementById("NotificationMessage_Input").value;
+        NotificationEventDate_Input = document.getElementById("NotificationEventDate_Input").value;
+        NotificationState_Input = document.getElementById("NotificationState_Input").value;
+        NotificationAct_Input = document.getElementById("NotificationAct_Input").value;
+        NotificationUsername_Input = document.getElementById("NotificationUsername_Input").value;
+        NotificationActComment_Input = document.getElementById("NotificationActComment_Input").value;
+        NotificationActDate_Input = document.getElementById("NotificationActDate_Input").value;
+        NotificationDeactiveDate_Input = document.getElementById("NotificationDeactiveDate_Input").value;
+
+        NotificationID_Label = document.getElementById("NotificationID_Label").innerHTML;
+        NotificationCattleFreestallID_Label = document.getElementById("NotificationCattleFreestallID_Label").innerHTML;
+        NotificationType_Label = document.getElementById("NotificationType_Label").innerHTML;
+        NotificationTopic_Label = document.getElementById("NotificationTopic_Label").innerHTML;
+        NotificationMessage_Label = document.getElementById("NotificationMessage_Label").innerHTML;
+        NotificationEventDate_Label = document.getElementById("NotificationEventDate_Label").innerHTML;
+        NotificationState_Label = document.getElementById("NotificationState_Label").innerHTML;
+        NotificationAct_Label = document.getElementById("NotificationAct_Label").innerHTML;
+        NotificationUsername_Label = document.getElementById("NotificationUsername_Label").innerHTML;
+        NotificationActComment_Label = document.getElementById("NotificationActComment_Label").innerHTML;
+        NotificationActDate_Label = document.getElementById("NotificationActDate_Label").innerHTML;
+        NotificationDeactiveDate_Label = document.getElementById("NotificationDeactiveDate_Label").innerHTML;
+
+        var AllFields =
+        [
+            NotificationID_Input,
+            NotificationCattleFreestallID_Input,
+            NotificationType_Input,
+            NotificationTopic_Input,
+            NotificationMessage_Input,
+            NotificationEventDate_Input,
+            NotificationState_Input,
+            NotificationAct_Input,
+            NotificationUsername_Input,
+            NotificationActComment_Input,
+            NotificationActDate_Input,
+            NotificationDeactiveDate_Input,
+            NotificationID_Label,
+            NotificationCattleFreestallID_Label,
+            NotificationType_Label,
+            NotificationTopic_Label,
+            NotificationMessage_Label,
+            NotificationEventDate_Label,
+            NotificationState_Label,
+            NotificationAct_Label,
+            NotificationUsername_Label,
+            NotificationActComment_Label,
+            NotificationActDate_Label,
+            NotificationDeactiveDate_Label
+        ];
+
+        ShowTableWaiting();
+        $.post("/Notification/Advancefilter",
+        {
+            AllFields: AllFields
+        },
+        function (data) {
+            parser = new DOMParser();
+            $("#searchableGridWrapper tbody").html($(parser.parseFromString(data, "text/html")).find("tbody").html());
+            parser = new DOMParser();
+            //tmpHtml = $(parser.parseFromString(data, "text/html")).find("#paging").html();
+            CloseTableWaiting();
+        });
+    }
+</script>
+<script>
+    function ShowTableWaiting()
+    {
+        $("#searchableGridWrapper tbody").animate({ opacity: 0 }, 200);
+        $(".loader").fadeIn(300);
+    }
+
+    function CloseTableWaiting()
+    {
+        $(".loader").hide(100);
+        $("#searchableGridWrapper tbody").animate({ opacity: 1 }, 200);
+    }
+</script>
+<script>
+    $(window).click(function (e) {
+        $("body").css("padding-right", 0);
+        $("body").css("padding-right", 0);
+    });
+
+    $("#exampleModalCenter").on("hidden.bs.modal", function () {
+        $("body").css("padding-right", 0);
+        $("body").css("padding-right", 0);
+    });
+
+    $('.fa-filter').on('click', function (e) {
+        $(".FilterBox").hide();
+        filter = $(this).data("filter");
+        column = $(this).data("column");
+
+        if (filter == "NotificationID_Filter") {
+            console.log("field : " + column);
+            $("#NotificationID_Filter_Menu .filterItem").attr("title", column);
+            $("#NotificationID_Filter_Menu").hide();
+            $("#NotificationID_Filter_Menu").css({ top: $(this).parent().offset().top - 150, left: $(this).parent().offset().left - ($(this).width()) });
+            $("#NotificationID_Filter_Menu").fadeIn(400);
+        }
+
+        if (filter == "NotificationCattleFreestallID_Filter") {
+            console.log("field : " + column);
+            $("#NotificationCattleFreestallID_Filter_Menu .filterItem").attr("title", column);
+            $("#NotificationCattleFreestallID_Filter_Menu").hide();
+            $("#NotificationCattleFreestallID_Filter_Menu").css({ top: $(this).parent().offset().top - 150, left: $(this).parent().offset().left - ($(this).width()) });
+            $("#NotificationCattleFreestallID_Filter_Menu").fadeIn(400);
+        }
+
+        if (filter == "NotificationType_Filter") {
+            console.log("field : " + column);
+            $("#NotificationType_Filter_Menu .filterItem").attr("title", column);
+            $("#NotificationType_Filter_Menu").hide();
+            $("#NotificationType_Filter_Menu").css({ top: $(this).parent().offset().top - 150, left: $(this).parent().offset().left - ($(this).width()) });
+            $("#NotificationType_Filter_Menu").fadeIn(400);
+        }
+
+        if (filter == "NotificationState_Filter") {
+            console.log("field : " + column);
+            $("#NotificationState_Filter_Menu .filterItem").attr("title", column);
+            $("#NotificationState_Filter_Menu").hide();
+            $("#NotificationState_Filter_Menu").css({ top: $(this).parent().offset().top - 150, left: $(this).parent().offset().left - ($(this).width()) });
+            $("#NotificationState_Filter_Menu").fadeIn(400);
+        }
+
+        if (filter == "NotificationAct_Filter") {
+            console.log("field : " + column);
+            $("#NotificationAct_Filter_Menu .filterItem").attr("title", column);
+            $("#NotificationAct_Filter_Menu").hide();
+            $("#NotificationAct_Filter_Menu").css({ top: $(this).parent().offset().top - 150, left: $(this).parent().offset().left - ($(this).width()) });
+            $("#NotificationAct_Filter_Menu").fadeIn(400);
+        }
+
+        if (filter == "NotificationEventDate_Filter") {
+            console.log("field : " + column);
+            $("#NotificationEventDate_Filter_Menu .filterItem").attr("title", column);
+            $("#NotificationEventDate_Filter_Menu").hide();
+            $("#NotificationEventDate_Filter_Menu").css({ top: $(this).parent().offset().top - 150, left: $(this).parent().offset().left - ($(this).width()) });
+            $("#NotificationEventDate_Filter_Menu").fadeIn(400);
+        }
+
+        if (filter == "NotificationDeactiveDate_Filter") {
+            console.log("field : " + column);
+            $("#NotificationDeactiveDate_Filter_Menu .filterItem").attr("title", column);
+            $("#NotificationDeactiveDate_Filter_Menu").hide();
+            $("#NotificationDeactiveDate_Filter_Menu").css({ top: $(this).parent().offset().top - 150, left: $(this).parent().offset().left - ($(this).width()) });
+            $("#NotificationDeactiveDate_Filter_Menu").fadeIn(400);
+        }
+
+        if (filter == "NotificationActDate_Filter") {
+            console.log("field : " + column);
+            $("#NotificationActDate_Filter_Menu .filterItem").attr("title", column);
+            $("#NotificationActDate_Filter_Menu").hide();
+            $("#NotificationActDate_Filter_Menu").css({ top: $(this).parent().offset().top - 150, left: $(this).parent().offset().left - ($(this).width()) });
+            $("#NotificationActDate_Filter_Menu").fadeIn(400);
+        }
+    });
+
+    $("#NotificationID_Filter_Menu").on("click", ".filterItem", function () {
+        $("#" + $(this).attr("title")).attr("title", $(this).data("value"));
+        $("#NotificationID_Filter_Menu").fadeOut(200);
+        $("#" + $(this).attr("title") + "_Label").html($(this).html());
+        $("#" + $(this).attr("title") + "_Label").attr("data-related", $(this).attr("title"));
+        $("#" + $(this).attr("title") + "_Label").css({ "visibility": "visible" });
+        $("#" + $(this).attr("title") + "_Label").animate({ "opacity": 1 }, 300);
+        if ($(this).data("value") == "WitoutFilter") {
+            $("#" + $(this).attr("title") + "_Label").removeAttr("style");
+            $("#" + $(this).attr("title") + "_Label").html("");
+        }
+        Advancefilter();
+    });
+
+    $("#NotificationCattleFreestallID_Filter_Menu").on("click", ".filterItem", function () {
+        $("#" + $(this).attr("title")).attr("title", $(this).data("value"));
+        $("#NotificationCattleFreestallID_Filter_Menu").fadeOut(200);
+        $("#" + $(this).attr("title") + "_Label").html($(this).html());
+        $("#" + $(this).attr("title") + "_Label").attr("data-related", $(this).attr("title"));
+        $("#" + $(this).attr("title") + "_Label").css({ "visibility": "visible" });
+        $("#" + $(this).attr("title") + "_Label").animate({ "opacity": 1 }, 300);
+        if ($(this).data("value") == "WitoutFilter") {
+            $("#" + $(this).attr("title") + "_Label").removeAttr("style");
+            $("#" + $(this).attr("title") + "_Label").html("");
+        }
+        Advancefilter();
+    });
+    
+    $("#NotificationType_Filter_Menu").on("click", ".filterItem", function () {
+        $("#" + $(this).attr("title")).attr("title", $(this).data("value"));
+        $("#NotificationType_Filter_Menu").fadeOut(200);
+        $("#" + $(this).attr("title") + "_Label").html($(this).html());
+        $("#" + $(this).attr("title") + "_Label").attr("data-related", $(this).attr("title"));
+        $("#" + $(this).attr("title") + "_Label").css({ "visibility": "visible" });
+        $("#" + $(this).attr("title") + "_Label").animate({ "opacity": 1 }, 300);
+        if ($(this).data("value") == "WitoutFilter") {
+            $("#" + $(this).attr("title") + "_Label").removeAttr("style");
+            $("#" + $(this).attr("title") + "_Label").html("");
+        }
+        Advancefilter();
+    });
+
+    $("#NotificationState_Filter_Menu").on("click", ".filterItem", function () {
+        $("#" + $(this).attr("title")).attr("title", $(this).data("value"));
+        $("#NotificationState_Filter_Menu").fadeOut(200);
+        $("#" + $(this).attr("title") + "_Label").html($(this).html());
+        $("#" + $(this).attr("title") + "_Label").attr("data-related", $(this).attr("title"));
+        $("#" + $(this).attr("title") + "_Label").css({ "visibility": "visible" });
+        $("#" + $(this).attr("title") + "_Label").animate({ "opacity": 1 }, 300);
+        if ($(this).data("value") == "WitoutFilter") {
+            $("#" + $(this).attr("title") + "_Label").removeAttr("style");
+            $("#" + $(this).attr("title") + "_Label").html("");
+        }
+        Advancefilter();
+    });
+
+    $("#NotificationAct_Filter_Menu").on("click", ".filterItem", function () {
+        $("#" + $(this).attr("title")).attr("title", $(this).data("value"));
+        $("#NotificationAct_Filter_Menu").fadeOut(200);
+        $("#" + $(this).attr("title") + "_Label").html($(this).html());
+        $("#" + $(this).attr("title") + "_Label").attr("data-related", $(this).attr("title"));
+        $("#" + $(this).attr("title") + "_Label").css({ "visibility": "visible" });
+        $("#" + $(this).attr("title") + "_Label").animate({ "opacity": 1 }, 300);
+        if ($(this).data("value") == "WitoutFilter") {
+            $("#" + $(this).attr("title") + "_Label").removeAttr("style");
+            $("#" + $(this).attr("title") + "_Label").html("");
+        }
+        Advancefilter();
+    });
+
+    $("#NotificationEventDate_Filter_Menu").on("click", ".filterItem", function () {
+        $("#" + $(this).attr("title")).attr("title", $(this).data("value"));
+        $("#NotificationEventDate_Filter_Menu").fadeOut(200);
+        $("#" + $(this).attr("title") + "_Label").html($(this).html());
+        $("#" + $(this).attr("title") + "_Label").attr("data-related", $(this).attr("title"));
+        $("#" + $(this).attr("title") + "_Label").css({ "visibility": "visible" });
+        $("#" + $(this).attr("title") + "_Label").animate({ "opacity": 1 }, 300);
+        if ($(this).data("value") == "WitoutFilter") {
+            $("#" + $(this).attr("title") + "_Label").removeAttr("style");
+            $("#" + $(this).attr("title") + "_Label").html("");
+        }
+        Advancefilter();
+    });
+
+    $("#NotificationDeactiveDate_Filter_Menu").on("click", ".filterItem", function () {
+        $("#" + $(this).attr("title")).attr("title", $(this).data("value"));
+        $("#NotificationDeactiveDate_Filter_Menu").fadeOut(200);
+        $("#" + $(this).attr("title") + "_Label").html($(this).html());
+        $("#" + $(this).attr("title") + "_Label").attr("data-related", $(this).attr("title"));
+        $("#" + $(this).attr("title") + "_Label").css({ "visibility": "visible" });
+        $("#" + $(this).attr("title") + "_Label").animate({ "opacity": 1 }, 300);
+        if ($(this).data("value") == "WitoutFilter") {
+            $("#" + $(this).attr("title") + "_Label").removeAttr("style");
+            $("#" + $(this).attr("title") + "_Label").html("");
+        }
+        Advancefilter();
+    });
+
+    $("#NotificationActDate_Filter_Menu").on("click", ".filterItem", function () {
+        $("#" + $(this).attr("title")).attr("title", $(this).data("value"));
+        $("#NotificationActDate_Filter_Menu").fadeOut(200);
+        $("#" + $(this).attr("title") + "_Label").html($(this).html());
+        $("#" + $(this).attr("title") + "_Label").attr("data-related", $(this).attr("title"));
+        $("#" + $(this).attr("title") + "_Label").css({ "visibility": "visible" });
+        $("#" + $(this).attr("title") + "_Label").animate({ "opacity": 1 }, 300);
+        if ($(this).data("value") == "WitoutFilter") {
+            $("#" + $(this).attr("title") + "_Label").removeAttr("style");
+            $("#" + $(this).attr("title") + "_Label").html("");
+        }
+        Advancefilter();
+    });
+
+</script>
+<script>
+    var RowId;
+
+    function onClickRow(element)
+    {
+        RowId = element.id;
+        $.post("/Notification/CheckDeactive",
+        {
+            ID: RowId
+        },
+        function (data) {
+            if (data == 'NaN') {
+                alert('اگر این پیام رو می بینید یعنی یه اتفاق عجیب افتاده. زودتر من رو با کد 1601 در جریان بذارید.');
+            }
+
+            else if (data == 'DEACTIVE') {
+                var check_btnActionModalButton = document.getElementById("btnActionModalButton");
+                if (check_btnActionModalButton != null) {
+                    document.getElementById('btnActionModalButton').style.display = 'none';
+                }
+                var check_btnActive_AgainModal = document.getElementById("btnActive_AgainModal");
+                if (check_btnActive_AgainModal != null) {
+                    document.getElementById('btnActive_AgainModal').style.display = 'inline';
+                }
+            }
+            else if (data == 'SUSPPEND') {
+                var check_btnActionModalButton = document.getElementById("btnActionModalButton");
+                if (check_btnActionModalButton != null) {
+                    document.getElementById('btnActionModalButton').style.display = 'inline';
+                }
+                var check_btnActive_AgainModal = document.getElementById("btnActive_AgainModal");
+                if (check_btnActive_AgainModal != null) {
+                    document.getElementById('btnActive_AgainModal').style.display = 'none';
+                }
+            }
+            else if (data == 'NULL') {
+                alert('@Localization.getString("ThereIsNotMsg")');
+            }
+            $('#btnActionMenu').click();
+            $("body").css("padding-right", 0);
+            $("body").css("padding-right", 0);
+        });
+        $("body").css("padding-right", 0);
+        $("body").css("padding-right", 0);
+    }
+
+    function onActive_AgainClick()
+    {
+        $('#btnCloseActionModal').click();
+        $('#btnCloseModal').click();
+        $('#btnCloseModal').click();
+        $("body").css("padding-right", 0);
+        $("body").css("padding-right", 0);
+        $.post("/Notification/ActiveAgainAction",
+        {
+            ID: RowId.replace("btnSnoozeName", "")
+        },
+        function (data) {
+            $('#btnCloseActionModal').click();
+            $('#btnCloseActionModal').click();
+            $('#btnCloseModal').click();
+            $('#btnCloseModal').click();
+            $("body").css("padding-right", 0);
+            $("body").css("padding-right", 0);
+            if (data == 'NaN')
+            {
+                alert('@Localization.getString("LoginPlease")');
+                window.location.href = "/" + '@Thread.CurrentThread.CurrentCulture.Name' + "/Account/Login";
+            }
+            else if (data == "STAFF") {
+                alert('کارمند بک آفیس نمی تواند برای نوتیفیکیشن های ایجاد شده اکشنی انجام دهد.');
+            }
+            else
+            {
+                Notify('@Localization.getString("Active_Successfully")', 'bottom-right', '5000', 'blue', 'fa-check', true);
+                location.reload();
+            }
+        });
+    }
+
+    function onHistoryClick()
+    {
+        $('#btnCloseModal').click();
+        $("body").css("padding-right", 0);
+        $("body").css("padding-right", 0);
+        //$('#btnCloseModal').click();
+        $.post("/Notification/LoadDetail",
+        {
+            ID: RowId
+        },
+        function (data) {
+            if (data == 'NaN')
+            {
+                alert('@Localization.getString("ThereIsNotMsg")');
+            }
+            else
+            {
+                var obj = JSON.parse(data);
+                var nRow = 0;
+                oTable.fnDeleteRow();
+                for (var i = 0; i < obj.length; i++)
+                {
+                    var addData = [];
+                    addData.push(obj[i].ID);
+                    addData.push(obj[i].Status);
+                    addData.push(obj[i].CreateDate);
+                    addData.push(obj[i].Act);
+                    addData.push(obj[i].Username);
+                    addData.push(obj[i].ActComment);
+                    addData.push(obj[i].ActDate);
+                    addData.push(obj[i].DeactiveAt);
+                    oTable.fnAddData(addData);
+                }
+
+                document.getElementById('myModal').style.display = "block";
+            }
+        });
+    }
+
+    function onActionClick()
+    {
+        $('#btnActionModal').click();
+        $('#btnCloseModal').click();
+        $("body").css("padding-right", 0);
+        $("body").css("padding-right", 0);
+    }
+
+    function onSaveActionClick()
+    {
+        var txtActionMessage = document.getElementById('txtActionMessage');
+        if (txtActionMessage.value == '')
+        {
+            alert("لطفا فیلد را خالی نگذارید");
+        }
+        else
+        {
+            $('#btnCloseModal').click();
+            $("body").css("padding-right", 0);
+            $("body").css("padding-right", 0);
+            $.post("/Notification/SaveAction",
+            {
+                ID: RowId.replace("btnSnoozeName", ""),
+                Msg: txtActionMessage.value
+            },
+            function (data) {
+                $('#btnCloseActionModal').click();
+                $('#btnCloseActionModal').click();
+                $('#btnCloseModal').click();
+                $('#btnCloseModal').click();
+                $("body").css("padding-right", 0);
+                $("body").css("padding-right", 0);
+                if (data == 'NaN')
+                {
+                    alert('@Localization.getString("LoginPlease")');
+                    window.location.href = "/" + '@Thread.CurrentThread.CurrentCulture.Name' + "/Account/Login";
+                }
+                else if (data == "STAFF")
+                {
+                     alert('کارمند بک آفیس نمی تواند برای نوتیفیکیشن های ایجاد شده اکشنی انجام دهد.');
+                }
+                else
+                {
+                    Notify('@Localization.getString("Saved_Successfully")', 'bottom-right', '5000', 'blue', 'fa-check', true);
+                    location.reload();
+                }
+            });
+        }
+    }
+
+    function onDeactiveClick()
+    {
+        $('#btnCloseActionModal').click();
+        $('#btnCloseModal').click();
+        $('#btnCloseModal').click();
+        $("body").css("padding-right", 0);
+        $("body").css("padding-right", 0);
+
+        var ID = RowId.replace("btnSnoozeName", "");
+        var User = document.getElementById('SmartCattleUserName').innerHTML.replace("</span>", "").replace("<span>", "");
+        $.post("/Notification/DeactiveAction",
+        {
+            ID: RowId.replace("btnSnoozeName", "")
+        },
+        function (data) {
+            $('#btnCloseActionModal').click();
+            $('#btnCloseActionModal').click();
+            $('#btnCloseModal').click();
+            $('#btnCloseModal').click();
+            $("body").css("padding-right", 0);
+            $("body").css("padding-right", 0);
+            if (data == 'NaN')
+            {
+                alert('@Localization.getString("LoginPlease")');
+                window.location.href = "/" + '@Thread.CurrentThread.CurrentCulture.Name' + "/Account/Login";
+            }
+            else if (data == "STAFF") {
+                alert('کارمند بک آفیس نمی تواند برای نوتیفیکیشن های ایجاد شده اکشنی انجام دهد.');
+            }
+            else
+            {
+                Notify('@Localization.getString("Deactive_Successfully")', 'bottom-right', '5000', 'blue', 'fa-check', true);
+                location.reload();
+            }
+        });
+    }
+
+    function CloseDetail()
+    {
+        document.getElementById('myModal').style.display = "none";
+        $('#btnCloseModal').click();
+        $("body").css("padding-right", 0);
+        $("body").css("padding-right", 0);
+    }
+
+    function CloseModal()
+    {
+        document.getElementById('myModal').style.display = "none";
+        $('#btnCloseModal').click();
+        $("body").css("padding-right", 0);
+        $("body").css("padding-right", 0);
+    }
+
+</script>
+<script src="~/assets/js/charts/easypiechart/jquery.easypiechart.js"></script>
+<script src="~/assets/js/charts/easypiechart/easypiechart-init.js"></script>
+<script src="~/assets/js/HighChart/highcharts.js"></script>
+<script src="~/assets/js/HighChart/exporting.js"></script>

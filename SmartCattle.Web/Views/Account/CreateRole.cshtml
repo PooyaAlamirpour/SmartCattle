@@ -1,0 +1,869 @@
+﻿@using System.Threading
+@using SmartCattle.DomainClass
+@using SmartCattle.Web.Areas.APIs.Models
+@using Newtonsoft.Json
+@model SmartCattle.Web.Controllers.AccountController.ViewModel_Role
+
+@{
+    ViewBag.Title = Localization.getString("Role_List");
+}
+
+<link rel="shortcut icon" href="~/assets/img/favicon.png" type="image/x-icon">
+<link href="~/assets/css/font-awesome.min.css" rel="stylesheet" />
+<link href="~/assets/css/weather-icons.min.css" rel="stylesheet" />
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300" rel="stylesheet" type="text/css">
+<link id="beyond-link" href="~/assets/css/beyond.min.css" rel="stylesheet" />
+<link href="~/assets/css/demo.min.css" rel="stylesheet" />
+<link href="~/assets/css/typicons.min.css" rel="stylesheet" />
+<link href="~/assets/css/animate.min.css" rel="stylesheet" />
+<script src="~/assets/js/skins.min.js"></script>
+
+<style>
+    .onoffswitch {
+        position: relative;
+        width: 30px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+    }
+
+    .onoffswitch-checkbox {
+        display: none;
+    }
+
+    .onoffswitch-label {
+        display: block;
+        overflow: hidden;
+        cursor: pointer;
+        height: 13px;
+        padding: 0;
+        line-height: 15px;
+        border: 2px solid #999999;
+        border-radius: 13px;
+        background-color: #EEEEEE;
+        transition: background-color 0.3s ease-in;
+    }
+
+        .onoffswitch-label:before {
+            content: "";
+            display: block;
+            width: 13px;
+            margin: 0px;
+            background: #FFFFFF;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 20px;
+            border: 2px solid #999999;
+            border-radius: 13px;
+            transition: all 0.3s ease-in 0s;
+        }
+
+    .onoffswitch-checkbox:checked + .onoffswitch-label 
+    {
+        background-color: #34A7C1;
+    }
+
+    .onoffswitch-checkbox:checked + .onoffswitch-label, .onoffswitch-checkbox:checked + .onoffswitch-label:before 
+    {
+        border-color: #34A7C1;
+    }
+
+    .onoffswitch-checkbox:checked + .onoffswitch-label:before 
+    {
+        right: 0px;
+    }
+</style>
+
+<div class="row">
+    @{
+        if (PermissionViewer.WillBeShow("Account-CreateRole", User.Identity.Name))
+        {
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+                <h5 class="row-title before-themeprimary"><i class="fa fa-user themeprimary"></i>@Localization.getString("define_new_role")</h5>
+                <div id="tabbedwizard" class="wizard wizard-tabbed" data-target="#tabbedwizardsteps">
+                    <ul class="steps">
+                        <li data-target="#tabbedwizardstep1" class="active"><span class="step">1</span>@Localization.getString("role_detail")<span class="chevron"></span></li>
+                        <li data-target="#tabbedwizardstep2"><span class="step">2</span>@Localization.getString("define_permission_level")<span class="chevron"></span></li>
+                    </ul>
+                </div>
+                <div class="step-content" id="tabbedwizardsteps">
+                    <div class="step-pane active" id="tabbedwizardstep1">
+                        <div class="row" style="margin-bottom:-30px">
+                            <div class="col-lg-12 col-sm-12 col-xs-12">
+                                <div class="widget radius-bordered">
+                                    <div class="widget-body">
+                                        <form id="registrationForm" method="post" class="form-horizontal"
+                                              data-bv-message="This value is not valid"
+                                              data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+                                              data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
+                                              data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+                                            <div class="form-group">
+                                                <label class="col-lg-2 control-label">@Localization.getString("RoleName")</label>
+                                                <div class="col-lg-4">
+                                                    <input type="text" class="form-control" id="txtRoleName" />
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-lg-2 control-label">@Localization.getString("RoleComment")</label>
+                                                <div class="col-lg-4">
+                                                    <input type="text" class="form-control" id="txtRoleComment" />
+                                                </div>
+                                            </div>
+
+                                            @{
+                                                if (Helper.getCurrentFarmId() == -1)
+                                                {
+                                                    <div class="form-group">
+                                                        <label class="col-lg-2 control-label">
+                                                            @Localization.getString("Type")
+                                                        </label>
+                                                        <div class="col-lg-3">
+                                                            <select class="form-control" id="SelectedRoleTypeName" name="SelectedRoleTypeName" onchange="onSelectType()">
+                                                                @*<option value="UserRole_Farm">
+                                                                        @Localization.getString("FarmUser_Role")
+                                                                    </option>*@
+                                                                <option value="SystemRole_Farm">
+                                                                    @Localization.getString("SystemRole_Farm")
+                                                                </option>
+                                                                <option value="SystemRole_Staff">
+                                                                    @Localization.getString("StaffUser_Role")
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+
+                                            <div class="form-group has-feedback" style="display:none" id="idFarm">
+                                                <label class="col-lg-2 control-label">
+                                                    @Localization.getString("Farm")
+                                                </label>
+                                                <div class="col-lg-3">
+                                                    <select class="form-control" id="SelectedFarmId" name="SelectedFarmId">
+                                                        <option value="@Helper.getCurrentFarmId()">
+                                                            @Localization.getString("CurrentFarm")
+                                                        </option>
+                                                        @for (int i = 0; i < @Model.FarmList.Count; i++)
+                                                        {
+                                                            <option value=@Model.FarmList[i].ID>@Model.FarmList[i].FarmName</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step-pane" id="tabbedwizardstep2">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-12">
+                                <div class="widget">
+                                    <div class="widget-body no-padding">
+                                        <table class="table table-bordered table-hover table-striped" id="searchable">
+                                            <thead class="bordered-darkorange">
+                                                <tr role="row">
+                                                    <th>@Localization.getString("ControlerName")</th>
+                                                    <th>@Localization.getString("ActionName")</th>
+                                                    <th>@Localization.getString("Comment")</th>
+                                                    @*<th>@Localization.getString("RoleMessage")</th>*@
+                                                    <th>@Localization.getString("Permission")</th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr></tr>
+                                            </tfoot>
+                                            <tbody id="divPermissionList"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="actions actions-footer" id="tabbedwizard-actions">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-sm btn-next btn-darkorange" data-last="تایید">@Localization.getString("Next")</button>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+</div>
+
+<div style="height:30px">
+
+</div>
+
+@{
+    if (Helper.getCurrentFarmId() != -1)
+    {
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <h5 class="row-title before-themeprimary"><i class="fa fa-user themeprimary"></i>@Localization.getString("DefinedFarmRoleList")</h5>
+                <div class="widget">
+                    <div class="widget-header ">
+                    </div>
+                    <div class="widget-body">
+                        <table class="table table-striped table-bordered table-hover" id="expandabledatatable">
+                            <thead>
+                                <tr>
+                                    <th>
+                                    </th>
+                                    <th>
+                                        @Localization.getString("Role_Name")
+                                    </th>
+                                    <th>
+                                        @Localization.getString("Comment")
+                                    </th>
+                                    <th>
+                                        @Localization.getString("Edit")/@Localization.getString("Delete")
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @for (int i = 0; i < Model.RoleList.Count; i++)
+                                {
+                                    <tr>
+                                        <td>
+                                            @i
+                                        </td>
+                                        <td>
+                                            @Model.RoleList[i].jName
+                                        </td>
+                                        <td>
+                                            @Model.RoleList[i].Comment
+                                        </td>
+                                        <td>
+                                            @{
+
+                                                if (Model.RoleList[i].uId.Equals(Helper.getCurrentRoleuId()))
+                                                {
+                                                    if (Helper.isStaff())
+                                                    {
+                                                        <a name=@Model.RoleList[i].uId href="javascript:void(0);" class="btn-xs btn-danger" onclick="RemoveFarmRoleFunc(this)">@Localization.getString("Delete")</a>
+                                                        <a name=@Model.RoleList[i].uId href="javascript:void(0);" class="btn-xs btn-primary" onclick="EditFarmRoleFunc(this)">@Localization.getString("Edit")</a>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <a name=@Model.RoleList[i].uId href="javascript:void(0);" class="btn-xs btn-danger" onclick="RemoveFarmRoleFunc(this)">@Localization.getString("Delete")</a>
+                                                    <a name=@Model.RoleList[i].uId href="javascript:void(0);" class="btn-xs btn-primary" onclick="EditFarmRoleFunc(this)">@Localization.getString("Edit")</a>
+                                                }
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+
+ @{
+     if (Helper.getCurrentFarmId() == -1)
+     {
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <h5 class="row-title before-themeprimary"><i class="fa fa-user themeprimary"></i>@Localization.getString("DefinedSystemRole_FarmList")</h5>
+                <div class="widget">
+                    <div class="widget-header ">
+                    </div>
+                    <div class="widget-body">
+                        <table class="table table-striped table-bordered table-hover" id="expandabledatatableDefinedSystemRoleFarmList">
+                            <thead>
+                                <tr>
+                                    <th>
+                                    </th>
+                                    <th>
+                                        @Localization.getString("Role_Name")
+                                    </th>
+                                    <th>
+                                        @Localization.getString("Comment")
+                                    </th>
+                                    <th>
+                                        @Localization.getString("Farm")
+                                    </th>
+                                    <th>
+                                        @Localization.getString("Edit")/@Localization.getString("Delete")
+                                    </th>
+                                    
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @for (int i = 0; i < Model.SystemRole_Farm.Count; i++)
+                                {
+                                    var RemoveRoleVar = Model.SystemRole_Farm[i].uId + "_Remove";
+                                    var EditRoleVar = Model.SystemRole_Farm[i].uId + "_Edit";
+                                    <tr>
+                                        <td>
+                                            @i
+                                        </td>
+                                        <td>
+                                            @Model.SystemRole_Farm[i].jName
+                                        </td>
+                                        <td>
+                                            @Model.SystemRole_Farm[i].Comment
+                                        </td>
+                                        <td>@Model.SystemRole_Farm[i].FarmName</td>
+                                        <td>
+                                            @{
+                                                <a name=@{@RemoveRoleVar} href="javascript:void(0);" class="btn-xs btn-danger" onclick="RemoveSystemRole_Farm(this)">@Localization.getString("Delete")</a>
+                                                <a name=@{@EditRoleVar} href="javascript:void(0);" class="btn-xs btn-primary" onclick="EditSystemRole_Farm(this)">@Localization.getString("Edit")</a>
+                                            }
+                                        </td>
+                                        
+                                    </tr>
+                                 }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <h5 class="row-title before-themeprimary"><i class="fa fa-user themeprimary"></i>@Localization.getString("DefinedSystem_StaffList")</h5>
+                <div class="widget">
+                    <div class="widget-header ">
+                    </div>
+                    <div class="widget-body">
+                        <table class="table table-striped table-bordered table-hover" id="expandabledatatableDefinedSystemStaffList">
+                            <thead>
+                                <tr>
+                                    <th>
+                                    </th>
+                                    <th>
+                                        @Localization.getString("Role_Name")
+                                    </th>
+                                    <th>
+                                        @Localization.getString("Comment")
+                                    </th>
+                                    <th>
+                                        @Localization.getString("Edit")/@Localization.getString("Delete")
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @for (int i = 0; i < Model.SystemRole_Staff.Count; i++)
+                                {
+                                    <tr>
+                                        <td>
+                                            @i
+                                        </td>
+                                        <td>
+                                            @Model.SystemRole_Staff[i].jName
+                                        </td>
+                                        <td>
+                                            @Model.SystemRole_Staff[i].Comment
+                                        </td>
+                                        <td>
+                                            @{
+                                                if (Model.SystemRole_Staff[i].ID == 1)
+                                                {
+                                                    <a name=@Model.SystemRole_Staff[i].uId href="javascript:void(0);" class="btn-xs btn-primary" onclick="EditStaffRole(this)">@Localization.getString("Edit")</a>
+                                                }
+                                                else if (Model.SystemRole_Staff[i].uId.Equals(Helper.getCurrentRoleuId()))
+                                                {
+
+                                                }
+                                                else
+                                                {
+                                                    if (PermissionViewer.WillBeShow("Account-RemoveStaffRole", User.Identity.Name))
+                                                    {
+                                                        <a name=@Model.SystemRole_Staff[i].uId href="javascript:void(0);" class="btn-xs btn-danger" onclick="RemoveStaffRoleFunc(this)">@Localization.getString("Delete")</a>
+                                                    }
+
+                                                    <a name=@Model.SystemRole_Staff[i].uId href="javascript:void(0);" class="btn-xs btn-primary" onclick="EditStaffRole(this)">@Localization.getString("Edit")</a>
+                                                }
+                                            }
+                                        </td>
+                                    </tr>
+                                    }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+
+<link href="~/assets/css/dataTables.bootstrap.css" rel="stylesheet" />
+<script src="~/assets/js/datatable/jquery.dataTables.min.js"></script>
+<script src="~/assets/js/datatable/ZeroClipboard.js"></script>
+<script src="~/assets/js/datatable/dataTables.tableTools.min.js"></script>
+<script src="~/assets/js/datatable/dataTables.bootstrap.min.js"></script> 
+<script src="~/assets/js/jquery.min.js"></script>
+@*<script src="~/assets/js/bootstrap.min.js"></script>*@
+<script src="~/assets/js/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="~/assets/js/datatable/jquery.dataTables.min.js"></script>
+<script src="~/assets/js/datatable/ZeroClipboard.js"></script>
+<script src="~/assets/js/datatable/dataTables.tableTools.min.js"></script>
+<script src="~/assets/js/datatable/dataTables.bootstrap.min.js"></script>
+<script src="~/assets/js/datatable/datatables-init.js"></script>
+
+<script type="text/javascript">
+    //InitiateSimpleDataTable.init();
+    //InitiateEditableDataTable.init();
+    InitiateExpandableDataTable.init('@Html.Raw(Json.Encode(Model.RoleList))');
+    //InitiateSearchableDataTable.init();
+</script>
+<script>
+    var InitiateExpandableDataTable_SystemRole_FarmList = function () {
+        return {
+            init: function () {
+                /* Formatting function for row details */
+                function fnFormatDetails(oTable, nTr) {
+                    var aData = oTable.fnGetData(nTr);
+                    var RowIndex = aData[1];
+                    var i = 1;
+                    var sOut = "<div class='row'>";
+                    sOut += "<div class='col-xs-12 col-md-12'>";
+                    sOut += "<div class='widget'>";
+                    sOut += "<div class='widget-body no-padding'>";
+                    sOut += "<table class='table table-bordered table-hover table-striped' id='searchable'>";
+                    sOut += "<thead class='bordered-darkorange'>";
+                    sOut += "<tr role='row'>";
+                    sOut += "<th>نام کنترلر</th>";
+                    sOut += "<th>نام اکشن</th>";
+                    sOut += "<th>توضیحات</th>";
+                    sOut += "<th></th>";
+                    sOut += "</tr>";
+                    sOut += "</thead>";
+                    sOut += "<tfoot>";
+                    sOut += "<tr>";
+                    sOut += "</tr>";
+                    sOut += "</tfoot>";
+                    sOut += "<tbody>";
+                    sOut += "</tbody>";
+                    sOut += "</table>";
+                    sOut += "</div>";
+                    sOut += "</div>";
+                    sOut += "</div>";
+                    sOut += "</div>";
+                    return sOut;
+                }
+
+                /*
+                 * Insert a 'details' column to the table
+                 */
+                var nCloneTh = document.createElement('th');
+                var nCloneTd = document.createElement('td');
+                nCloneTd.innerHTML = '<i class="fa  row-details"></i>';
+
+                $('#expandabledatatableDefinedSystemRoleFarmList thead tr').each(function () {
+                    this.insertBefore(nCloneTh, this.childNodes[0]);
+                });
+
+                $('#expandabledatatableDefinedSystemRoleFarmList tbody tr').each(function () {
+                    this.insertBefore(nCloneTd.cloneNode(true), this.childNodes[0]);
+                });
+
+                /*
+                 * Initialize DataTables, with no sorting on the 'details' column
+                 */
+                var oTable = $('#expandabledatatableDefinedSystemRoleFarmList').dataTable({
+                    "sDom": "Tflt<'row DTTTFooter'<'col-sm-6'i>130<'col-sm-6'p>>",
+                    "aoColumnDefs": [
+                        { "bSortable": false, "aTargets": [0] },
+                        { "bVisible": false, "aTargets": [1] }
+                    ],
+                    "aaSorting": [[1, 'asc']],
+                    "aLengthMenu": [
+                        [5, 15, 20, -1],
+                        [5, 15, 20, "All"]
+                    ],
+                    "iDisplayLength": 5,
+                    "oTableTools": {
+                        "aButtons": [
+                            "copy"
+                        ]
+                    },
+                    "language": {
+                        "search": "",
+                        "sLengthMenu": "_MENU_",
+                        "oPaginate": {
+                            "sPrevious": "Prev",
+                            "sNext": "Next"
+                        }
+                    }
+                });
+
+
+                $('#expandabledatatableDefinedSystemRoleFarmList').on('click', ' tbody td .row-details', function () {
+                    var nTr = $(this).parents('tr')[0];
+                    if (oTable.fnIsOpen(nTr)) {
+                        /* This row is already open - close it */
+                        $(this).addClass("fa-plus-square-o").removeClass("fa-minus-square-o");
+                        oTable.fnClose(nTr);
+                    } else {
+                        /* Open this row */
+                        $(this).addClass("fa-minus-square-o").removeClass("fa-plus-square-o");;
+                        oTable.fnOpen(nTr, fnFormatDetails(oTable, nTr), 'details');
+                    }
+                });
+
+                $('#expandabledatatable_column_toggler input[type="checkbox"]').change(function () {
+                    var iCol = parseInt($(this).attr("data-column"));
+                    var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
+                    oTable.fnSetColumnVis(iCol, (bVis ? false : true));
+                });
+
+                $('body').on('click', '.dropdown-menu.hold-on-click', function (e) {
+                    e.stopPropagation();
+                });
+            }
+        };
+    }();
+
+    InitiateExpandableDataTable_SystemRole_FarmList.init('@Html.Raw(Json.Encode(Model.SystemRole_Farm))');
+</script>
+<script>
+    var InitiateExpandableDataTable_System_StaffList = function () {
+        return {
+            init: function () {
+                /* Formatting function for row details */
+                function fnFormatDetails(oTable, nTr) {
+                    var aData = oTable.fnGetData(nTr);
+                    var RowIndex = aData[1];
+                    var i = 1;
+                    var sOut = "<div class='row'>";
+                    sOut += "<div class='col-xs-12 col-md-12'>";
+                    sOut += "<div class='widget'>";
+                    sOut += "<div class='widget-body no-padding'>";
+                    sOut += "<table class='table table-bordered table-hover table-striped' id='searchable'>";
+                    sOut += "<thead class='bordered-darkorange'>";
+                    sOut += "<tr role='row'>";
+                    sOut += "<th>نام کنترلر</th>";
+                    sOut += "<th>نام اکشن</th>";
+                    sOut += "<th>توضیحات</th>";
+                    sOut += "<th></th>";
+                    sOut += "</tr>";
+                    sOut += "</thead>";
+                    sOut += "<tfoot>";
+                    sOut += "<tr>";
+                    sOut += "</tr>";
+                    sOut += "</tfoot>";
+                    sOut += "<tbody>";
+                    sOut += "</tbody>";
+                    sOut += "</table>";
+                    sOut += "</div>";
+                    sOut += "</div>";
+                    sOut += "</div>";
+                    sOut += "</div>";
+                    return sOut;
+                }
+
+                /*
+                 * Insert a 'details' column to the table
+                 */
+                var nCloneTh = document.createElement('th');
+                var nCloneTd = document.createElement('td');
+                nCloneTd.innerHTML = '<i class="fa  row-details"></i>';
+
+                $('#expandabledatatableDefinedSystemStaffList thead tr').each(function () {
+                    this.insertBefore(nCloneTh, this.childNodes[0]);
+                });
+
+                $('#expandabledatatableDefinedSystemStaffList tbody tr').each(function () {
+                    this.insertBefore(nCloneTd.cloneNode(true), this.childNodes[0]);
+                });
+
+                /*
+                 * Initialize DataTables, with no sorting on the 'details' column
+                 */
+                var oTable = $('#expandabledatatableDefinedSystemStaffList').dataTable({
+                    "sDom": "Tflt<'row DTTTFooter'<'col-sm-6'i>134<'col-sm-6'p>>",
+                    "aoColumnDefs": [
+                        { "bSortable": false, "aTargets": [0] },
+                        { "bVisible": false, "aTargets": [1] }
+                    ],
+                    "aaSorting": [[1, 'asc']],
+                    "aLengthMenu": [
+                        [5, 15, 20, -1],
+                        [5, 15, 20, "All"]
+                    ],
+                    "iDisplayLength": 5,
+                    "oTableTools": {
+                        "aButtons": [
+                            "copy"
+                        ]
+                    },
+                    "language": {
+                        "search": "",
+                        "sLengthMenu": "_MENU_",
+                        "oPaginate": {
+                            "sPrevious": "Prev",
+                            "sNext": "Next"
+                        }
+                    }
+                });
+
+
+                $('#expandabledatatableDefinedSystemStaffList').on('click', ' tbody td .row-details', function () {
+                    var nTr = $(this).parents('tr')[0];
+                    if (oTable.fnIsOpen(nTr)) {
+                        /* This row is already open - close it */
+                        $(this).addClass("fa-plus-square-o").removeClass("fa-minus-square-o");
+                        oTable.fnClose(nTr);
+                    } else {
+                        /* Open this row */
+                        $(this).addClass("fa-minus-square-o").removeClass("fa-plus-square-o");;
+                        oTable.fnOpen(nTr, fnFormatDetails(oTable, nTr), 'details');
+                    }
+                });
+
+                $('#expandabledatatable_column_toggler input[type="checkbox"]').change(function () {
+                    var iCol = parseInt($(this).attr("data-column"));
+                    var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
+                    oTable.fnSetColumnVis(iCol, (bVis ? false : true));
+                });
+
+                $('body').on('click', '.dropdown-menu.hold-on-click', function (e) {
+                    e.stopPropagation();
+                });
+            }
+        };
+    }();
+
+    InitiateExpandableDataTable_System_StaffList.init('@Html.Raw(Json.Encode(Model.SystemRole_Staff))');
+</script>
+<script src="~/assets/js/fuelux/wizard/wizard-custom.js"></script>
+<script src="~/assets/js/toastr/toastr.js"></script>
+
+<script>
+    function onSelectType()
+    {
+        var idFarm = document.getElementById("idFarm");
+        if ($("#SelectedRoleTypeName").val() == "UserRole_Farm")
+        {
+            idFarm.style.display = "block";
+        }
+        else
+        {
+            idFarm.style.display = "none";
+        }
+    }
+</script>
+
+<script type="text/javascript">
+    jQuery(function ($) {
+        $('#simplewizardinwidget').wizard();
+        $('#simplewizard').wizard();
+        $('#tabbedwizard').wizard().on('finished', function (e) {
+            var tmpComment = "";
+            if ($("#txtRoleName").val() !== '' && $("#txtRoleComment").val() !== '') {
+                $.post("/Account/SaveRole",
+                {
+                    RoleName: $("#txtRoleName").val().replace(' ', '_'),
+                    RoleComment: $("#txtRoleComment").val(),
+                    PermissionList: PermissionListStr,
+                    RoleType: $("#SelectedRoleTypeName").val(),
+                    FarmId: $("#SelectedFarmId").val(),
+                    Controller_Action_List: Controller_Action_List
+                },
+                function (data) {
+                    Notify('Thank You! All of your information saved successfully.', 'bottom-right', '5000', 'blue', 'fa-check', true);
+                    location.reload(true);
+                });
+            }
+            else {
+                alert("فیلد نام نقش و توضیحات آن می بایست تکمیل شود.");
+            }
+        });
+        $('#WiredWizard').wizard();
+    });
+</script>
+
+@*Load all permission list*@
+<script>
+    var PermissionListStr = "";
+    var lengthOdPisrmission = 0;
+    var Controller_Action_List = "";
+
+    LoadPermissionList();
+    LoadFarmList();
+
+    function LoadPermissionList()
+    {
+        $.post("/Setting/PermissionsList",
+        {
+            ACK: "ACK"
+        },
+        function (data)
+        {
+            var contentOfTable = "";
+            lengthOdPisrmission = data.Item1.length;
+            for (var n = 0; n < lengthOdPisrmission; n++) {
+                contentOfTable += "";
+                contentOfTable += "<tr>";
+                contentOfTable += "<td class=''>" + data.Item1[n].Controller + "</td>";
+                contentOfTable += "<td class=''>" + data.Item1[n].Action + "</td>";
+                contentOfTable += "<td class=''>" + data.Item1[n].Comment + "</td>";
+                contentOfTable += "<td class=''>";
+                contentOfTable += "<div class='onoffswitch'>";
+                Controller_Action_List += data.Item1[n].Controller + "-" + data.Item1[n].Action + "_";
+                var willCheck = false;
+                if (data.Item1[n].Controller + "-" + data.Item1[n].Action === 'Cattle-List') {
+                    willCheck = true
+                    PermissionListStr += 'onoffswitch_Cattle-List,'/* + n.toString() + '-'*/;
+                }
+                else if (data.Item1[n].Controller + "-" + data.Item1[n].Action === 'Cattle-getSpecTemperature') {
+                    willCheck = true
+                    PermissionListStr += 'onoffswitch_Cattle-getSpecTemperature,'/* + n.toString() + '-'*/;
+                }
+                else if (data.Item1[n].Controller + "-" + data.Item1[n].Action === 'Cattle-getSpecActivity') {
+                    willCheck = true
+                    PermissionListStr += 'onoffswitch_Cattle-getSpecActivity,'/* + n.toString() + '-'*/;
+                }
+                else if (data.Item1[n].Controller + "-" + data.Item1[n].Action === 'Cattle-AdvancedFilter') {
+                    willCheck = true
+                    PermissionListStr += 'onoffswitch_Cattle-AdvancedFilter,'/* + n.toString() + '-'*/;
+                }
+                else if (data.Item1[n].Controller + "-" + data.Item1[n].Action === 'Home-Alerts') {
+                    willCheck = true
+                    PermissionListStr += 'onoffswitch_Home-Alerts,'/* + n.toString() + '-'*/;
+                }
+                else if (data.Item1[n].Controller + "-" + data.Item1[n].Action === 'Cattle-CattleScore') {
+                    willCheck = true
+                    PermissionListStr += 'onoffswitch_Cattle-CattleScore,'/* + n.toString() + '-'*/;
+                }
+                else if (data.Item1[n].Controller + "-" + data.Item1[n].Action === 'Cattle-CattleEvent') {
+                    willCheck = true
+                    PermissionListStr += 'onoffswitch_Cattle-CattleEvent,'/* + n.toString() + '-'*/;
+                }
+                else if (data.Item1[n].Controller + "-" + data.Item1[n].Action === 'Home-Index') {
+                    willCheck = true
+                    PermissionListStr += 'onoffswitch_Home-Index,'/* + n.toString() + '-'*/;
+                }
+                else if (data.Item1[n].Controller + "-" + data.Item1[n].Action === 'Cattle-Detail') {
+                    willCheck = true
+                    PermissionListStr += 'onoffswitch_Cattle-Detail,'/* + n.toString() + '-'*/;
+                }
+                
+                var IgnorList = data.Item2;
+                debugger;
+                var str = data.Item1[n].Controller + '-' + data.Item1[n].Action;
+                var flag = CheckHidenOrNot(IgnorList,str);
+                if (flag) {
+                    contentOfTable += "<input type='checkbox' disabled name='onoffswitch_" + data.Item1[n].Controller + "-" + data.Item1[n].Action + "' class='onoffswitch-checkbox' id='PermissionSwitch" + n.toString() + "' onclick='onChangePermission(this)' checked>";
+                }
+                else {
+                    if (willCheck === true) {
+                        contentOfTable += "<input type='checkbox' name='onoffswitch_" + data.Item1[n].Controller + "-" + data.Item1[n].Action + "' class='onoffswitch-checkbox' id='PermissionSwitch" + n.toString() + "' onclick='onChangePermission(this)' checked>";
+                    } else {
+                        contentOfTable += "<input type='checkbox' name='onoffswitch_" + data.Item1[n].Controller + "-" + data.Item1[n].Action + "' class='onoffswitch-checkbox' id='PermissionSwitch" + n.toString() + "' onclick='onChangePermission(this)' >";
+                    }
+                }
+                contentOfTable += '<label class="onoffswitch-label" for="PermissionSwitch' + n.toString() + '"></label>';
+                contentOfTable += "</div>";
+                contentOfTable += "</td>";
+                contentOfTable += "</tr>";
+            }
+            $("#divPermissionList").html(contentOfTable);
+            
+        });
+    }
+
+    function CheckHidenOrNot(IgnorList, CurrentAction_Contrloller)
+    {
+        var i;
+        var strPermission = '';
+        for (i = 0; IgnorList.length > i; i++) {
+            strPermission = IgnorList[i].Item1 + '-' + IgnorList[i].Item2;
+            if (strPermission === CurrentAction_Contrloller) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function onChangePermission(checkbox)
+    {
+        if (checkbox.checked)
+        {
+            PermissionListStr += checkbox.name + ",";
+        }
+        else
+        {
+            PermissionListStr = PermissionListStr.replace(checkbox.name + ",", "");
+        }
+    }
+</script>
+
+<script>
+    function RemoveFarmRoleFunc(element)
+    {
+        if (confirm('@Localization.getString("Are_You_Sure_Delete")')) {
+            $.post("/Account/RemoveFarmRoleFunc",
+            {
+                RoleName: element.name
+            },
+            function (data) {
+                location.reload(true);
+            });
+        }
+    }
+
+    function EditFarmRoleFunc(element)
+    {
+        window.location.href = '@Url.Content("~")' + '@Thread.CurrentThread.CurrentCulture.Name' + '/Account/EditFarmRoleFunc?jq=' + element.name.replace("_Edit", "");
+    }
+</script>
+
+<script>
+    function RemoveSystemRole_Farm(element)
+    {
+        if (confirm('@Localization.getString("Are_You_Sure_Delete")')) {
+            $.post("/Account/RemoveSystemRole_Farm",
+            {
+                RoleName: element.name
+            },
+            function (data) {
+                location.reload(true);
+            });
+        }
+    }
+
+    function EditSystemRole_Farm(element)
+    {
+        window.location.href = '@Url.Content("~")' + '@Thread.CurrentThread.CurrentCulture.Name' + '/Account/EditSystemRole_Farm?jq=' + element.name.replace("_Edit", "");
+    }
+</script>
+
+<script>
+    function RemoveStaffRoleFunc(element) {
+        if (confirm('@Localization.getString("Are_You_Sure_Delete")')) {
+            $.post("/Account/RemoveStaffRole",
+            {
+                RoleName: element.name
+            },
+            function (data) {
+                location.reload(true);
+            });
+        }
+    }
+
+    function EditStaffRole(element)
+    {
+        window.location.href = '@Url.Content("~")' + '@Thread.CurrentThread.CurrentCulture.Name' + '/Account/EditStaffRole?Id=' + element.name;
+    }
+</script>
+
+
+ 

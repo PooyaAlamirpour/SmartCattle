@@ -1,0 +1,124 @@
+﻿@using SmartCattle.Web.Areas.BackOffice.Controllers
+@model CreateRolePermissionModel
+@{
+    ViewBag.Title = "CreateRolePermission";
+    Layout = "~/Areas/BackOffice/Views/Shared/_AdminLayout.cshtml";
+}
+<style>
+    input[type="radio"], input[type="checkbox"]{
+        height:20px;
+    }
+    .danger{
+        color:#ff0000;
+    }
+</style>
+ 
+@using (Html.BeginForm("CreateRolePermission", "Main", null, FormMethod.Post, new { id = "newFarmForm" }))
+{    @Html.AntiForgeryToken()
+
+                <div class="col-lg-8 col-lg-offset-2" style="padding:5px; text-align:center; background-color:#0e817d; ">
+        <h4 style="color:#fff">Register New Permission</h4>
+    </div>
+        <div class="col-lg-8 col-lg-offset-2 bg-white" style="padding:20px;">
+           
+        <div class="col-md-6">
+            <div class="form-group clearfix">
+                <label class="col-md-4 control-label " for="farmName"> Title *</label>
+                <div class="col-md-8">
+                    @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Title, "*", new { @class = "danger" })                                  
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group clearfix">
+                <label class="col-md-4 control-label " for="farmName"> Description  </label>
+                <div class="col-md-8">
+                    @Html.TextBoxFor(m => m.Description, new { @class = "form-control" })                    
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group clearfix">
+                <label class="col-md-4 control-label " for="farmName"> Controller *</label>
+                <div class="col-md-8">
+                    @Html.TextBoxFor(m => m.Controller, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Controller, "*", new { @class = "danger" })
+                    
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group clearfix">
+                <label class="col-md-4 control-label " for="farmName"> Action *</label>
+                <div class="col-md-8">
+                    @Html.TextBoxFor(m => m.Action, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Action, "*", new { @class = "danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group clearfix">
+                <label class="col-md-3 control-label " for="farmName"> Write </label>
+                <div class="col-md-3">
+                    @Html.CheckBoxFor(m => m.Write, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group clearfix">
+                <label class="col-md-3 control-label " for="farmName"> Read </label>
+                <div class="col-md-3">
+                    @Html.CheckBoxFor(m => m.Read, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group clearfix">
+                <div class="col-md-3">
+                    <input class="form-control btn btn-sky" type="submit" style="background-color:#0094ff; color:#FFF;">
+                </div>
+            </div>
+        </div>
+            @if (ViewBag.msg != null)
+            {<div class="col-md-12">
+                <div class="form-group clearfix">
+                     <p style="color:#d35555 ; font-size:14px">@ViewBag.msg</p>
+                </div>
+            </div>
+            }
+
+    </div>  
+}
+
+@{ Html.RenderAction("PermisionList");}
+
+
+@Html.AntiForgeryToken()
+ @section pageScripts{
+     <script>
+
+         function removePremission(id,obj) {
+             if (confirm("Are You Sure to Remove This Permission ?")) {
+                 $.ajax({
+                     url: '@Url.Action("RemovePermission", "Main")',
+                     type: "POST",
+                     data: {"id":id , "__RequestVerificationToken":$("input[name=__RequestVerificationToken]").val()},
+                     success: function (res) {
+                         if(res="success")
+                         {
+                             $(obj).parent().parent().remove();
+                         }
+                     }
+                 });
+             }
+         }
+     </script>
+     
+     
+     }
+

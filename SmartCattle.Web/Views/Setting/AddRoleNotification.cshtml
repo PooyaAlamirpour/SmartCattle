@@ -1,0 +1,123 @@
+﻿@using SmartCattle.DomainClass
+@model SmartCattle.Web.Controllers.RoleNotificationModel
+
+@{
+    ViewBag.Title = "AddRoleNotification";
+}
+
+
+<div class="col-md-8 col-md-offset-2 bg-white padding-40">
+    @using (Html.BeginForm("AddRoleNotification", "Setting", null, FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="col-md-6 padding-10">
+            <select name="NotificationId" class="form-control col-md-12">
+                @foreach (var notif in Model.notifications)
+                {
+                    <option value="@notif.ID">@notif.Title</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-6 padding-10">
+            <select name="RoleId" class="form-control col-md-12">
+                @foreach (var role in Model.roles)
+                {
+                    <option value="@role.Id">@role.Name</option>
+                } 
+            </select>
+        </div>
+        <div class="col-md-6 padding-10">
+            <input type="text" class="form-control col-md-12" placeholder="Priority" name="Priority" />
+        </div>
+        <div class="col-md-6 padding-10">
+            <select name="Maskable" class="form-control col-md-12">
+                <option value="true">Maskable</option>
+                <option value="false">Non Maskable</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <input type="submit" value="Submit" class="btn btn-success col-md-3 margin-10" />
+        </div>
+
+    }
+
+
+</div>
+
+
+<div class="col-md-8 col-md-offset-2 well with-header with-footer">
+    <div class="header bordered-pink">
+        Notification List
+    </div>
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    <i class="fa fa-briefcase"></i> Role
+                </th>
+                <th class="hidden-xs">
+                    <i class="fa fa-user"></i> Notification
+                </th>
+                <th>
+                    <i class="fa fa-shopping-cart"></i> priority
+                </th>
+                <th>
+                    <i class="fa fa-shopping-cart"></i> Maskable
+                </th>
+                <th>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.rolenotifications)
+            {
+                <tr>
+                    <td>
+                        @item.Role.Name
+                    </td>
+                    <td class="hidden-xs">
+                        @item.Notification.Title
+                    </td>
+                    <td class="hidden-xs">
+                        @item.priority
+                    </td>
+                    <td class="hidden-xs">
+                        @(item.Maskable==true?"Maskable":"")
+                    </td>                    
+                    <td>
+                        <a href="#" onclick="removeRoleNotification('@item.ID', this)" class="btn btn-default btn-xs purple"><i class="fa fa-remove"></i> Remove</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section pageScripts{
+    <script>
+
+        function removeRoleNotification(id, obj)
+        {
+            var token = $('input[name="__RequestVerificationToken"]').val();
+            $.ajax({
+                url: '@Url.Action("RemoveRoleNotification", "Setting")',
+                type: "Post",
+                data: {"__RequestVerificationToken":token , "id":id},
+                success:function(response)
+                {
+                    console.log(response);
+                    if (response.type == 0)
+                    {
+                        console.log(response.type);
+                        $(obj).parent().parent().remove();
+                    }
+                },
+                error:function(response)
+                {
+
+                }
+            })
+        }
+
+    </script>
+}

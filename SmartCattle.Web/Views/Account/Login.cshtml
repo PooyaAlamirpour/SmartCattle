@@ -1,0 +1,122 @@
+﻿@using SmartCattle.Web.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Login Page";
+    ViewBag.Description = "login page";
+    Layout = "~/Views/Shared/_Empty.cshtml";
+}
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>Sign In | Bootstrap Based Admin Template - Material Design</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <!-- Bootstrap Core Css -->
+    <link href="~/assets/Thems/AdminBSB/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+    
+    <!-- Waves Effect Css -->
+    <link href="~/assets/Thems/AdminBSB/plugins/node-waves/waves.css" rel="stylesheet" />
+    <!-- Animation Css -->
+    <link href="~/assets/Thems/AdminBSB/plugins/animate-css/animate.css" rel="stylesheet" />
+    <!-- Custom Css -->
+    <link href="~/assets/Thems/AdminBSB/css/style.css" rel="stylesheet">
+</head>
+<div class="login-page">
+    <div class="login-box">
+        <div class="logo">
+            <a href="javascript:void(0);">Smart<b>Cattle</b></a>
+            <small>Admin Dashboard Page - SmartCattle</small>
+        </div>
+        <div class="card" style="background-color: rgb(255, 255, 255)">
+            <div class="body">
+                @*<form id="sign_in" method="POST">*@
+                @using (var form = Html.Bootstrap().Begin(new Form().Type(FormType.Vertical)))
+                {
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.AntiForgeryToken()
+
+                    <div class="msg">Sign in to start your session</div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">person</i>
+                        </span>
+                        <div class="form-line">
+                            @*<input type="text" class="form-control" name="username" placeholder="Username" required autofocus>*@
+                            @Html.Bootstrap().TextBoxFor(t => t.Email).Placeholder("Email")
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">lock</i>
+                        </span>
+                        <div class="form-line">
+                            @*<input type="password" class="form-control" name="password" placeholder="Password" required>*@
+                            @Html.Bootstrap().PasswordFor(t => t.Password).Placeholder("Password")
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-8 p-t-5">
+                            @Html.Bootstrap().CheckBoxFor(t => t.RememberMe).Text("Remember Me")
+                        </div>
+                        <div class="col-xs-4">
+                            @*<button class="btn btn-block bg-pink waves-effect" type="submit">SIGN IN</button>*@
+                            @Html.Bootstrap().SubmitButton().Text("Login").Color(BootstrapColors.Primary).ButtonBlock()
+                        </div>
+                    </div>
+                    <div class="row m-t-15 m-b--20">
+                        <div class="col-xs-6">
+                        </div>
+                        <div class="col-xs-6 align-right">
+                            <a href="/Account/ForgotPassword">Forgot Password?</a>
+                        </div>
+                    </div>
+                }
+                    
+                @*</form>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<div class="login-page animated fadeIn">
+    <div class="loginbox bg-white">
+        <div class="loginbox-title">SIGN IN</div>
+        @using (var form = Html.Bootstrap().Begin(new Form().Type(FormType.Vertical)))
+        {
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.AntiForgeryToken()
+            <div class="loginbox-textbox">
+                @Html.Bootstrap().TextBoxFor(t => t.Email).Placeholder("Email")
+                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+            </div>
+            <div class="loginbox-textbox">
+                @Html.Bootstrap().PasswordFor(t => t.Password).Placeholder("Password")
+                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+            </div>
+            <div class="loginbox-forgot">
+                <a href="/Account/ForgotPassword">Forgot Password?</a>
+            </div>
+            <div class="loginbox-submit">
+                @Html.Bootstrap().SubmitButton().Text("Login").Color(BootstrapColors.Primary).ButtonBlock()
+            </div>
+        }
+    </div>
+</div>*@
+
+@section PageScripts {
+    <!-- Jquery Core Js -->
+    <script src="~/assets/Thems/AdminBSB/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap Core Js -->
+    <script src="~/assets/Thems/AdminBSB/plugins/bootstrap/js/bootstrap.js"></script>
+    <!-- Waves Effect Plugin Js -->
+    <script src="~/assets/Thems/AdminBSB/plugins/node-waves/waves.js"></script>
+    <!-- Validation Plugin Js -->
+    <script src="~/assets/Thems/AdminBSB/plugins/jquery-validation/jquery.validate.js"></script>
+    <!-- Custom Js -->
+    <script src="~/assets/Thems/AdminBSB/js/admin.js"></script>
+    <script src="~/assets/Thems/AdminBSB/js/pages/examples/sign-in.js"></script>
+}

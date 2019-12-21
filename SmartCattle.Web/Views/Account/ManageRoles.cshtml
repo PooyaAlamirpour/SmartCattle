@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "ManageRoles";
+}
+
+ 
+<div class="col-lg-4 col-sm-6 col-xs-12" style="cursor:pointer" onclick="window.location = '/Account/CreateRole'">
+    <div class="well bg-magenta bordered-left bordered-green">
+        <h4 class="block">@Localization.getString("Create Role")</h4>
+        <p>
+            @Localization.getString("Create Role")
+        </p>
+    </div>
+</div>
+
+
+<div class="col-lg-4 col-sm-6 col-xs-12" style="cursor:pointer" onclick="window.location = '/Account/AssignRole'">
+    <div class="well bg-lightred bordered-left bordered-green">
+        <h4 class="block">@Localization.getString("Assign Role")</h4>
+        <p>
+            @Localization.getString("Assign Role")
+        </p>
+    </div>
+</div>
+
+
+

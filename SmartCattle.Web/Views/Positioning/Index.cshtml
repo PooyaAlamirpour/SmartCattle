@@ -1,0 +1,97 @@
+﻿@model List<SmartCattle.DomainClass.CattlePosition>
+ 
+<style>
+    .white-boarder-10 {
+        background-color: white;
+        height: 10px;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+
+    .blue-title-bar {
+        background-color: #2dc3e8;
+        height: 35px;
+    }
+</style>
+
+
+<div class="white-boarder-10"></div>
+<div class="row-10" style="background-color:white;height:450px">
+
+    <div id="map_canvas" style="background-color:white;height:100%;margin-left:10px;margin-right:10px">
+    </div>
+
+</div>
+<div class="white-boarder-10"></div>
+
+<link href="~/Content/Site.css" rel="stylesheet" />
+@section PageScripts{
+    <script src="http://maps.google.com/maps/api/js?sensor=true&key=AIzaSyDrbXqxXPH_oWjPIuM8AikKdIkKKR01Fh8" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            Initialize();
+        });
+
+        function Initialize() {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: '@Url.Action("getPersonalTrackingWithMap", "Positioning")',
+                data: '{MAC: "' + '64:bc:c:24:5f:e4' + '"}',
+                dataType: "json",
+                success: function (data) {
+                    DrawMap(data[0], data[1].center.latitude, data[1].center.longitude, data[2].zoneId);
+                },
+                error: function (result) {
+                    //alert("Error");
+                }
+            });
+
+        }
+
+        function DrawMap(data, center_lat, center_lng, zoneId) {
+            var myLatLng = new google.maps.LatLng(center_lat, center_lng);
+            map = new google.maps.Map(document.getElementById('map_canvas'), {
+                zoom: 19,
+                center: myLatLng,
+                scrollwheel: true,
+                panControl: true,
+                zoomControl: true,
+                scaleControl: true,
+                disableDefaultUI: true
+            });
+            map.data.addGeoJson(data);
+            map.data.setStyle(function (feature) {
+                var SD_NAME = feature.getProperty('name');
+                var SD_FILL = feature.getProperty('fill');
+                //alert(SD_NAME);
+                if (SD_NAME == zoneId) {
+                    color = "#ff00ba";
+                }
+                else {
+                    color = "#0cff00";
+                }
+                return {
+                    fillColor: color,
+                    strokeWeight: 1
+                }
+            });
+        }
+
+
+    </script>
+    <script src="~/assets/Thems/AdminBSB/plugins/jquery/jquery.min.js"></script>
+    <script src="~/assets/Thems/AdminBSB/plugins/bootstrap/js/bootstrap.js"></script>
+    <script src="~/assets/Thems/AdminBSB/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+    <script src="~/assets/Thems/AdminBSB/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+    <script src="~/assets/Thems/AdminBSB/plugins/node-waves/waves.js"></script>
+    <script src="~/assets/Thems/AdminBSB/plugins/chartjs/Chart.bundle.js"></script>
+    <script src="~/assets/Thems/AdminBSB/js/admin.js"></script>
+    @*<script src="~/assets/Thems/AdminBSB/js/pages/charts/chartjs.js"></script>*@
+    <script src="~/assets/Thems/AdminBSB/js/demo.js"></script>
+}
+
+
+
+

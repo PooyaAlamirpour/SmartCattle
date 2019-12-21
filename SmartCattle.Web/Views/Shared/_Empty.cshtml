@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<!--
+BeyondAdmin - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.3.6
+Version: 1.6.0
+Purchase: https://wrapbootstrap.com/theme/beyondadmin-adminapp-angularjs-mvc-WB06R48S4
+-->
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!--Head-->
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+
+    <meta name="description" content="@ViewBag.Description" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="~/assets/img/favicon.png" type="image/x-icon">
+
+    <!--Basic Styles-->
+    @Styles.Render("~/css/bootstrap")
+    <link id="bootstrap-rtl-link" href="" rel="stylesheet" />
+
+
+    <!--Fonts-->
+    @*<link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300"
+          rel="stylesheet" type="text/css">*@
+
+    <!--Beyond styles-->
+    @Styles.Render("~/css/beyond")
+    <link id="skin-link" href="" rel="stylesheet" type="text/css" />
+
+    <!--Skin Script: Place this script in head to load scripts for skins and rtl support-->
+    @Scripts.Render("~/bundles/skin")
+</head>
+<!--Head Ends-->
+<!--Body-->
+<body>
+    @RenderBody()
+    <!--Basic Scripts-->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <!--Beyond Scripts-->
+    @Scripts.Render("~/bundles/beyond")
+
+    <!--Page Related Scripts-->
+    @RenderSection("PageScripts", required: false)
+</body>
+<!--  /Body -->
+</html>

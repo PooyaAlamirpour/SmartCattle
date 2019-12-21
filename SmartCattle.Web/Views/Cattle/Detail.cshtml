@@ -1,0 +1,974 @@
+﻿@model SmartCattle.Web.Controllers.CattleDetailModel
+@using System.Threading;
+
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300" rel="stylesheet" type="text/css">
+<link id="beyond-link" href="assets/css/beyond.min.css" rel="stylesheet" />
+
+<style>
+    .dropbtn {
+        background-color: #6F85BF;
+        color: white;
+        padding: 10px;
+        font-size: 12px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+            .dropdown-content a:hover {
+                background-color: #f1f1f1
+            }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .dropdown:hover .dropbtn {
+        background-color: #427fed;
+    }
+</style>
+
+<div class="col-lg-12 col-sm-12 col-xs-12">
+    <div class="widget">
+        <div class="widget-header bg-orange">
+            <span class="widget-caption">@Localization.getString("Cattle_Detail")</span>
+            <div class="widget-buttons">
+                <a href="/fa-IR/Cattle/List" data-toggle="dispose">
+                    <i class="fa fa-times"></i>
+                </a>
+            </div>
+            <!--Widget Buttons-->
+        </div>
+        <!--Widget Header-->
+        <div class="widget-body">
+            <div class="col-lg-12 col-sm-12 col-xs-12 no-padding">
+                <div class="widget flat radius-bordered">
+                    <div class="widget-body">
+                        <div class="widget-main ">
+                            <div class="tabbable">
+                                <ul class="nav nav-tabs tabs-flat" id="myTab11">
+                                    <li class="active">
+                                        <a data-toggle="tab" id="renderCattleInfo" href="#Cattle_info" aria-expanded="false">
+                                            @Localization.getString("Cattle_info")
+                                        </a>
+                                    </li>
+                                    @{
+                                        if (PermissionViewer.WillBeShow("Cattle-getSpecTemperature", User.Identity.Name))
+                                        {
+                                            <li class="">
+                                                <a data-toggle="tab" id="renderTemprature" href="#Tempreture" aria-expanded="true">
+                                                    @Localization.getString("Tempreture")
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    @{
+                                        if (PermissionViewer.WillBeShow("Cattle-getSpecTimeBudget", User.Identity.Name))                                        
+                                        {
+                                            <li class="">
+                                                <a data-toggle="tab" id="renderTimeBudget" href="#TimeBudget" aria-expanded="true">
+                                                    @Localization.getString("TimeBudget")
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    @{
+                                        if (PermissionViewer.WillBeShow("Cattle-getSpecActivity", User.Identity.Name))
+                                        {
+                                            <li class="">
+
+                                                <a data-toggle="tab" id="renderActivity" href="#Activity" aria-expanded="true">
+                                                    @Localization.getString("Activity")
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+
+                                    @{
+                                        if (PermissionViewer.WillBeShow("Cattle-CattlePosition", User.Identity.Name))
+                                        {
+                                            <li class="">
+                                                <a data-toggle="tab" id="renderPosition" href="#Position" aria-expanded="true">
+                                                    @Localization.getString("Position")
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    @{
+                                        if (PermissionViewer.WillBeShow("Cattle-CattleEvent", User.Identity.Name))
+                                        {
+                                            <li class="">
+                                                <a data-toggle="tab" href="#Events" aria-expanded="true">
+                                                    @Localization.getString("Events")
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    @{
+                                        if (PermissionViewer.WillBeShow("Cattle-CattleScore", User.Identity.Name))
+                                        {
+                                            <li class="">
+                                                <a data-toggle="tab" href="#Scores" aria-expanded="true">
+                                                    @Localization.getString("Scores")
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                                <div class="tab-content tabs-flat">
+                                    <div id="Cattle_info" class="tab-pane active">
+                                        @{Html.RenderPartial("CattleDetailTable", Model);}
+                                    </div>
+
+                                    <br />
+                                    <br />
+                                    @{
+                                        if (PermissionViewer.WillBeShow("Cattle-getSpecTemperature", User.Identity.Name))
+                                        {
+                                            <div id="Tempreture" class="tab-pane">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                    <div id="fromDateWidget" class="col-lg-3 col-md-3 col-sm-12 col-xs-12" data-mddatetimepicker="true" data-targetselector="#fromDate" data-trigger="click" data-enabletimepicker="false" data-isgregorian="false">
+                                                        <div>
+                                                            <div class="glyphicon glyphicon-calendar col-md-1"></div>
+                                                            @{
+                                                                if (@Thread.CurrentThread.CurrentCulture.Name == "fa-IR")
+                                                                {
+                                                                    <div class="col-md-2" style="margin-top:16px;margin-right:0px;margin-right:-30px">@Localization.getString("From")</div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="col-md-2" style="margin-top:16px;margin-right:0px;margin-left:-35px">@Localization.getString("From")</div>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        @{
+                                                            if (@Thread.CurrentThread.CurrentCulture.Name == "fa-IR")
+                                                            {
+                                                                <div style="margin-right: 10px;">
+                                                                    <input type="text" class="form-control no-padding col-md-10" id="fromDate" placeholder="از تاریخ" />
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div style="margin-left: 60px;">
+                                                                    <input type="text" class="form-control no-padding col-md-10" id="fromDate" placeholder="از تاریخ" />
+                                                                </div>
+                                                            }
+                                                        }
+                                                    </div>
+
+                                                    <div id="toDateWidget" class="col-lg-3 col-md-3 col-sm-12 col-xs-12" data-mddatetimepicker="true" data-targetselector="#toDate" data-trigger="click" data-enabletimepicker="false" data-isgregorian="false">
+                                                        <div style="margin-right: 0px;">
+                                                            <div class="glyphicon glyphicon-calendar col-md-1" style="margin-right:-38px"></div>
+                                                            @{
+                                                                if (@Thread.CurrentThread.CurrentCulture.Name == "fa-IR")
+                                                                {
+                                                                    <div class="col-md-1" style="margin-top:16px;margin-right:0px;margin-right:-30px">@Localization.getString("To")</div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="col-md-1" style="margin-top:16px;margin-right:0px;margin-left:0px">@Localization.getString("To")</div>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        @{
+                                                            if (@Thread.CurrentThread.CurrentCulture.Name == "fa-IR")
+                                                            {
+                                                                <div>
+                                                                    <input type="text" class="form-control no-padding col-md-10" id="toDate" placeholder="تا تاریخ" />
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div style="margin-left:40px">
+                                                                    <input type="text" class="form-control no-padding col-md-10" id="toDate" placeholder="تا تاریخ" />
+                                                                </div>
+                                                            }
+                                                        }
+
+                                                    </div>
+                                                    <div class="buttons-preview" id="btnShowTemp">
+                                                        <a href="javascript:void(0);" class="btn btn-primary">@Localization.getString("Show_Temp")</a>
+                                                    </div>
+                                                </div>
+                                                <div id="temperaturePlaceHolder">
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+
+
+                                    @*////////////////////////////////////////////////////////////////////////////////////////////*@
+                                    @{
+                                        if (PermissionViewer.WillBeShow("Cattle-getSpecTimeBudget", User.Identity.Name))
+                                        {
+                                            <div id="TimeBudget" class="tab-pane">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                    <div id="fromDateWidget_TimeBudget" class="col-lg-3 col-md-3 col-sm-12 col-xs-12" data-mddatetimepicker="true" data-targetselector="#fromDate_TimeBudget" data-trigger="click" data-enabletimepicker="false" data-isgregorian="false">
+                                                        <div>
+                                                            <div class="glyphicon glyphicon-calendar col-md-1"></div>
+                                                            @{
+                                                                if (@Thread.CurrentThread.CurrentCulture.Name == "fa-IR")
+                                                                {
+                                                                    <div class="col-md-2" style="margin-top:16px;margin-right:0px;margin-right:-30px">@Localization.getString("From")</div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="col-md-2" style="margin-top:16px;margin-right:0px;margin-left:-35px">@Localization.getString("From")</div>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        @{
+                                                            if (@Thread.CurrentThread.CurrentCulture.Name == "fa-IR")
+                                                            {
+                                                                <div style="margin-right: 10px;">
+                                                                    <input type="text" class="form-control no-padding col-md-10" id="fromDate_TimeBudget" placeholder="از تاریخ" />
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div style="margin-left: 60px;">
+                                                                    <input type="text" class="form-control no-padding col-md-10" id="fromDate_TimeBudget" placeholder="از تاریخ" />
+                                                                </div>
+                                                            }
+                                                        }
+                                                    </div>
+
+                                                    <div id="toDateWidget_TimeBudget" class="col-lg-3 col-md-3 col-sm-12 col-xs-12" data-mddatetimepicker="true" data-targetselector="#toDate_TimeBudget" data-trigger="click" data-enabletimepicker="false" data-isgregorian="false">
+                                                        <div style="margin-right: 0px;">
+                                                            <div class="glyphicon glyphicon-calendar col-md-1" style="margin-right:-38px"></div>
+                                                            @{
+                                                                if (@Thread.CurrentThread.CurrentCulture.Name == "fa-IR")
+                                                                {
+                                                                    <div class="col-md-1" style="margin-top:16px;margin-right:0px;margin-right:-30px">@Localization.getString("To")</div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="col-md-1" style="margin-top:16px;margin-right:0px;margin-left:0px">@Localization.getString("To")</div>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        @{
+                                                            if (@Thread.CurrentThread.CurrentCulture.Name == "fa-IR")
+                                                            {
+                                                                <div>
+                                                                    <input type="text" class="form-control no-padding col-md-10" id="toDate_TimeBudget" placeholder="تا تاریخ" />
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div style="margin-left:40px">
+                                                                    <input type="text" class="form-control no-padding col-md-10" id="toDate_TimeBudget" placeholder="تا تاریخ" />
+                                                                </div>
+                                                            }
+                                                        }
+
+                                                    </div>
+                                                    <div class="buttons-preview" id="btnShowTimeBudget" style="margin-right:-100px">
+                                                        <a href="javascript:void(0);" class="btn btn-primary">@Localization.getString("TimeBudget")</a>
+                                                    </div>
+                                                </div>
+                                                <div id="TimeBudgetPlaceHolder">
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+
+
+                                    @*////////////////////////////////////////////////////////////////////////////////////////////*@
+
+                                    @{
+                                        if (PermissionViewer.WillBeShow("Cattle-getSpecActivity", User.Identity.Name))
+                                        {
+                                            <div id="Activity" class="tab-pane ">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                    <div id="activityFromDateWidget" class="col-lg-3 col-md-3 col-sm-12 col-xs-12" data-mddatetimepicker="true" data-targetselector="#activityFromDate" data-trigger="click" data-enabletimepicker="false" data-isgregorian="false" style="margin-left: -40px;">
+                                                        <div>
+                                                            <div class="glyphicon glyphicon-calendar col-md-1"></div>
+                                                            @{
+                                                                if (@Thread.CurrentThread.CurrentCulture.Name == "fa-IR")
+                                                                {
+                                                                    <div class="col-md-2" style="margin-top:16px;margin-right:0px;margin-right:-30px">@Localization.getString("From")</div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="col-md-2" style="margin-top:16px;margin-right:0px;margin-left:-35px">@Localization.getString("From")</div>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        @{
+                                                            if (@Thread.CurrentThread.CurrentCulture.Name == "fa-IR")
+                                                            {
+                                                                <div style="margin-right:0px;">
+                                                                    <input type="text" class="form-control no-padding col-md-8" id="activityFromDate" placeholder="از تاریخ" />
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div style="margin-left:60px;">
+                                                                    <input type="text" class="form-control no-padding col-md-10" id="activityFromDate" placeholder="از تاریخ" />
+                                                                </div>
+                                                            }
+                                                        }
+                                                    </div>
+
+                                                    <div id="activityToDateWidget" class="col-lg-3 col-md-3 col-sm-12 col-xs-12" data-mddatetimepicker="true" data-targetselector="#activityToDate" data-trigger="click" data-enabletimepicker="false" data-isgregorian="false">
+                                                        <div style="margin-right:0px">
+                                                            <div class="glyphicon glyphicon-calendar col-md-1" style="margin-right:-38px"></div>
+                                                            @{
+                                                                if (@Thread.CurrentThread.CurrentCulture.Name == "fa-IR")
+                                                                {
+                                                                    <div class="col-md-1" style="margin-top:16px;margin-right:0px;margin-right:-30px">@Localization.getString("To")</div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="col-md-1" style="margin-top:16px;margin-right:0px;margin-left:0px">@Localization.getString("To")</div>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        @{
+                                                            if (@Thread.CurrentThread.CurrentCulture.Name == "fa-IR")
+                                                            {
+                                                                <div>
+                                                                    <input type="text" class="form-control no-padding col-md-10" id="activityToDate" placeholder="تا تاریخ" />
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div style="margin-left:40px">
+                                                                    <input type="text" class="form-control no-padding col-md-10" id="activityToDate" placeholder="تا تاریخ" />
+                                                                </div>
+                                                            }
+                                                        }
+                                                    </div>
+
+                                                    <div class="dropdown">
+                                                        <button id="ddActivity_text" class="dropbtn">@Localization.getString("Every_12H")</button>
+                                                        <div class="dropdown-content">
+                                                            <a id="ddActivity_option1" href="#">@Localization.getString("Every_1H")</a>
+                                                            <a id="ddActivity_option2" href="#">@Localization.getString("Every_2H")</a>
+                                                            <a id="ddActivity_option3" href="#">@Localization.getString("Every_6H")</a>
+                                                            <a id="ddActivity_option4" href="#">@Localization.getString("Every_12H")</a>
+                                                            <a id="ddActivity_option5" href="#">@Localization.getString("Every_1Day")</a>
+                                                        </div>
+                                                    </div>
+
+                                                    @{
+                                                        if (@Thread.CurrentThread.CurrentCulture.Name == "fa-IR")
+                                                        {
+                                                            <div class="buttons-preview" id="btnShowActivity" style="padding-right:40px;padding-top:10px;">
+                                                                <a href="javascript:void(0);" class="btn btn-primary">@Localization.getString("Show_Activity")</a>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="buttons-preview" id="btnShowActivity" style="padding-left:35px;padding-top:10px;">
+                                                                <a href="javascript:void(0);" class="btn btn-primary">@Localization.getString("Show_Activity")</a>
+                                                            </div>
+                                                        }
+                                                    }
+                                                </div>
+
+                                                <div id="ActivityPlaceHolder">
+                                                </div>
+
+                                            </div>
+                                        }
+                                    }
+                                    @{
+                                        if (PermissionViewer.WillBeShow("Cattle-CattlePosition", User.Identity.Name))
+                                        {
+                                            <div id="Position" class="tab-pane ">
+                                                <div id="positionPlaceHolder">
+                                                </div>
+                                                @*@{Html.RenderAction("CattleLocation"); }*@
+                                            </div>
+                                            <div id="Position" class="tab-pane ">
+                                                @{Html.RenderAction("CattleLocation"); }
+                                            </div>
+                                        }
+                                    }
+
+                                    @{
+                                        if (PermissionViewer.WillBeShow("Cattle-CattleEvent", User.Identity.Name))
+                                        {
+                                            <div id="Events" class="tab-pane ">
+                                                @{Html.RenderAction("CattleEvent"); }
+                                            </div>
+                                        }
+                                    }
+                                    @{
+                                        if (PermissionViewer.WillBeShow("Cattle-CattleScore", User.Identity.Name))
+                                        {
+                                            <div id="Scores" class="tab-pane ">
+                                                @{Html.RenderAction("CattleScore"); }
+                                            </div>
+                                        }
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div><!--Widget Body-->
+    </div><!--Widget-->
+</div>
+<script src="~/assets/Thems/AdminBSB/js/demo.js"></script>
+<script src="~/assets/Thems/LoadingDialog/bootstrap-waitingfor.js"></script>
+<script>
+    $('#ddActivity_option1').click(function() {
+        $('#ddActivity_text').html('@Localization.getString("Every_1H")');
+    });
+    $('#ddActivity_option2').click(function() {
+        $('#ddActivity_text').html('@Localization.getString("Every_2H")');
+    });
+    $('#ddActivity_option3').click(function() {
+        $('#ddActivity_text').html('@Localization.getString("Every_6H")');
+    });
+    $('#ddActivity_option4').click(function() {
+        $('#ddActivity_text').html('@Localization.getString("Every_12H")');
+    });
+    $('#ddActivity_option5').click(function() {
+        $('#ddActivity_text').html('@Localization.getString("Every_1Day")');
+    });
+</script>
+<script>
+
+    var cultureInfo = '@Thread.CurrentThread.CurrentCulture.Name';
+    if (cultureInfo == "fa-IR")
+    {
+        $('#fromDateWidget').MdPersianDateTimePicker({
+            Placement: 'bottom',
+            Trigger: 'click',
+            EnableTimePicker: false,
+            TargetSelector: '#fromDate',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'yyyy/MM/dd',
+            IsGregorian: false
+        });
+        $('#toDateWidget').MdPersianDateTimePicker({
+            Placement: 'bottom',
+            Trigger: 'click',
+            EnableTimePicker: false,
+            TargetSelector: '#toDate',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'yyyy/MM/dd',
+            IsGregorian: false
+        });
+        $('#activityFromDateWidget').MdPersianDateTimePicker({
+            Placement: 'bottom',
+            Trigger: 'click',
+            EnableTimePicker: false,
+            TargetSelector: '#activityFromDate',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'yyyy/MM/d',
+            IsGregorian: false
+        });
+        $('#activityToDateWidget').MdPersianDateTimePicker({
+            Placement: 'bottom',
+            Trigger: 'click',
+            EnableTimePicker: false,
+            TargetSelector: '#activityToDate',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'yyyy/MM/dd',
+            IsGregorian: false
+        });
+        $('#fromDateWidget_TimeBudget').MdPersianDateTimePicker({
+            Placement: 'bottom',
+            Trigger: 'click',
+            EnableTimePicker: false,
+            TargetSelector: '#fromDate_TimeBudget',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'yyyy/MM/d',
+            IsGregorian: false
+        });
+        $('#toDateWidget_TimeBudget').MdPersianDateTimePicker({
+            Placement: 'bottom',
+            Trigger: 'click',
+            EnableTimePicker: false,
+            TargetSelector: '#toDate_TimeBudget',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'yyyy/MM/dd',
+            IsGregorian: false
+        });
+    }
+    else
+    {
+        $('#fromDateWidget').MdPersianDateTimePicker({
+            Placement: 'bottom',
+            Trigger: 'click',
+            EnableTimePicker: false,
+            TargetSelector: '#fromDate',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'yyyy/MM/dd',
+            IsGregorian: true
+        });
+        $('#toDateWidget').MdPersianDateTimePicker({
+            Placement: 'bottom',
+            Trigger: 'click',
+            EnableTimePicker: false,
+            TargetSelector: '#toDate',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'yyyy/MM/dd',
+            IsGregorian: true
+        });
+        $('#activityFromDateWidget').MdPersianDateTimePicker({
+            Placement: 'bottom',
+            Trigger: 'click',
+            EnableTimePicker: false,
+            TargetSelector: '#activityFromDate',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'yyyy/MM/d',
+            IsGregorian: true
+        });
+        $('#activityToDateWidget').MdPersianDateTimePicker({
+            Placement: 'bottom',
+            Trigger: 'click',
+            EnableTimePicker: false,
+            TargetSelector: '#activityToDate',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'yyyy/MM/dd',
+            IsGregorian: true
+        });
+        $('#fromDateWidget_TimeBudget').MdPersianDateTimePicker({
+            Placement: 'bottom',
+            Trigger: 'click',
+            EnableTimePicker: false,
+            TargetSelector: '#fromDate_TimeBudget',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'yyyy/MM/d',
+            IsGregorian: true
+        });
+        $('#toDateWidget_TimeBudget').MdPersianDateTimePicker({
+            Placement: 'bottom',
+            Trigger: 'click',
+            EnableTimePicker: false,
+            TargetSelector: '#toDate_TimeBudget',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'yyyy/MM/dd',
+            IsGregorian: true
+        });
+    }
+
+</script>
+<script>
+    if (cultureInfo == "fa-IR")
+    {
+        $.ajax({
+            url: '@Url.Action("getCurrentDate", "Utility")',
+            type: "POST",
+            data: { 'AddHours': -96 },
+            success: function (data) {
+                $("#activityFromDate").val(data);
+                $("#fromDate").val(data);
+                $("#fromDate_TimeBudget").val(data);
+            },
+            error: function (xhr, error) {
+                alert("ERROR Detail.cshtml");
+            }
+        });
+
+        $.ajax({
+            url: '@Url.Action("getCurrentDate", "Utility")',
+            type: "POST",
+            data: { 'AddHours': 10 },
+            success: function (data) {
+                $("#activityToDate").val(data);
+                $("#toDate").val(data);
+                $("#toDate_TimeBudget").val(data);
+            },
+            error: function (xhr, error) {
+                alert("ERROR Detail.cshtml");
+            }
+        });
+    }
+    else
+    {
+        $.ajax({
+            url: '@Url.Action("getCurrentGeoDate", "Utility")',
+            type: "POST",
+            data: { 'AddHours': -60 },
+            success: function (data) {
+                $("#activityFromDate").val(data);
+                $("#fromDate").val(data);
+                $("#fromDate_TimeBudget").val(data);
+            },
+            error: function (xhr, error) {
+                alert("ERROR Detail.cshtml");
+            }
+        });
+
+        $.ajax({
+            url: '@Url.Action("getCurrentGeoDate", "Utility")',
+            type: "POST",
+            data: { 'AddHours': 0 },
+            success: function (data) {
+                $("#activityToDate").val(data);
+                $("#toDate").val(data);
+                $("#toDate_TimeBudget").val(data);
+            },
+            error: function (xhr, error) {
+                alert("ERROR Detail.cshtml");
+            }
+        });
+    }
+
+    $("#toDate").on("change", function btnShowActivity() {
+        $("#toDate").val(FatoEnNumber($("#toDate").val()));
+    });
+    $("#fromDate").on("change", function btnShowActivity() {
+        $("#fromDate").val(FatoEnNumber($("#fromDate").val()));
+    });
+    $("#activityFromDate").on("change", function btnShowActivity() {
+        $("#activityFromDate").val(FatoEnNumber($("#activityFromDate").val()));
+    });
+    $("#activityToDate").on("change", function btnShowActivity() {
+        $("#activityToDate").val(FatoEnNumber($("#activityToDate").val()));
+    });
+    $("#fromDate_TimeBudget").on("change", function btnShowActivity() {
+        $("#fromDate_TimeBudget").val(FatoEnNumber($("#fromDate_TimeBudget").val()));
+    });
+    $("#toDate_TimeBudget").on("change", function btnShowActivity() {
+        $("#toDate_TimeBudget").val(FatoEnNumber($("#toDate_TimeBudget").val()));
+    });
+
+    function FatoEnNumber(number) {
+        var persian = [];
+        var input = number;
+        persian = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
+        for (var j = 0; j < persian.length; j++) {
+            input = input.replace(new RegExp(persian[j], 'g'), j.toString());
+        }
+        return input;
+    }
+
+</script>
+<script>
+    var LastAction_Activity = "NOTHING";
+
+    $("#btnShowActivity").on("click",function btnShowActivity() {
+        reDrawActivityChart();
+    });
+
+    $("#btnShowTemp").on("click",function btnShowActivity() {
+        reDrawTemperatureChart();
+    });
+
+    $("#btnShowTimeBudget").on("click", function btnShowActivity() {
+        reDrawTimeBudgetChart();
+    });
+
+    function reDrawActivityChart() {
+        $("#ActivityWidgetWrapper").hide();
+
+        var ActivityStep = 0;
+        switch ($('#ddActivity_text').html()) {
+            case 'هر یک ساعت':
+                ActivityStep = 1;
+                break;
+
+            case 'هر دو ساعت':
+                ActivityStep = 2;
+                break;
+
+            case 'هر شش ساعت':
+                ActivityStep = 6;
+                break;
+
+            case 'هر دوازده ساعت':
+                ActivityStep = 12;
+                break;
+
+            case 'هر یک روز':
+                ActivityStep = 24;
+                break;
+
+            case 'Every 1H':
+                ActivityStep = 1;
+                break;
+
+            case 'Every 2H':
+                ActivityStep = 2;
+                break;
+
+            case 'Every 6H':
+                ActivityStep = 6;
+                break;
+
+            case 'Every 12H':
+                ActivityStep = 12;
+                break;
+
+            case 'Every 1Day':
+                ActivityStep = 24;
+                break;
+        }
+        window.history.replaceState(null, null,
+            window.location.protocol + "//" + window.location.host + window.location.pathname
+            + "?from=" + $("#activityFromDate").val()
+            + "&to="   + $("#activityToDate").val()
+            + "&step=" + ActivityStep
+            + "&cattleId=" + @Model.cattle.ID);
+
+
+        $.post("/widget/CattleActivityWidget",
+        {
+            CattleId: @Model.cattle.ID,
+            cultureInfo: "BTN"
+        },
+        function (input) {
+            $("#ActivityPlaceHolder").html(input);
+            LastAction_Activity = "BTN";
+        });
+
+    }
+
+    function reDrawTemperatureChart()
+    {
+        $("#TemperatueWidgetWrapper").hide();
+        window.history.replaceState(null, null,
+            window.location.protocol + "//" + window.location.host + window.location.pathname  + "?from="
+            + $("#fromDate").val() + "&to="
+            + $("#toDate").val() + "&step="
+            + 100 + "&cattleId="
+            + @Model.cattle.ID);
+
+        $.ajax({
+            url: '@Url.Action("TempretureWidget", "Widget")',
+            type: "GET",
+            data: {"CattleId":@Model.cattle.ID,"FreeStallId":@Model.cattle.FreeStallId},
+            success: function (response) {
+                $("#temperaturePlaceHolder").html(response);
+                waitingDialog.hide();
+            },
+            error: function () {
+
+            }
+        });
+    }
+
+    var TimeBudgetStep = 1;
+    function reDrawTimeBudgetChart()
+    {
+         window.history.replaceState(null, null,
+            window.location.protocol + "//" + window.location.host + window.location.pathname  + "?from="
+            + $("#fromDate_TimeBudget").val() + "&to="
+            + $("#toDate_TimeBudget").val() + "&step="
+            + TimeBudgetStep + "&cattleId="
+            + @Model.cattle.ID);
+
+        $.ajax({
+            url: '@Url.Action("TimebudgetWidget", "Widget")',
+            type: "GET",
+            data: {"CattleId":@Model.cattle.ID,"FreeStallId":@Model.cattle.FreeStallId},
+            success: function (response) {
+                $("#TimeBudgetPlaceHolder").html(response);
+                renderTimeBudgetStatus = "OK";
+            },
+            error: function () {
+                alert("Error 101.02");
+
+            }
+        });
+    }
+</script>
+<script>
+    $("#renderCattleInfo").on("click", function renderCattleInfo()
+    {
+        $.post("/Cattle/RefreshDetail",
+        {
+            CattleId: @Model.cattle.ID
+        },
+        function (response) {
+            $("#Cattle_info").html(response);
+        });
+    });
+
+    var renderTempratureStatus = "NaN";
+
+    $("#renderTemprature").on("click",function renderTemprature()
+    {
+        window.history.replaceState(null, null,
+            window.location.protocol + "//" + window.location.host + window.location.pathname  + "?from="
+            + $("#fromDate").val() + "&to="
+            + $("#toDate").val() + "&step="
+            + 100 + "&cattleId="
+            + @Model.cattle.ID);
+
+        if (renderTempratureStatus == "NaN")
+        {
+            $.post("/Widget/TempretureWidget",
+            {
+                CattleId: @Model.cattle.ID,
+                FreeStallId: @Model.cattle.FreeStallId
+            },
+            function (response) {
+                $("#temperaturePlaceHolder").html(response);
+                renderTempratureStatus = "OK";
+            });
+        }
+    });
+
+    var renderTimeBudgetStatus = "NaN";
+    $("#renderTimeBudget").on("click", function renderTimeBudget()
+    {
+        if (renderTimeBudgetStatus == "NaN")
+        {
+            reDrawTimeBudgetChart();
+        }
+    });
+
+    $("#renderPosition").on("click", function renderPosition() {
+        $.ajax({
+            url: '@Url.Action("CattlePositionWidget", "Widget")',
+            type: "GET",
+            data: {"cattleId":@Model.cattle.ID},
+            success: function (response) {
+                $("#positionPlaceHolder").html(response);
+            },
+            error: function () {
+                alert("Error 413");
+            }
+        });
+    });
+
+    var renderActivityStatus = "NaN";
+    $("#renderActivity").on("click",function renderActivity()
+    {
+        var ActivityStep = 0;
+        switch ($('#ddActivity_text').html()) {
+            case 'هر یک ساعت':
+                ActivityStep = 1;
+                break;
+
+            case 'هر دو ساعت':
+                ActivityStep = 2;
+                break;
+
+            case 'هر شش ساعت':
+                ActivityStep = 6;
+                break;
+
+            case 'هر دوازده ساعت':
+                ActivityStep = 12;
+                break;
+
+            case 'هر یک روز':
+                ActivityStep = 24;
+                break;
+
+            case 'Every 1H':
+                ActivityStep = 1;
+                break;
+
+            case 'Every 2H':
+                ActivityStep = 2;
+                break;
+
+            case 'Every 6H':
+                ActivityStep = 6;
+                break;
+
+            case 'Every 12H':
+                ActivityStep = 12;
+                break;
+
+            case 'Every 1Day':
+                ActivityStep = 24;
+                break;
+        }
+        window.history.replaceState(null, null,
+            window.location.protocol + "//" + window.location.host + window.location.pathname
+            + "?from=" + $("#activityFromDate").val()
+            + "&to="   + $("#activityToDate").val()
+            + "&step=" + ActivityStep
+            + "&cattleId=" + @Model.cattle.ID);
+
+        if (renderActivityStatus == "NaN")
+        {
+            $.post("/Widget/CattleActivityWidget",
+            {
+                CattleId: @Model.cattle.ID,
+                IsEmpty: "NaN"
+            },
+            function (response) {
+                $("#ActivityPlaceHolder").html(response);
+                renderActivityStatus = "OK";
+            });
+        }
+
+    });
+
+</script>

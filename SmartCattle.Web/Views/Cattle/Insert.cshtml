@@ -1,0 +1,598 @@
+﻿@using SmartCattle.DomainClass
+@using System.Threading;
+@model List<SmartCattle.Web.Domain.CattleGroupTbl>
+@{
+    ViewBag.Title = "Insert";
+}
+<link rel="shortcut icon" href="~/assets/img/favicon.png" type="image/x-icon">
+<link href="~/assets/css/font-awesome.min.css" rel="stylesheet" />
+<link href="~/assets/css/weather-icons.min.css" rel="stylesheet" />
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300" rel="stylesheet" type="text/css">
+<link id="beyond-link" href="~/assets/css/beyond.min.css" rel="stylesheet" />
+<link href="~/assets/css/demo.min.css" rel="stylesheet" />
+<link href="~/assets/css/typicons.min.css" rel="stylesheet" />
+<link href="~/assets/css/animate.min.css" rel="stylesheet" />
+<script src="~/assets/js/skins.min.js"></script>
+<style>
+   tr {
+        cursor: pointer;
+    }
+
+    th, td {
+        max-width:50px !important;
+        min-width: 50px !important;
+        display: table-cell;
+        font-size: 80%;
+        padding:3px 1px !important;
+    }
+
+    .widget-body {
+        overflow-y: hidden;
+        overflow-x: auto;
+    }
+ 
+    .FilterBox {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: none;
+    }
+
+    .relative {
+        position: relative;
+    }
+
+    #datePickerbtn {
+        border: none !important;
+    }
+
+    .input-group-addon {
+        padding: 0px 6px;
+        border: none;
+        display: inline-block;
+    }
+
+    #dateHeader {
+        max-width: 170px !important;
+        min-width: 170px !important;
+        padding: 8px 2px;
+    }
+
+    .popover table td, th {
+        min-width: 5px !important;
+        max-width: none !important;
+        font-family: 'WYekan';
+    }
+    .widget-body{
+        overflow:hidden;
+    }
+</style>
+
+<div>@ViewBag.msg</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="well with-header with-footer no-padding">
+                <div class="widget flat radius-bordered">
+                    <div class="header bg-yellow" style="color:darkred">
+                        <span class="widget-caption">@Localization.getString("Cattle_Identity")</span>
+                    </div>
+                    <div class="widget-body">
+                        <div id="registration-form" style="margin-top:20px">
+
+                            @using (Html.BeginForm("setCattle", "Cattle", FormMethod.Post, new { id = "setCattleForm" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <div class="form-title" style="height:20px">
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            @Localization.getString("Cattle_ID")
+                                            <span class="input-icon icon-right">
+                                                <input type="text" name="animalNumber" class="form-control" placeholder="@Localization.getString("Number_Example")">
+                                                <i class="glyphicon glyphicon-pencil circular"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            @Localization.getString("Name")
+                                            <span class="input-icon icon-right">
+                                                <input type="text" name="Name" class="form-control" placeholder="@Localization.getString("String_Example")">
+                                                <i class="glyphicon glyphicon-pencil circular"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            @Localization.getString("Sex")
+                                            <select class="form-control col-lg-12" name="Sex">
+                                                <option value="@SmartCattle.DomainClass.Sex_Subcategory.Sex"> @Localization.getString("Sex")</option>
+                                                <option value="@SmartCattle.DomainClass.Sex_Subcategory.Male"> @Localization.getString("Male")</option>
+                                                <option value="@SmartCattle.DomainClass.Sex_Subcategory.Female"> @Localization.getString("Female")</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            @Localization.getString("MotherID")
+                                            <span class="input-icon icon-right">
+                                                <input type="text" id="MotherID" name="MotherID" class="form-control" placeholder="@Localization.getString("Number_Example")">
+                                                <i class="glyphicon glyphicon-pencil circular"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            @Localization.getString("Genetics_type_num")
+                                            <span class="input-icon icon-right">
+                                                <input type="text" name="Genetics_type_num" class="form-control" placeholder="@Localization.getString("String_Example")">
+                                                <i class="glyphicon glyphicon-pencil circular"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <div id="BirthDateWidget" data-mddatetimepicker="true" data-targetselector="#birthDate" data-trigger="click" data-enabletimepicker="false" data-isgregorian="false">
+                                                @Localization.getString("date_of_birth")
+                                                <span class="input-icon icon-right">
+                                                    <input type="text" class="form-control padding-5 col-md-12 col-lg-12 col-sm-12" id="birthDate" name="birthDate" value="" placeholder="@Localization.getString("Date_Example")" />
+                                                    <i class="glyphicon glyphicon-calendar"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <div id="Last_Calving_Widget" data-mddatetimepicker="true" data-targetselector="#lastCalvingDate" data-trigger="click" data-enabletimepicker="false" data-isgregorian="false">
+                                                @Localization.getString("Last_Calving_Date")
+                                                <span class="input-icon icon-right">
+                                                    <input type="text" class="form-control padding-5 col-md-12 col-lg-12 col-sm-12" id="lastCalvingDate" name="lastCalvingDate" value="" placeholder="@Localization.getString("Date_Example")" />
+                                                    <i class="glyphicon glyphicon-calendar"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            @Localization.getString("Lacation_Number")
+                                            <select class="form-control col-lg-12" name="lactationNumber" id="lactationNumber" onchange="Lacation_Number(this)">
+                                                <option value="@Localization.getString("Lacation_Number")">@Localization.getString("Lacation_Number_default")</option>
+                                                <option value="0">0</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                                <option value="9">9</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-warning" style="margin-top:40px;width:100px;height:38px" onclick="setCattle()">@Localization.getString("Register")</button>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="well with-header no-padding">
+                <div class="widget flat radius-bordered">
+                    <div class="header bg-yellow" style="color:darkred">
+                        <span class="widget-caption">@Localization.getString("Cattle_Identity")</span>
+                    </div>
+                    <div class="">
+                        <div id="registration-form" style="margin-top:0px">
+
+                            @using (Html.BeginForm("setCattle", "Cattle", FormMethod.Post, new { id = "setCattleForm" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <div class="form-title" style="height:20px">
+                                </div>
+                                <div class="">
+                                    <div class="widget radius-bordered">
+                                        <div class="widget-body">
+                                            <form id="registrationForm" method="post" class="form-horizontal"
+                                                  data-bv-message="This value is not valid"
+                                                  data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+                                                  data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
+                                                  data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+
+                                                <div class="form-group">
+                                                    @*<label class="col-lg-3 control-label" style="margin-top:10px">@Localization.getString("FarmRole")</label>*@
+                                                    <div class="col-lg-4">
+                                                        <select id="eExcelType" style="width:110%;margin-right:-15px;">
+                                                            <option value="SmartCattle" />SmartCattle
+                                                            <option value="Modiran" />Modiran
+                                                            <option value="BaniAsady" />BaniAsady
+                                                            <option value="ExcelType4" />ExcelType4
+                                                        </select>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </form>
+
+                                            <div class="form-group">
+                                                <div class="col-lg-12"></div>
+                                                <form action="CattleUploading" class="dropzone col-lg-12" method="post" id="dropzonewidget" style="margin-top:15px;height:50px">
+                                                    <div class="fallback">
+                                                        <input name="file" type="file" />
+                                                    </div>
+                                                    <input id="txtExcelType" name="txtExcelType" value="SmartCattle" type="hidden" />
+                                                </form>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                @*<a href="#" style="height:38px;width:100px;margin-top:10px;margin-right:-15px;" class="btn btn-info btn-xxs edit"><i class="fa fa-edit"></i> ويرايش</a>*@
+                                                <button type="button" class="btn btn-warning" style="margin-top:15px;width:100px;height:38px" onclick="saveCattle()">@Localization.getString("Register")</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section PageScripts{
+
+<!--Beyond Scripts-->
+@*<script src="/assets/js/beyond.min.js"></script>*@
+<script src="/assets/js/MdBootstrapPersianDateTimePicker/jalaali.js"></script>
+<script src="/assets/js/MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.js"></script>
+<script src="~/assets/Thems/LoadingDialog/bootstrap-waitingfor.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+<script src="http://malsup.github.com/jquery.form.js"></script>
+
+<link href="~/assets/css/dataTables.bootstrap.css" rel="stylesheet" />
+<script src="~/assets/js/datatable/jquery.dataTables.min.js"></script>
+<script src="~/assets/js/datatable/ZeroClipboard.js"></script>
+<script src="~/assets/js/datatable/dataTables.tableTools.min.js"></script>
+<script src="~/assets/js/datatable/dataTables.bootstrap.min.js"></script>
+<script src="~/assets/js/jquery.min.js"></script>
+<script src="~/assets/js/bootstrap.min.js"></script>
+<script src="~/assets/js/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="~/assets/js/datatable/jquery.dataTables.min.js"></script>
+<script src="~/assets/js/datatable/ZeroClipboard.js"></script>
+<script src="~/assets/js/datatable/dataTables.tableTools.min.js"></script>
+<script src="~/assets/js/datatable/dataTables.bootstrap.min.js"></script>
+<script src="~/assets/js/datatable/datatables-init.js"></script>
+<script type="text/javascript">
+InitiateSimpleDataTable.init();
+InitiateEditableDataTable.init();
+InitiateExpandableDataTable.init('@Html.Raw(Json.Encode(Model))');
+InitiateSearchableDataTable.init();
+</script>
+<script src="~/assets/js/fuelux/wizard/wizard-custom.js"></script>
+<script src="~/assets/js/toastr/toastr.js"></script>
+<script src="~/assets/js/jquery.min.js"></script>
+<script src="~/assets/js/bootstrap.min.js"></script>
+<script src="~/assets/js/slimscroll/jquery.slimscroll.min.js"></script>
+@*<script src="~/assets/js/beyond.min.js"></script>*@
+<script src="~/assets/js/select2/select2.js"></script>
+<script src="~/assets/js/tagsinput/bootstrap-tagsinput.js"></script>
+<script src="~/assets/js/datetime/bootstrap-datepicker.js"></script>
+<script src="~/assets/js/datetime/bootstrap-timepicker.js"></script>
+<script src="~/assets/js/datetime/moment.js"></script>
+<script src="~/assets/js/datetime/daterangepicker.js"></script>
+<script src="~/assets/js/textarea/jquery.autosize.js"></script>
+<script src="~/assets/js/fuelux/spinbox/fuelux.spinbox.min.js"></script>
+<script src="~/assets/js/knob/jquery.knob.js"></script>
+<script src="~/assets/js/slider/jquery.nouislider.js"></script>
+<script src="~/assets/js/jquery-ui-1.10.4.custom.js"></script>
+<script src="~/assets/js/slider/jQRangeSlider/jQAllRangeSliders-withRuler-min.js"></script>
+<script src="~/assets/js/dropzone/dropzone.min.js"></script>
+<script src="~/assets/DropZone/dropzone.js"></script>
+<script>
+    var cultureInfo = '@Thread.CurrentThread.CurrentCulture.Name';
+    if (cultureInfo == "fa-IR")
+    {
+        $('#BirthDateWidget').MdPersianDateTimePicker({
+            Placement: 'bottom',
+            Trigger: 'click',
+            EnableTimePicker: false,
+            TargetSelector: '#birthDate',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'yyyy/MM/dd',
+            IsGregorian: false
+        });
+
+        $('#Last_Calving_Widget').MdPersianDateTimePicker({
+            Placement: 'bottom',
+            Trigger: 'click',
+            EnableTimePicker: false,
+            TargetSelector: '#lastCalvingDate',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'yyyy/MM/dd',
+            IsGregorian: false
+        });
+    }
+    else
+    {
+        $('#BirthDateWidget').MdPersianDateTimePicker({
+            Placement: 'bottom',
+            Trigger: 'click',
+            EnableTimePicker: false,
+            TargetSelector: '#birthDate',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'yyyy/MM/dd',
+            IsGregorian: true
+        });
+
+        $('#Last_Calving_Widget').MdPersianDateTimePicker({
+            Placement: 'bottom',
+            Trigger: 'click',
+            EnableTimePicker: false,
+            TargetSelector: '#lastCalvingDate',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'yyyy/MM/dd',
+            IsGregorian: true
+        });
+    }
+
+</script>
+
+<script>
+    if (cultureInfo == "fa-IR")
+    {
+        $.ajax({
+            url: '@Url.Action("getCurrentDate", "Utility")',
+            type: "POST",
+            data: { 'AddHours': 0 },
+            success: function (data) {
+                $("#birthDate").val(data);
+                $("#lastCalvingDate").val(data);
+            },
+            error: function (xhr, error) {
+                alert("ERROR Detail.cshtml");
+            }
+        });
+
+    }
+    else
+    {
+        $.ajax({
+            url: '@Url.Action("getCurrentGeoDate", "Utility")',
+            type: "POST",
+            data: { 'AddHours': 0 },
+            success: function (data) {
+                $("#birthDate").val(data);
+                $("#lastCalvingDate").val(data);
+            },
+            error: function (xhr, error) {
+                alert("ERROR Detail.cshtml");
+            }
+        });
+    }
+
+</script>
+
+<script>
+    function lastCalvingDateOnChange()
+    {
+        alert("OK");
+    }
+
+    //document.getElementById("lastCalvingDate").on("change", function btnShowActivity() {
+    //    $("#lastCalvingDate").val(FatoEnNumber($("#lastCalvingDate").val()));
+    //});
+
+    //$("#birthDate").on("change", function btnShowActivity() {
+    //    $("#birthDate").val(FatoEnNumber($("#birthDate").val()));
+    //});
+    
+</script>
+<script>
+    function Lacation_Number(element) {
+        //alert(element);
+    }
+</script>
+
+<script>
+    (function () {
+        var bar = $('.progress-bar');
+        var percent = $('.progress-bar');
+        var status = $('#status');
+
+        $('form').ajaxForm({
+            beforeSend: function () {
+                status.empty();
+                var percentVal = '0%';
+                bar.width(percentVal)
+                percent.html(percentVal);
+            },
+            uploadProgress: function (event, position, total, percentComplete) {
+                var percentVal = percentComplete + '%';
+                bar.width(percentVal)
+                percent.html(percentVal);
+            },
+            success: function () {
+                var percentVal = '100%';
+                bar.width(percentVal)
+                percent.html(percentVal);
+            },
+            complete: function (xhr) {
+                status.html(xhr.responseText);
+            }
+        });
+
+    })();
+</script>
+
+<script src="~/assets/DropZone/dropzone.js"></script>
+
+<script>
+    //var uploaders = new Dropzone('#dropzonewidget');
+    Dropzone.autoDiscover = false;
+    $(".dropzone").dropzone({
+        maxFiles: 1,
+        init: function () {
+            this.on("success", function (file, response) {
+                alertify.success('@Localization.getString("success")');
+                $('.dz-error-message').text("success");
+                $('.dz-success-mark').show();
+                $('.data-dz-name').hide();
+                $('.data-dz-size').hide();
+                txtFileName = response;
+                $('#txtExcelType').val("txtFileName");
+                this.options.addRemoveLinks = true;
+            });
+            this.on("maxfilesexceeded", function (response) {
+                alertify.error('@Localization.getString("maxfilesexceeded")');
+                $(response.previewElement).find('.dz-error-message').text("maxfilesexceeded");
+                $('.dz-success-mark').hide();
+                $('.data-dz-name').hide();
+                $('.data-dz-size').hide();
+
+                this.removeAllFiles();
+                this.addFile(response);
+            });
+            this.on("error", function (response) {
+                debugger;
+                alertify.error('@Localization.getString("error")');
+                $(response.previewElement).find('.dz-error-message').text("error");
+                $('.dz-success-mark').hide();
+                $('.data-dz-name').hide();
+                $('.data-dz-size').hide();
+
+            });
+            this.on("addedfile", function (file) {
+                $('.dz-success-mark').hide();
+                $('.dz-error-mark').hide();
+                $('.data-dz-name').hide();
+                $('.data-dz-size').hide();
+                txtFileName = file.name;
+            });
+        },
+        addRemoveLinks: true,
+        clickable: true,
+        removedfile: function (file) {
+            var name = file.name;
+
+            var _ref;
+            return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+        },
+        uploadMultiple: false,
+        acceptedFiles: '.xlsx, .xlsx',
+        dictResponseError: 'Server not Configured',
+    });
+
+
+</script>
+
+<script>
+    $("#eExcelType").select2();
+
+    function setCattle()
+    {
+        debugger;
+        var MotherID = document.getElementById("MotherID").value;
+        var lactationNumber = document.getElementById("lactationNumber").value;
+        if (MotherID == "") {
+            MotherID = 0;
+        }
+        if (lactationNumber == "شکم زایش")
+        {
+            lactationNumber = 0;
+        }
+        if (lactationNumber == "Lactation Number") {
+            lactationNumber = 0;
+        }
+        document.getElementById("MotherID").value = MotherID;
+        document.getElementById("lactationNumber").value = lactationNumber;
+        var CattleProperty = $("#setCattleForm").serialize();
+
+        alertify.success('@Localization.getString("Please_Wait")');
+        $.ajax({
+            url: '@Url.Action("setCattle", "Cattle")',
+            type: "POST",
+            data: CattleProperty,
+            success: function (data) {
+                if (data.includes("EMPTY"))
+                {
+                    alertify.error('@Localization.getString("Please_Fill_Blank")');
+                }
+                else if (data.includes("EXCEPTION"))
+                {
+                    alertify.error("EXCEPTION: " + data);
+                }
+                else if (data.includes("SIMILAR"))
+                {
+                    alertify.success('@Localization.getString("SIMILAR_Cattle_Error")');
+                }
+                else if (data.includes("SAVED"))
+                {
+                    alertify.success('@Localization.getString("Saved_Successfully")');
+                }
+            },
+            error: function (xhr, error) {
+                //alert("error:" + xhr.responseText);
+                alertify.error('@Localization.getString("Please_Fill_Blank")');
+            }
+        });
+    }
+</script>
+
+<script>
+    $('#eExcelType').on('change', function (e) {
+        var optionSelected = $("option:selected", this);
+        var valueSelected = this.value;
+        document.getElementById("txtExcelType").value = valueSelected;
+    });
+</script>
+<script>
+    function saveCattle()
+    {
+        $.post("/Cattle/CattleSaveAsList",
+        {
+            eExcelType: $("#eExcelType").val(),
+            FileName: txtFileName
+        },
+        function (data) {
+            Notify('Thank You! All of your information saved successfully.', 'bottom-right', '5000', 'blue', 'fa-check', true);
+            $('.dz-success-mark').hide();
+            $('.data-dz-name').hide();
+            $('.data-dz-size').hide();
+        });
+    }
+    </script>
+}

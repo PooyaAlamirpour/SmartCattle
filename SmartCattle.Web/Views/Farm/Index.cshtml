@@ -1,0 +1,709 @@
+﻿@using System.Threading
+@using SmartCattle.DomainClass
+@using SmartCattle.Web.Areas.APIs.Models
+@using Newtonsoft.Json
+@model SmartCattle.Web.Controllers.EssentialDataForCreationFarm
+@{
+    ViewBag.Title = Localization.getString("Role_List");
+}
+<link rel="shortcut icon" href="~/assets/img/favicon.png" type="image/x-icon">
+<link href="~/assets/css/font-awesome.min.css" rel="stylesheet" />
+<link href="~/assets/css/weather-icons.min.css" rel="stylesheet" />
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300" rel="stylesheet" type="text/css">
+<link id="beyond-link" href="~/assets/css/beyond.min.css" rel="stylesheet" />
+<link href="~/assets/css/demo.min.css" rel="stylesheet" />
+<link href="~/assets/css/typicons.min.css" rel="stylesheet" />
+<link href="~/assets/css/animate.min.css" rel="stylesheet" />
+<script src="~/assets/js/skins.min.js"></script>
+
+<style>
+    .onoffswitch {
+        position: relative;
+        width: 30px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+    }
+
+    .onoffswitch-checkbox {
+        display: none;
+    }
+
+    .onoffswitch-label {
+        display: block;
+        overflow: hidden;
+        cursor: pointer;
+        height: 13px;
+        padding: 0;
+        line-height: 15px;
+        border: 2px solid #999999;
+        border-radius: 13px;
+        background-color: #EEEEEE;
+        transition: background-color 0.3s ease-in;
+    }
+
+    .onoffswitch-label:before {
+            content: "";
+            display: block;
+            width: 13px;
+            margin: 0px;
+            background: #FFFFFF;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 20px;
+            border: 2px solid #999999;
+            border-radius: 13px;
+            transition: all 0.3s ease-in 0s;
+        }
+
+    .onoffswitch-checkbox:checked + .onoffswitch-label {
+        background-color: #34A7C1;
+    }
+
+    .onoffswitch-checkbox:checked + .onoffswitch-label, .onoffswitch-checkbox:checked + .onoffswitch-label:before {
+            border-color: #34A7C1;
+        }
+
+    .onoffswitch-checkbox:checked + .onoffswitch-label:before {
+        right: 0px;
+    }
+
+    /*.dz-max-files-reached {
+        background-color: red
+    }*/
+
+</style>
+
+<div class="row">
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <h5 class="row-title before-themeprimary"><i class="fa fa-user themeprimary"></i>@Localization.getString("define_new_farm")</h5>
+        <div id="tabbedwizard" class="wizard wizard-tabbed" data-target="#tabbedwizardsteps">
+            <ul class="steps">
+                <li data-target="#tabbedwizardstep1" class="active"><span class="step">1</span>@Localization.getString("farm_primary_data")<span class="chevron"></span></li>
+                <li data-target="#tabbedwizardstep2"><span class="step">2</span>@Localization.getString("farm_address")<span class="chevron"></span></li>
+                <li data-target="#tabbedwizardstep3"><span class="step">3</span>@Localization.getString("farm_location")<span class="chevron"></span></li>
+                <li data-target="#tabbedwizardstep4"><span class="step">4</span>@Localization.getString("farm_cattle_import")<span class="chevron"></span></li>
+                @*<li data-target="#tabbedwizardstep5"><span class="step">5</span>@Localization.getString("farm_assets_import")<span class="chevron"></span></li>*@
+            </ul>
+        </div>
+        <div class="step-content" id="tabbedwizardsteps">
+            <div class="step-pane active" id="tabbedwizardstep1">
+                <div class="row" style="margin-bottom:-30px">
+                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                        <div class="widget radius-bordered">
+                            <div class="widget-body">
+                                <form id="registrationForm" method="post" class="form-horizontal"
+                                      data-bv-message="This value is not valid"
+                                      data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+                                      data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
+                                      data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">@Localization.getString("FarmName")</label>
+                                        <div class="col-lg-4">
+                                            <input type="text" class="form-control" id="txtFarmName" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">@Localization.getString("FarmUserId")</label>
+                                        <div class="col-lg-4">
+                                            <select id="e1" style="width:100%;" onchange="onSelectUserId(this)">
+                                                @{
+                                                    foreach (var Email in Model.UserInfoList)
+                                                    {
+                                                        <option value="@Email" />@Email
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">@Localization.getString("FarmRole")</label>
+                                        <div class="col-lg-4">
+                                            <select id="e4" style="width:100%;" onchange="onSelectUserId(this)">
+                                                @{
+                                                    foreach (var item in Model.FarmType)
+                                                    {
+                                                        <option value="@item.uId">@item.jName</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="step-pane" id="tabbedwizardstep2">
+                <div class="row" style="margin-bottom:-30px">
+                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                        <div class="widget radius-bordered">
+                            <div class="widget-body">
+                                <form id="registrationForm" method="post" class="form-horizontal"
+                                      data-bv-message="This value is not valid"
+                                      data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+                                      data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
+                                      data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+                                    
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">@Localization.getString("Country")</label>
+                                        <div class="col-lg-5">
+                                            <select id="e2" style="width:100%;" onchange="OnChangeCountry()">
+                                                @{
+                                                    foreach (var item in Model.CountryList)
+                                                    {
+                                                        <option value="@item.ID" />@item.Name
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    @*<div class="form-group">
+                                        <label class="col-lg-2 control-label">@Localization.getString("Province")</label>
+                                        <div class="col-lg-5">
+                                            <input type="text" class="form-control" id="txtProvince" />
+                                        </div>
+                                    </div>*@
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">@Localization.getString("CityName")</label>
+                                        <div class="col-lg-5">
+                                            <select id="e3" style="width:100%;" onchange="onSelectCityName()">
+                                                @{
+                                                    foreach (var item in Model.CityList)
+                                                    {
+                                                        <option value="@item.ID" />@item.name
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">@Localization.getString("Street_Name1")</label>
+                                        <div class="col-lg-5">
+                                            <input type="text" class="form-control" id="txtStreet_Name1" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">@Localization.getString("Street_Name2")</label>
+                                        <div class="col-lg-5">
+                                            <input type="text" class="form-control" id="txtStreet_Name2" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">@Localization.getString("FarmNo")</label>
+                                        <div class="col-lg-2">
+                                            <input type="text" class="form-control" id="txtFarmNo" />
+                                        </div>
+                                        <label class="col-lg-1 control-label">@Localization.getString("PostalCode")</label>
+                                        <div class="col-lg-2">
+                                            <input type="text" class="form-control" id="txtPostalCode" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">@Localization.getString("Phone_1")</label>
+                                        <div class="col-lg-2">
+                                            <input type="text" class="form-control" id="txtPhone_1" />
+                                        </div>
+                                        <label class="col-lg-1 control-label">@Localization.getString("Phone_2")</label>
+                                        <div class="col-lg-2">
+                                            <input type="text" class="form-control" id="txtPhone_2" />
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="step-pane" id="tabbedwizardstep3">
+                <div class="row" style="margin-bottom:-30px">
+                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                        <div class="widget radius-bordered">
+                            <div class="widget-body">
+                                <form id="registrationForm" method="post" class="form-horizontal"
+                                      data-bv-message="This value is not valid"
+                                      data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+                                      data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
+                                      data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+
+                                    <div class="form-group">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div id="googleMap" style="background-color: white; height: 370px;"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-1 control-label">@Localization.getString("Latitiude")</label>
+                                        <div class="col-lg-2">
+                                            <input type="text" class="form-control" id="txtLatitiude" />
+                                        </div>
+                                        <label class="col-lg-1 control-label">@Localization.getString("Longitude")</label>
+                                        <div class="col-lg-2">
+                                            <input type="text" class="form-control" id="txtLongitude" />
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="step-pane" id="tabbedwizardstep4">
+                <div class="row" style="margin-bottom:-30px">
+                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                        <div class="widget radius-bordered">
+                            <div class="widget-body">
+                                <form id="registrationForm" method="post" class="form-horizontal"
+                                      data-bv-message="This value is not valid"
+                                      data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+                                      data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
+                                      data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">@Localization.getString("FarmRole")</label>
+                                        <div class="col-lg-4">
+                                            <select id="eExcelType" style="width:105%;">
+                                                <option value="SmartCattle" />SmartCattle
+                                                <option value="Modiran" />Modiran
+                                                <option value="BaniAsady" />BaniAsady
+                                                <option value="ExcelType4" />ExcelType4
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                </form>
+                                
+                                 <div class="form-group">
+                                     <div class="col-lg-2"></div>
+                                    <form action="CattleUploading" class="dropzone col-lg-4" method="post" id="dropzonewidget">
+                                        <div class="fallback">
+                                            <input name="file" type="file"/>
+                                        </div>
+                                        <input id="txtExcelType" name="txtExcelType" value="SmartCattle" type="hidden" />
+                                    </form>
+                                </div>
+
+                                <div style="height:280px"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*<div class="step-pane" id="tabbedwizardstep5">
+                <div class="row" style="margin-bottom:-30px">
+                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                        <div class="widget radius-bordered">
+                            <div class="widget-body">
+                                <form id="registrationForm" method="post" class="form-horizontal"
+                                      data-bv-message="This value is not valid"
+                                      data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+                                      data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
+                                      data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+                                    <div class="form-group">
+                                    </div>
+
+                                    <div class="form-group">
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+        </div>
+        <div class="actions actions-footer" id="tabbedwizard-actions">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default btn-sm btn-next btn-darkorange" data-last="تایید">@Localization.getString("Next")</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="height:30px">
+
+</div>
+<div class="row">
+    <div class="col-xs-12 col-md-12">
+        <h5 class="row-title before-themeprimary"><i class="fa fa-user themeprimary"></i>@Localization.getString("DefinedFarm")</h5>
+        <div class="widget">
+            <div class="widget-header ">
+            </div>
+            <div class="widget-body">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                            </th>
+                            <th>
+                                @Localization.getString("FarmName")
+                            </th>
+                            <th>
+                                @Localization.getString("Email")
+                            </th>
+                            <th>
+                                @Localization.getString("Country")
+                            </th>
+                            <th>
+                                @Localization.getString("City")
+                            </th>
+                            <th>
+                                @Localization.getString("Assress")
+                            </th>
+                            <th>
+                                @Localization.getString("PostalCode")
+                            </th>
+                            <th>
+                                @Localization.getString("Phones")
+                            </th>
+                            <th>
+                                @Localization.getString("Edit")/@Localization.getString("Delete")
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @for (int i = 0; i < Model.FarmList.Count; i++)
+                        {
+                            var Assress = Model.FarmList[i].Street1 + ", " + Model.FarmList[i].Street2 + ", " + Model.FarmList[i].No;
+                            var Phones = Model.FarmList[i].Phone1 + " - " + Model.FarmList[i].Phone2;
+                            var RemoveID = "Remove_" + @Model.FarmList[i].ID.ToString();
+                            var EditID = "Edit_" + @Model.FarmList[i].ID.ToString();
+                            <tr>
+                                <td>@(i + 1)</td>
+                                <td>@Model.FarmList[i].FarmName</td>
+                                <td>@Model.FarmList[i].Email</td>
+                                <td>@Model.FarmList[i].Country</td>
+                                <td>@Model.FarmList[i].City</td>
+                                <td>@Assress</td>
+                                <td>@Model.FarmList[i].PostalCode</td>
+                                <td>@Phones</td>
+                                <td>
+                                    <a name=@RemoveID href="javascript:void(0);" class="btn-xs btn-danger" onclick="RemoveFarm(this)">@Localization.getString("Delete")</a>
+                                    <a name=@EditID href="javascript:void(0);" class="btn-xs btn-primary" onclick="EditFarm(this)">@Localization.getString("Edit")</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+<script src="http://malsup.github.com/jquery.form.js"></script> 
+
+<script src="~/assets/js/jquery.min.js"></script>
+<script src="~/assets/js/bootstrap.min.js"></script>
+<script src="~/assets/js/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="~/assets/js/select2/select2.js"></script>
+<script src="~/assets/js/tagsinput/bootstrap-tagsinput.js"></script>
+<script src="~/assets/js/datetime/bootstrap-datepicker.js"></script>
+<script src="~/assets/js/datetime/bootstrap-timepicker.js"></script>
+<script src="~/assets/js/datetime/moment.js"></script>
+<script src="~/assets/js/datetime/daterangepicker.js"></script>
+<script src="~/assets/js/textarea/jquery.autosize.js"></script>
+<script src="~/assets/js/fuelux/spinbox/fuelux.spinbox.min.js"></script>
+<script src="~/assets/js/knob/jquery.knob.js"></script>
+<script src="~/assets/js/slider/jquery.nouislider.js"></script>
+<script src="~/assets/js/jquery-ui-1.10.4.custom.js"></script>
+<script src="~/assets/js/slider/jQRangeSlider/jQAllRangeSliders-withRuler-min.js"></script>
+<script src="~/assets/js/dropzone/dropzone.min.js"></script>
+
+<script>
+    $("#e1").select2();
+    $("#e2").select2();
+    var CityNameList = $("#e3").select2();
+    $("#e4").select2();
+    $("#eExcelType").select2();
+
+</script>
+<script>
+    $('#eExcelType').on('change', function (e) {
+        var optionSelected = $("option:selected", this);
+        var valueSelected = this.value;
+        document.getElementById("txtExcelType").value = valueSelected;
+    });
+
+    function OnChangeCountry()
+    {
+        $.post("/Farm/LoadCitybyCountry",
+        {
+            CityId: document.getElementById("e2").value
+        },
+        function (data) {
+            var City = [];
+            for (var i = 0; i < data.length; i++) {
+                City.push(
+                {
+                    id: data[i].ID,
+                    text: data[i].Name
+                });
+            }
+            debugger;
+            CityNameList.html('').select2({
+                data: City
+            });
+        });
+    }
+
+</script>
+
+<link href="~/assets/css/dataTables.bootstrap.css" rel="stylesheet" />
+<script src="~/assets/js/datatable/jquery.dataTables.min.js"></script>
+<script src="~/assets/js/datatable/ZeroClipboard.js"></script>
+<script src="~/assets/js/datatable/dataTables.tableTools.min.js"></script>
+<script src="~/assets/js/datatable/dataTables.bootstrap.min.js"></script>
+<script src="~/assets/js/jquery.min.js"></script>
+<script src="~/assets/js/bootstrap.min.js"></script>
+<script src="~/assets/js/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="~/assets/js/datatable/jquery.dataTables.min.js"></script>
+<script src="~/assets/js/datatable/ZeroClipboard.js"></script>
+<script src="~/assets/js/datatable/dataTables.tableTools.min.js"></script>
+<script src="~/assets/js/datatable/dataTables.bootstrap.min.js"></script>
+<script src="~/assets/js/datatable/datatables-init.js"></script>
+<script type="text/javascript">
+        InitiateSimpleDataTable.init();
+        InitiateEditableDataTable.init();
+        InitiateExpandableDataTable.init('@Html.Raw(Json.Encode(Model))');
+        InitiateSearchableDataTable.init();
+</script>
+<script src="~/assets/js/fuelux/wizard/wizard-custom.js"></script>
+<script src="~/assets/js/toastr/toastr.js"></script>
+
+<script type="text/javascript">
+        var txtFileName = "NaN";
+
+        jQuery(function ($) {
+        $('#simplewizardinwidget').wizard();
+        $('#simplewizard').wizard();
+        $('#tabbedwizard').wizard().on('finished', function (e) {
+            
+            var FarmUserId      = $('#e1').val();
+            var txtFarmName     = $("#txtFarmName").val();
+            var txtFarmRoleType = $("#e4").val();
+            var Country         = $('#e2').val();
+            var txtProvince     = $("#txtProvince").val();
+            var CityName        = $('#e3').val();  
+            var txtStreet_Name1 = $("#txtStreet_Name1").val();
+            var txtStreet_Name2 = $("#txtStreet_Name2").val();
+            var txtFarmNo       = $("#txtFarmNo").val();
+            var txtPostalCode   = $("#txtPostalCode").val();
+            var txtPhone_1      = $("#txtPhone_1").val();
+            var txtPhone_2      = $("#txtPhone_2").val();
+            var txtLatitiude    = $("#txtLatitiude").val();
+            var txtLongitude    = $("#txtLongitude").val();
+            var eExcelType      = $("#eExcelType").val();
+
+            var AllFarmFieldsForRegistration =
+                [
+                    txtFarmName,
+                    FarmUserId,
+                    txtFarmRoleType,
+                    Country,
+                    txtProvince,
+                    CityName,
+                    txtStreet_Name1,
+                    txtStreet_Name2,
+                    txtFarmNo,
+                    txtPostalCode,
+                    txtPhone_1,
+                    txtPhone_2,
+                    txtLatitiude,
+                    txtLongitude,
+                    eExcelType,
+                    txtFileName
+                ];
+
+            if (txtFarmName !== '' && FarmUserId !== '') {
+                $.post("/Farm/SetFarm",
+                    {
+                        FarmData: AllFarmFieldsForRegistration
+                    },
+                    function (data) {
+                        if (data == "NaN")
+                        {
+                            Notify('Thank You! All of your information saved successfully.', 'bottom-right', '5000', 'blue', 'fa-check', true);
+                            location.reload(true);
+                        }
+                        else if (data == "SPID_N200")
+                        {
+                            Notify('There is not SPID. (ErrN200)', 'bottom-right', '5000', 'red', 'fa-check', true);
+                        }
+                        else if (data == "SPID_NULL") {
+                            Notify('There is not SPID. (ErrN01)', 'bottom-right', '5000', 'red', 'fa-check', true);
+                        }
+                        else
+                        {
+                            Notify('مشکلی وجود دارد.', 'bottom-right', '5000', 'blue', 'fa-check', true);
+                        }
+                    });
+            }
+            else {
+                alert("@Localization.getString("Please_Fill_Blank")");
+            }
+        });
+        $('#WiredWizard').wizard();
+    });
+</script>
+
+<script>
+        function RemoveFarm(element)
+        {
+            if (confirm("Are You Sure To Delete This Row?") == false) {
+                return;
+            }
+            $.post("/Farm/RemoveFarm",
+            {
+                FarmId: element.name.replace("Remove_", "")
+            },
+            function (data) {
+                location.reload(true);
+            });
+        }
+
+        function EditFarm(element)
+        {
+            window.location.href = '@Url.Content("~")' + '@Thread.CurrentThread.CurrentCulture.Name' + '/Farm/Edit?FarmId=' + element.name.replace("Edit_", "");
+        }
+</script>
+
+<script>
+    var markerList = [];
+    var map;
+
+    function myMap() {
+        var mapProp = {
+            center: new google.maps.LatLng(35.7887611, 51.4666498),
+            zoom: 18,
+        };
+        map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+        google.maps.event.addListener(map, 'click', function (event) {
+            document.getElementById('txtLatitiude').value = event.latLng.lat();
+            document.getElementById('txtLongitude').value = event.latLng.lng();
+            PinMarker();
+        });
+        PinMarker();
+    }
+
+    function PinMarker() {
+        debugger;
+        for (var i = 0; i < markerList.length; i++) {
+            markerList[i].setMap(null);
+        }
+        var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(document.getElementById('txtLatitiude').value, document.getElementById('txtLongitude').value),
+            map: map,
+            icon: pinSymbol('red')
+        });
+        markerList.push(marker);
+    }
+
+    function pinSymbol(color) {
+        return {
+            path: 'M125 410 c-56 -72 -111 -176 -120 -224 -7 -36 11 -83 49 -124 76 -85 223 -67 270 31 28 60 29 88 6 150 -19 51 -122 205 -148 221 -6 3 -32 -21 -57 -54z m110 -175 c35 -34 33 -78 -4 -116 -35 -35 -71 -37 -105 -7 -40 35 -43 78 -11 116 34 41 84 44 120 7z',
+            fillColor: color,
+            fillOpacity: 0.8,
+            scale: 0.1,
+            strokeColor: color,
+            strokeWeight: 1,
+            anchor: new google.maps.Point(185, 500)
+        };
+    }
+</script>
+
+<script>
+    (function () {
+        var bar = $('.progress-bar');
+        var percent = $('.progress-bar');
+        var status = $('#status');
+
+        $('form').ajaxForm({
+            beforeSend: function () {
+                status.empty();
+                var percentVal = '0%';
+                bar.width(percentVal)
+                percent.html(percentVal);
+            },
+            uploadProgress: function (event, position, total, percentComplete) {
+                var percentVal = percentComplete + '%';
+                bar.width(percentVal)
+                percent.html(percentVal);
+            },
+            success: function () {
+                var percentVal = '100%';
+                bar.width(percentVal)
+                percent.html(percentVal);
+            },
+            complete: function (xhr) {
+                status.html(xhr.responseText);
+            }
+        });
+
+    })();
+</script>
+
+<script>
+    //var uploaders = new Dropzone('#dropzonewidget');
+    Dropzone.autoDiscover = false;
+    $(".dropzone").dropzone({
+        maxFiles: 1,
+        init: function () {
+            this.on("success", function (file, response) {
+                alertify.success('@Localization.getString("success")');
+                $('.dz-error-message').text("success");
+                $('.dz-success-mark').show();
+                $('.data-dz-name').hide();
+                $('.data-dz-size').hide();
+                txtFileName = response;
+                $('#txtExcelType').val("txtFileName");
+                this.options.addRemoveLinks = true;
+            });
+            this.on("maxfilesexceeded", function (response) {
+                alertify.error('@Localization.getString("maxfilesexceeded")');
+                $(response.previewElement).find('.dz-error-message').text("maxfilesexceeded");
+                $('.dz-success-mark').hide();
+                $('.data-dz-name').hide();
+                $('.data-dz-size').hide();
+
+                this.removeAllFiles();
+                this.addFile(response);
+            });
+            this.on("error", function (response) {
+                alertify.error('@Localization.getString("error")');
+                $(response.previewElement).find('.dz-error-message').text("error");
+                $('.dz-success-mark').hide();
+                $('.data-dz-name').hide();
+                $('.data-dz-size').hide();
+
+            });
+            this.on("addedfile", function (file) {
+                $('.dz-success-mark').hide();
+                $('.dz-error-mark').hide();
+                $('.data-dz-name').hide();
+                $('.data-dz-size').hide();
+                txtFileName = file.name;
+            });
+        },
+        addRemoveLinks: true,
+        clickable: true,
+        removedfile: function (file) {
+            var name = file.name;
+
+            var _ref;
+            return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+        },
+        uploadMultiple: false,
+        acceptedFiles: '.xlsx, .xlsx',
+        dictResponseError: 'Server not Configured',
+    });
+
+
+</script>
+<script src="http://maps.google.com/maps/api/js?sensor=true&key=AIzaSyDrbXqxXPH_oWjPIuM8AikKdIkKKR01Fh8&callback=myMap" type="text/javascript"></script>
+

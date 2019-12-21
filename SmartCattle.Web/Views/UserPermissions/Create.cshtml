@@ -1,0 +1,78 @@
+﻿<style type="text/css">
+    .container {
+        width: 500px;
+        clear: both;
+    }
+
+    .container input {
+        width: 100%;
+        clear: both;
+    }
+</style>
+<p>
+    تنها برنامه نویس پروژه به این بخش دسترسی دارد. البته فعلا دسترسی بدون محدودیت برای کسانی که لینک این بخش را بدانند بلامانع هست. 
+    ولی در آینده قطعا موارد امنیتی برای آن در نظر گرفته می شود.
+    در این بخش می توان نام کنترلر رو به همراه اکشن ها برای ایجاد دسترسی ایجاد کرد و برای هریک توضیحاتی درج کرد.
+    نتایج این بخش در جدولی به ادمین برنامه نشان داده خواهد شد که طبق آن می تواند دسترسی های مختلفی را برای کاربران تعریف کند.
+    توجه داشته باشید که ذکر نام کنترلر با/بدون پسوند کنترلر بلامانع هست.
+</p>
+<br />
+<div class="container">
+    <form>
+        <label>نام کنترلر</label>
+        <input type="text" id="ControllerName" alt="s"><br />
+        <label>نام اکشن</label>
+        <input type="text" id="ActionName"><br />
+        <label>توضیحات</label>
+        <input type="text" id="Comment"><br /><br />
+        <button type="button" id="btnCreate" class="btn btn-default btn-sm btn-next btn-blue">ایجاد دسترسی</button>
+    </form>
+</div>
+
+<div class="modal fade" id="modalPush" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-notify modal-info" role="document">
+        <div class="modal-content text-center">
+            <div class="modal-header d-flex justify-content-center">
+                <p class="heading">Warning</p>
+            </div>
+            <div class="modal-body">
+                <i class="fa fa-bell fa-4x animated rotateIn mb-4"></i>
+                <p>هیچ یک از فیلدها نباید خالی باشند.</p>
+            </div>
+            <div class="modal-footer flex-center" dir="rtl">
+                <button type="button" class="btn btn-outline-secondary-modal waves-effect" data-dismiss="modal">باشه</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@{
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script>
+        $("#btnCreate").click(function () {
+            if ($('#ControllerName').val() !== '' && $('#ActionName').val() !== '')
+            {
+                $.post("/UserPermissions/SavePermissions",
+                {
+                    ControllerName: $('#ControllerName').val(),
+                    ActionName: $('#ActionName').val(),
+                    Comment: $('#Comment').val()
+                }, function (data) {
+                    if (data === 'OK')
+                    {
+                        alert("Saved Successfully")
+                    }
+                    else
+                    {
+                        alert(data);
+                    }
+                });
+            }
+            else
+            {
+                $("#modalPush").modal('show');
+            }
+            
+        });
+    </script>
+}

@@ -1,0 +1,844 @@
+﻿@model   SmartCattle.Web.Controllers.ListModel
+@using SmartCattle.Core;
+@using System.Threading;
+@using SmartCattle.DomainClass;
+@using SmartCattle.Web.Controllers;
+<link href="~/assets/css/MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.css" rel="stylesheet" />
+<style>
+    tr {
+        cursor: pointer;
+    }
+
+    th, td {
+        max-width: 110px !important;
+        min-width: 110px !important;
+        display: table-cell;
+        font-size: 95%;
+    }
+
+        th input {
+            width: 110px !important;
+            height: 25px;
+            display: inline-block;
+        }
+
+    tr i.fa {
+        display: inline-block !important;
+        padding: 2px 4px;
+        border: 1px solid #808080;
+        background-color: #b9b9b9;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .widget-body {
+        overflow-y: hidden;
+        overflow-x: auto;
+    }
+
+    .filter-input {
+        display: inline-block !important;
+        width: 55px !important;
+        height: 25px !important;
+    }
+
+    #dateInput {
+        height: 25px !important;
+        float: left;
+        padding: 2px !important;
+    }
+
+    .FilterBox {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: none;
+        z-index:200;
+    }
+
+    .relative {
+        position: relative;
+    }
+
+    #datePickerbtn {
+        border: none !important;
+    }
+
+    .input-group-addon {
+        padding: 0px 6px;
+        border: none;
+        display: inline-block;
+    }
+
+    #dateHeader {
+        max-width: 170px !important;
+        min-width: 170px !important;
+        padding: 8px 2px;
+    }
+
+    .popover table td, th {
+        min-width: 5px !important;
+        max-width: none !important;
+        font-family: 'WYekan';
+    }
+
+    .selectedFilter{
+        font-size:10px;
+        display:block;
+        margin:2px auto;
+        text-align:center;
+        background-color:#EE7469;
+        padding:2px;
+        cursor:no-drop;
+        border-radius:2px;
+        clear:both;
+        height:20px; 
+        visibility:hidden;
+        color:#fefefe;
+    }
+</style>
+
+<input type="hidden" id="CattleNumber" value="" title="@ArithmeticFilerItem.Equal" />
+<input type="hidden" id="DIM" value="" title="@ArithmeticFilerItem.Equal" />
+<input type="hidden" id="FreeStallCode" value="" title="@ArithmeticFilerItem.Equal" />
+<input type="hidden" id="LactationNumber" value="" title="@ArithmeticFilerItem.Equal" />
+<input type="hidden" id="Eating" value="" title="@ArithmeticFilerItem.Equal" />
+<input type="hidden" id="Rumination" value="" title="@ArithmeticFilerItem.Equal" />
+<input type="hidden" id="DaysScinceLastBreeding" value="" title="@ArithmeticFilerItem.Equal" />
+<input type="hidden" id="Date" value="" />
+<input type="hidden" id="HeatState" value="" />
+<input type="hidden" id="HealthState" value="" />
+<input type="hidden" id="FertilityState" value="" />
+<input type="hidden" id="GroupId" value="-1" />
+<input type="hidden" id="Page" value="1" />
+
+<div class="row no-padding" id="cattleList">
+    <div class="well with-header with-footer col-lg-12 col-sm-12 col-xs-12 no-padding">
+        <div class="header bordered-sky">
+            @Localization.getString("Cow_List")
+        </div>
+        <div class="col-lg-12 col-sm-12 col-xs-12 no-padding">
+            <div class="tabbable">
+                <ul class="nav nav-tabs nav-justified" id="myTab5">
+                    <li class="tab-blue active" data-group="-1">
+                        <a data-toggle="tab" href="#" aria-expanded="false" onclick="jsfunction('')">
+                            @Localization.getString("All")
+                        </a>
+                    </li>
+                    
+                    @{
+                        @*List<CattleGroup> CattleGroupList = Model.Groups.ToList();
+                        var iIndex = 0;
+                        <li class="tab-blue" data-group="@CattleGroupList[iIndex].ID">
+                            <a data-toggle="tab" href="#" aria-expanded="false" onclick="jsfunction('Fresh')">
+                                @CattleGroupList[iIndex].name
+                            </a>
+                        </li>
+                        iIndex = 1;
+                        <li class="tab-blue" data-group="@CattleGroupList[iIndex].ID">
+                            <a data-toggle="tab" href="#" aria-expanded="false" onclick="jsfunction('Preg')">
+                                @CattleGroupList[iIndex].name
+                            </a>
+                        </li>
+                        iIndex = 2;
+                        <li class="tab-blue" data-group="@CattleGroupList[iIndex].ID">
+                            <a data-toggle="tab" href="#" aria-expanded="false" onclick="jsfunction('Insem')">
+                                @CattleGroupList[iIndex].name
+                            </a>
+                        </li>*@
+                    }
+
+                </ul>
+                <div class="tab-content col-lg-12 col-md-12 col-xs-12 ">
+                    <div class="col-xs-12 col-md-12 col-lg-12 no-padding">
+                        <div class="widget">
+                            <div class="widget-header bordered-bottom bordered-blue">
+                                <div class="widget-buttons">
+                                    <a href="/fa-IR/Cattle/List" data-toggle="dispose">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="widget-body no-padding" id="searchableGridWrapper">
+                                <table class="table table-bordered table-hover table-striped" id="searchable">
+                                    @{
+                                        if (PermissionViewer.WillBeShow("Cattle-AdvancedFilter", User.Identity.Name))
+                                        {
+                                            <thead class="bordered-darkorange">
+                                                <tr role="row">
+                                                    <th>
+                                                        @Localization.getString("Cattle_Number")
+                                                    </th>
+                                                    <th>
+                                                        @Localization.getString("Cattle_Group")
+                                                    </th>
+                                                    <th>
+                                                        @Localization.getString("Free_stall")
+                                                    </th>
+                                                    <th>
+                                                        @Localization.getString("DIM")
+                                                    </th>
+                                                    <th>
+                                                        @Localization.getString("Lactation_Number")
+                                                    </th>
+                                                    <th>
+                                                        @Localization.getString("Fertility_Status")
+                                                    </th>
+                                                    <th>
+                                                        @Localization.getString("In_Heat_Status")
+                                                    </th>
+                                                    <th>
+                                                        @Localization.getString("Health_Status")
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th class="relative ">
+                                                        <i data-filter="CattleID_Filter" data-column="CattleID" class="fa fa-filter" aria-hidden="true"></i>
+                                                        <input id="CattleID_Input" type="text" class="filter-input" />
+                                                        <i id="CattleID_Label" class="selectedFilter"> </i>
+                                                    </th>
+                                                    <th class="relative ">
+
+                                                            <i data-filter="CattleGroupID_Filter" data-column="CattleGroupID" class="fa fa-filter" aria-hidden="true"></i>
+                                                            <input id="CattleGroupID_Input" type="text" class="filter-input" />
+                                                            <i id="CattleGroupID_Label" class="selectedFilter"> </i>
+                                                    </th>
+                                                    <th class="relative ">
+                                                        <i data-filter="FreeStallID_Filter" data-column="FreeStallID" class="fa fa-filter" aria-hidden="true"></i>
+                                                        <input id="FreeStallID_Input" type="text" class="filter-input" />
+                                                        <i id="FreeStallID_Label" class="selectedFilter"> </i>
+                                                    </th>
+                                                    <th class="relative ">
+                                                        <i data-filter="CattleDIM_Filter" data-column="CattleDIM" class="fa fa-filter" aria-hidden="true"></i>
+                                                        <input id="CattleDIM_Input" type="text" class="filter-input" />
+                                                        <i id="CattleDIM_Label" class="selectedFilter"> </i>
+                                                    </th>
+                                                    <th class="relative ">
+                                                        <i data-filter="CattleLactationNumber_Filter" data-column="CattleLactationNumber" class="fa fa-filter" aria-hidden="true"></i>
+                                                        <input id="CattleLactationNumber_Input" type="text" class="filter-input" />
+                                                        <i id="CattleLactationNumber_Label" class="selectedFilter"> </i>
+                                                    </th>
+                                                    <th class="relative ">
+                                                        <i data-filter="FertilityState_Filter" data-column="FertilityState" class="fa fa-filter" aria-hidden="true"></i>
+                                                        <i id="FertilityState_Label" class="selectedFilter"> </i>
+                                                    </th>
+                                                    <th class="relative ">
+                                                        <i data-filter="CattleHeatState_Filter" data-column="CattleHeatState" class="fa fa-filter" aria-hidden="true"></i>
+                                                        <i id="CattleHeatState_Label" class="selectedFilter"> </i>
+                                                    </th>
+                                                    <th class="relative ">
+                                                        <i data-filter="CattleHealthState_Filter" data-column="CattleHealthState" class="fa fa-filter" aria-hidden="true"></i>
+                                                        <i id="CattleHealthState_Label" class="selectedFilter"> </i>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                        }
+                                    }
+
+
+                                    <tfoot>
+                                    </tfoot>
+                                    <tbody>
+                                        @if (Model.Cattles != null && Model.Cattles.Any())
+                                        {
+                                            foreach (var item in Model.Cattles)
+                                            {
+                                                <tr class="rowData" data-rowid="@item.ID">
+                                                    <td class="center">@item.animalNumber</td>
+                                                    <td class="center">@Helper.getCattleGroupName(item.CattleGroupId)</td>
+                                                    <td class="center">@Helper.getCattleFreeStallName(item.FreeStallId)</td>
+                                                    <td class="center">@item.Dim</td>
+                                                    <td class="center">@item.lactationNumber</td>
+                                                    <td class="center">@(Localization.getString(item.fertilityStatus) == "NULL" ? "" : Localization.getString(item.fertilityStatus))</td>
+                                                    <td class="center">@(Localization.getString(item.heatStatus) == "NULL" ? "" : Localization.getString(item.heatStatus))</td>
+                                                    <td class="center">@(Localization.getString(item.healthStatus) == "NULL" ? "" : Localization.getString(item.healthStatus))</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                                @{ Html.RenderPartial("Paging", Model); }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--start filter boxes -->
+        <div id = "CattleID_Filter_Menu" class="dropdown-container FilterBox" style="margin-left:10px">
+            <div class="dropdown-preview">
+                <ul class="dropdown-menu dropdown-darkorange">
+                    <li>
+                        <a class="filterItem" title="" data-value="WitoutFilter" href="#" tabindex="-1">@Localization.getString("WitoutFilter")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.Equal" href="#" tabindex="-1">@Localization.getString("Equal")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.NotEqual" href="#" tabindex="-1">@Localization.getString("NotEqual")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.GreateThan" href="#" tabindex="-1">@Localization.getString("GreateThan")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.LessThan" href="#" tabindex="-1">@Localization.getString("LessThan")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.GreateThanOrEqualTo" href="#" tabindex="-1">@Localization.getString("GreateThanOrEqualTo")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.LessThanOrEqualTo" href="#" tabindex="-1">@Localization.getString("LessThanOrEqualTo")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.IsNull" href="#" tabindex="-1">@Localization.getString("IsNull")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.NotIsNull" href="#" tabindex="-1">@Localization.getString("NotIsNull")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.NotIsNull" href="#" tabindex="-1">@Localization.getString("SortASC")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.NotIsNull" href="#" tabindex="-1">@Localization.getString("SortDESC")</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id = "CattleGroupID_Filter_Menu" class="dropdown-container FilterBox">
+            <div class="dropdown-preview">
+                <ul class="dropdown-menu dropdown-darkorange">
+                    <li>
+                        <a class="filterItem" title="" data-value="WitoutFilter" href="#" tabindex="-1">@Localization.getString("WitoutFilter")</a>
+                        @{
+                            foreach (var item in Model.CattleGroupList)
+                            {
+                                <a class="filterItem" title="" data-value="@item.name" href="#" tabindex="-1">@item.name</a>
+                            }
+                        }
+                        @*<a class="filterItem" title="" data-value="WitoutFilter" href="#" tabindex="-1">@Localization.getString("WitoutFilter")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.Equal" href="#" tabindex="-1">@Localization.getString("Equal")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.NotEqual" href="#" tabindex="-1">@Localization.getString("NotEqual")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.GreateThan" href="#" tabindex="-1">@Localization.getString("GreateThan")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.LessThan" href="#" tabindex="-1">@Localization.getString("LessThan")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.GreateThanOrEqualTo" href="#" tabindex="-1">@Localization.getString("GreateThanOrEqualTo")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.LessThanOrEqualTo" href="#" tabindex="-1">@Localization.getString("LessThanOrEqualTo")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.IsNull" href="#" tabindex="-1">@Localization.getString("IsNull")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.NotIsNull" href="#" tabindex="-1">@Localization.getString("NotIsNull")</a>*@
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id = "FreeStallID_Filter_Menu" class="dropdown-container FilterBox">
+            <div class="dropdown-preview">
+                <ul class="dropdown-menu dropdown-darkorange">
+                    <li>
+                        <a class="filterItem" title="" data-value="WitoutFilter" href="#" tabindex="-1">@Localization.getString("WitoutFilter")</a>
+                        @{
+                            foreach (var item in Model.FreeStallList)
+                            {
+                                <a class="filterItem" title="" data-value="@item.name" href="#" tabindex="-1">@item.name</a>
+                            }
+                        }
+                        @*<a class="filterItem" title="" data-value="WitoutFilter" href="#" tabindex="-1">@Localization.getString("WitoutFilter")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.Equal" href="#" tabindex="-1">@Localization.getString("Equal")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.NotEqual" href="#" tabindex="-1">@Localization.getString("NotEqual")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.GreateThan" href="#" tabindex="-1">@Localization.getString("GreateThan")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.LessThan" href="#" tabindex="-1">@Localization.getString("LessThan")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.GreateThanOrEqualTo" href="#" tabindex="-1">@Localization.getString("GreateThanOrEqualTo")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.LessThanOrEqualTo" href="#" tabindex="-1">@Localization.getString("LessThanOrEqualTo")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.IsNull" href="#" tabindex="-1">@Localization.getString("IsNull")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.NotIsNull" href="#" tabindex="-1">@Localization.getString("NotIsNull")</a>*@
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id = "CattleLactationNumber_Filter_Menu" class="dropdown-container FilterBox">
+            <div class="dropdown-preview">
+                <ul class="dropdown-menu dropdown-darkorange">
+                    <li>
+                        <a class="filterItem" title="" data-value="WitoutFilter" href="#" tabindex="-1">@Localization.getString("WitoutFilter")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.Equal" href="#" tabindex="-1">@Localization.getString("Equal")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.NotEqual" href="#" tabindex="-1">@Localization.getString("NotEqual")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.GreateThan" href="#" tabindex="-1">@Localization.getString("GreateThan")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.LessThan" href="#" tabindex="-1">@Localization.getString("LessThan")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.GreateThanOrEqualTo" href="#" tabindex="-1">@Localization.getString("GreateThanOrEqualTo")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.LessThanOrEqualTo" href="#" tabindex="-1">@Localization.getString("LessThanOrEqualTo")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.IsNull" href="#" tabindex="-1">@Localization.getString("IsNull")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.NotIsNull" href="#" tabindex="-1">@Localization.getString("NotIsNull")</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id = "CattleDIM_Filter_Menu" class="dropdown-container FilterBox">
+            <div class="dropdown-preview">
+                <ul class="dropdown-menu dropdown-darkorange">
+                    <li>
+                        <a class="filterItem" title="" data-value="WitoutFilter" href="#" tabindex="-1">@Localization.getString("WitoutFilter")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.Equal" href="#" tabindex="-1">@Localization.getString("Equal")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.NotEqual" href="#" tabindex="-1">@Localization.getString("NotEqual")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.GreateThan" href="#" tabindex="-1">@Localization.getString("GreateThan")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.LessThan" href="#" tabindex="-1">@Localization.getString("LessThan")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.GreateThanOrEqualTo" href="#" tabindex="-1">@Localization.getString("GreateThanOrEqualTo")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.LessThanOrEqualTo" href="#" tabindex="-1">@Localization.getString("LessThanOrEqualTo")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.IsNull" href="#" tabindex="-1">@Localization.getString("IsNull")</a>
+                        <a class="filterItem" title="" data-value="@ArithmeticFilerItem.NotIsNull" href="#" tabindex="-1">@Localization.getString("NotIsNull")</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id = "FertilityState_Filter_Menu" class="dropdown-container FilterBox">
+            <div class="dropdown-preview">
+                <ul class="dropdown-menu dropdown-darkorange">
+                    <li>
+                        <a class="filterItem" title="" data-value="WitoutFilter" href="#" tabindex="-1">@Localization.getString("WitoutFilter")</a>
+                        @*<a class="filterItem" data-value="@FertilityStates.Abort" href="#" tabindex="-1">@Localization.getString("Abort")</a>*@
+                        @*<a class="filterItem" data-value="@FertilityStates.BClf" href="#" tabindex="-1">@Localization.getString("BClf")</a>*@
+                        <a class="filterItem" data-value="@FertilityStates.Calf" href="#" tabindex="-1">@Localization.getString("Calf")</a>
+                        @*<a class="filterItem" data-value="@FertilityStates.Cull" href="#" tabindex="-1">@Localization.getString("Cull")</a>*@
+                        <a class="filterItem" data-value="@FertilityStates.Dry" href="#" tabindex="-1">@Localization.getString("Dry")</a>
+                        @*<a class="filterItem" data-value="@FertilityStates.Early" href="#" tabindex="-1">@Localization.getString("Early")</a>*@
+                        <a class="filterItem" data-value="@FertilityStates.Fresh" href="#" tabindex="-1">@Localization.getString("Fresh")</a>
+                        <a class="filterItem" data-value="@FertilityStates.Heifer" href="#" tabindex="-1">@Localization.getString("Heifer")</a>
+                        <a class="filterItem" data-value="@FertilityStates.Insem" href="#" tabindex="-1">@Localization.getString("Insem")</a>
+                        @*<a class="filterItem" data-value="@FertilityStates.Lead" href="#" tabindex="-1">@Localization.getString("Lead")</a>*@
+                        <a class="filterItem" data-value="@FertilityStates.Open" href="#" tabindex="-1">@Localization.getString("Open")</a>
+                        <a class="filterItem" data-value="@FertilityStates.Preg" href="#" tabindex="-1">@Localization.getString("Preg")</a>
+                        <a class="filterItem" data-value="@FertilityStates.Ready" href="#" tabindex="-1">@Localization.getString("Ready")</a>
+                        @*<a class="filterItem" data-value="@FertilityStates.TBCul" href="#" tabindex="-1">@Localization.getString("TBCul")</a>*@
+                        <a class="filterItem" data-value="@FertilityStates.Other" href="#" tabindex="-1">@Localization.getString("Other")</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id = "CattleHeatState_Filter_Menu" class="dropdown-container FilterBox">
+            <div class="dropdown-preview">
+                <ul class="dropdown-menu dropdown-darkorange">
+                    <li>
+                        <a class="filterItem" title="" data-value="WitoutFilter" href="#" tabindex="-1">@Localization.getString("WitoutFilter")</a>
+                        <a class="filterItem" data-value="@HeatState.InHeat" href="#" tabindex="-1">@Localization.getString("InHeat")</a>
+                        <a class="filterItem" data-value="@HeatState.Potential" href="#" tabindex="-1">@Localization.getString("Potential")</a>
+                        <a class="filterItem" data-value="@HeatState.Suspicious" href="#" tabindex="-1">@Localization.getString("Suspicious")</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id = "CattleHealthState_Filter_Menu" class="dropdown-container FilterBox">
+            <div class="dropdown-preview">
+                <ul class="dropdown-menu dropdown-darkorange">
+                    <li>
+                        <a class="filterItem" title="" data-value="WitoutFilter" href="#" tabindex="-1">@Localization.getString("WitoutFilter")</a>
+                        <a class="filterItem" data-value="@HealthState.Suspicious" href="#" tabindex="-1">@Localization.getString("Suspicious")</a>
+                        <a class="filterItem" data-value="@HealthState.Sick" href="#" tabindex="-1">@Localization.getString("Sick")</a>
+                        <a class="filterItem" data-value="@HealthState.VerySick" href="#" tabindex="-1">@Localization.getString("VerySick")</a>
+                        <a class="filterItem" data-value="@HealthState.NoMovement" href="#" tabindex="-1">@Localization.getString("NoMovement")</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- end filter boxes -->
+    </div>
+</div>
+
+<div class="row" id="cattleDetail">
+
+</div>
+
+@section PageScripts
+                                                    {
+
+    <script src="~/assets/js/datatable/jquery.dataTables.min.js"></script>
+    <script src="~/assets/js/datatable/dataTables.bootstrap.min.js"></script>
+    <script src="~/assets/js/datatable/datatables-init.js"></script>
+    @*<script src="~/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/beyond.min.js"></script>*@
+    <script src="~/assets/js/MdBootstrapPersianDateTimePicker/jalaali.js"></script>
+    <script src="~/assets/js/MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.js"></script>
+    <script type="text/javascript">
+        var InitialState = true;
+        window.onload = function (e)
+        {
+            var CattleID_Input_e = document.getElementById("CattleID_Input");
+            var CattleGroupID_Input_e = document.getElementById("CattleGroupID_Input");
+            var FreeStallID_Input_e = document.getElementById("FreeStallID_Input");
+            var CattleDIM_Input_e = document.getElementById("CattleDIM_Input");
+            var CattleLactationNumber_Input_e = document.getElementById("CattleLactationNumber_Input");
+
+            CattleID_Input_e.addEventListener("keyup", function (event) {
+                event.preventDefault();
+                if (event.keyCode === 13) {
+                    Advancefilter();
+                }
+            });
+
+            CattleGroupID_Input_e.addEventListener("keyup", function (event) {
+                event.preventDefault();
+                if (event.keyCode === 13) {
+                    Advancefilter();
+                }
+            });
+
+            FreeStallID_Input_e.addEventListener("keyup", function (event) {
+                event.preventDefault();
+                if (event.keyCode === 13) {
+                    Advancefilter();
+                }
+            });
+
+            CattleDIM_Input_e.addEventListener("keyup", function (event) {
+                event.preventDefault();
+                if (event.keyCode === 13) {
+                    Advancefilter();
+                }
+            });
+
+            CattleLactationNumber_Input_e.addEventListener("keyup", function (event) {
+                event.preventDefault();
+                if (event.keyCode === 13) {
+                    Advancefilter();
+                }
+            });
+        }
+
+        function Advancefilter()
+        {
+            page = $("#Page").val();
+            CattleID_Input = document.getElementById("CattleID_Input").value;
+            CattleGroupID_Input = document.getElementById("CattleGroupID_Input").value;
+            FreeStallID_Input = document.getElementById("FreeStallID_Input").value;
+            CattleDIM_Input = document.getElementById("CattleDIM_Input").value;
+            CattleLactationNumber_Input = document.getElementById("CattleLactationNumber_Input").value;
+
+            CattleID_Label = document.getElementById("CattleID_Label").innerHTML;
+            CattleGroupID_Label = document.getElementById("CattleGroupID_Label").innerHTML;
+            FreeStallID_Label = document.getElementById("FreeStallID_Label").innerHTML;
+            CattleDIM_Label = document.getElementById("CattleDIM_Label").innerHTML;
+            CattleLactationNumber_Label = document.getElementById("CattleLactationNumber_Label").innerHTML;
+            FertilityState_Label = document.getElementById("FertilityState_Label").innerHTML;
+            CattleHeatState_Label = document.getElementById("CattleHeatState_Label").innerHTML;
+            CattleHealthState_Label = document.getElementById("CattleHealthState_Label").innerHTML;
+
+            var AllFields =
+            [
+                page,
+                CattleID_Input,
+                CattleGroupID_Input,
+                FreeStallID_Input,
+                CattleDIM_Input,
+                CattleLactationNumber_Input,
+                CattleID_Label,
+                CattleGroupID_Label,
+                FreeStallID_Label,
+                CattleDIM_Label,
+                CattleLactationNumber_Label,
+                FertilityState_Label,
+                CattleHeatState_Label,
+                CattleHealthState_Label
+            ];
+
+            $("#searchableGridWrapper tbody").animate({ opacity: 0 }, 200);
+            $(".loader").fadeIn(300);
+
+            $.post("/Cattle/Advancefilter",
+            {
+                AllFields: AllFields
+            },
+            function (data) {
+                parser = new DOMParser();
+                tmpBody = $(parser.parseFromString(data, "text/html")).find("tbody").html();
+                $("#searchableGridWrapper tbody").html(tmpBody);
+                parser = new DOMParser();
+                tmpHtml = $(parser.parseFromString(data, "text/html")).find("#paging").html();
+                $("#searchableGridWrapper #paging").html(tmpHtml);
+                $(".loader").hide(100);
+                $("#searchableGridWrapper tbody").animate({ opacity: 1 }, 200);
+            });
+        }
+
+    </script>
+    <!-- filter box scripts -->
+    <script>
+        InitiateSearchableDataTable.init();
+        $("#searchable_length").remove();
+        $("#searchable_filter").remove();
+
+        $("body").on("click", ".fa-filter", function () {
+            $(".FilterBox").hide();
+            filter = $(this).data("filter");
+            column = $(this).data("column");
+
+            $("#" + column).val($(this).parent().find("input").val());
+            var CUrrentCulture = '@Thread.CurrentThread.CurrentCulture.Name';
+            if (filter == "CattleID_Filter") {
+                console.log("field : " + column);
+                $("#CattleID_Filter_Menu .filterItem").attr("title", column);
+                $("#CattleID_Filter_Menu").hide();
+                if (CUrrentCulture == "fa-IR")
+                {
+                    $("#CattleID_Filter_Menu").css({ top: $(this).parent().offset().top - 90, left: $(this).parent().offset().left - ($(this).width()) * 6 });
+                }
+                else
+                {
+                    var left_margin = $(this).width() * 16;
+                    $("#CattleID_Filter_Menu").css({ top: $(this).parent().offset().top - 130, left: $(this).parent().offset().left - left_margin});
+                }
+                $("#CattleID_Filter_Menu").fadeIn(400);
+            }
+            if (filter == "CattleGroupID_Filter") {
+                console.log("field : " + column);
+                $("#CattleGroupID_Filter_Menu .filterItem").attr("title", column);
+                $("#CattleGroupID_Filter_Menu").hide();
+                
+                if (CUrrentCulture == "fa-IR") {
+                    $("#CattleGroupID_Filter_Menu").css({ top: $(this).parent().offset().top - 90, left: $(this).parent().offset().left - ($(this).width()) * 6 });
+                }
+                else {
+                    var left_margin = $(this).width() * 16;
+                    $("#CattleGroupID_Filter_Menu").css({ top: $(this).parent().offset().top - 130, left: $(this).parent().offset().left - left_margin });
+                }
+                $("#CattleGroupID_Filter_Menu").fadeIn(400);
+            }
+            if (filter == "FreeStallID_Filter") {
+                console.log("field : " + column);
+                $("#FreeStallID_Filter_Menu .filterItem").attr("title", column);
+                $("#FreeStallID_Filter_Menu").hide();
+                
+                if (CUrrentCulture == "fa-IR") {
+                    $("#FreeStallID_Filter_Menu").css({ top: $(this).parent().offset().top - 90, left: $(this).parent().offset().left - ($(this).width()) * 6 });
+                }
+                else {
+                    var left_margin = $(this).width() * 16;
+                    $("#FreeStallID_Filter_Menu").css({ top: $(this).parent().offset().top - 130, left: $(this).parent().offset().left - left_margin });
+                }
+                $("#FreeStallID_Filter_Menu").fadeIn(400);
+            }
+            if (filter == "CattleDIM_Filter") {
+                console.log("field : " + column);
+                $("#CattleDIM_Filter_Menu .filterItem").attr("title", column);
+                $("#CattleDIM_Filter_Menu").hide();
+                
+                if (CUrrentCulture == "fa-IR") {
+                    $("#CattleDIM_Filter_Menu").css({ top: $(this).parent().offset().top - 70, left: $(this).parent().offset().left - ($(this).width()) * 6 });
+                }
+                else {
+                    var left_margin = $(this).width() * 16;
+                    $("#CattleDIM_Filter_Menu").css({ top: $(this).parent().offset().top - 130, left: $(this).parent().offset().left - left_margin });
+                }
+                $("#CattleDIM_Filter_Menu").fadeIn(400);
+            }
+            if (filter == "CattleLactationNumber_Filter") {
+                console.log("field : " + column);
+                $("#CattleLactationNumber_Filter_Menu .filterItem").attr("title", column);
+                $("#CattleLactationNumber_Filter_Menu").hide();
+                
+                if (CUrrentCulture == "fa-IR") {
+                    $("#CattleLactationNumber_Filter_Menu").css({ top: $(this).parent().offset().top - 90, left: $(this).parent().offset().left - ($(this).width()) * 6 });
+                }
+                else {
+                    var left_margin = $(this).width() * 16;
+                    $("#CattleLactationNumber_Filter_Menu").css({ top: $(this).parent().offset().top - 130, left: $(this).parent().offset().left - left_margin });
+                }
+                $("#CattleLactationNumber_Filter_Menu").fadeIn(400);
+            }
+            if (filter == "FertilityState_Filter") {
+                console.log("field : " + column);
+                $("#FertilityState_Filter_Menu .filterItem").attr("title", column);
+                $("#FertilityState_Filter_Menu").hide();
+                
+                if (CUrrentCulture == "fa-IR") {
+                    $("#FertilityState_Filter_Menu").css({ top: $(this).parent().offset().top - 90, left: $(this).parent().offset().left - ($(this).width()) * 6 });
+                }
+                else {
+                    var left_margin = $(this).width() * 16;
+                    $("#FertilityState_Filter_Menu").css({ top: $(this).parent().offset().top - 130, left: $(this).parent().offset().left - left_margin });
+                }
+                $("#FertilityState_Filter_Menu").fadeIn(400);
+            }
+            if (filter == "CattleHeatState_Filter") {
+                console.log("field : " + column);
+                $("#CattleHeatState_Filter_Menu .filterItem").attr("title", column);
+                $("#CattleHeatState_Filter_Menu").hide();
+                
+                if (CUrrentCulture == "fa-IR") {
+                    $("#CattleHeatState_Filter_Menu").css({ top: $(this).parent().offset().top - 90, left: $(this).parent().offset().left - ($(this).width()) * 6 });
+                }
+                else {
+                    var left_margin = $(this).width() * 16;
+                    $("#CattleHeatState_Filter_Menu").css({ top: $(this).parent().offset().top - 130, left: $(this).parent().offset().left - left_margin });
+                }
+                $("#CattleHeatState_Filter_Menu").fadeIn(400);
+            }
+            if (filter == "CattleHealthState_Filter") {
+                console.log("field : " + column);
+                $("#CattleHealthState_Filter_Menu .filterItem").attr("title", column);
+                $("#CattleHealthState_Filter_Menu").hide();
+                
+                if (CUrrentCulture == "fa-IR") {
+                    $("#CattleHealthState_Filter_Menu").css({ top: $(this).parent().offset().top - 90, left: $(this).parent().offset().left - ($(this).width()) * 6 });
+                }
+                else {
+                    var left_margin = $(this).width() * 16;
+                    $("#CattleHealthState_Filter_Menu").css({ top: $(this).parent().offset().top - 130, left: $(this).parent().offset().left - left_margin });
+                }
+                $("#CattleHealthState_Filter_Menu").fadeIn(400);
+            }
+        });
+
+        $("#CattleID_Filter_Menu").on("click", ".filterItem", function () {
+            $("#" + $(this).attr("title")).attr("title", $(this).data("value"));
+            $("#CattleID_Filter_Menu").fadeOut(200);
+            $("#" + $(this).attr("title") + "_Label").html($(this).html());
+            $("#" + $(this).attr("title") + "_Label").attr("data-related", $(this).attr("title"));
+            $("#" + $(this).attr("title") + "_Label").css({ "visibility": "visible" });
+            $("#" + $(this).attr("title") + "_Label").animate({ "opacity": 1 }, 300);
+            if ($(this).data("value") == "WitoutFilter") {
+                $("#" + $(this).attr("title") + "_Label").removeAttr("style");
+                $("#" + $(this).attr("title") + "_Label").html("");
+            }
+            Advancefilter();
+        });
+
+        $("#CattleGroupID_Filter_Menu").on("click", ".filterItem", function () {
+            $("#" + $(this).attr("title")).attr("title", $(this).data("value"));
+            $("#CattleGroupID_Filter_Menu").fadeOut(200);
+            $("#" + $(this).attr("title") + "_Label").html($(this).html());
+            $("#" + $(this).attr("title") + "_Label").attr("data-related", $(this).attr("title"));
+            $("#" + $(this).attr("title") + "_Label").css({ "visibility": "visible" });
+            $("#" + $(this).attr("title") + "_Label").animate({ "opacity": 1 }, 300);
+            if ($(this).data("value") == "WitoutFilter") {
+                $("#" + $(this).attr("title") + "_Label").removeAttr("style");
+                $("#" + $(this).attr("title") + "_Label").html("");
+            }
+            Advancefilter();
+        });
+
+        $("#FreeStallID_Filter_Menu").on("click", ".filterItem", function () {
+            $("#" + $(this).attr("title")).attr("title", $(this).data("value"));
+            $("#FreeStallID_Filter_Menu").fadeOut(200);
+            $("#" + $(this).attr("title") + "_Label").html($(this).html());
+            $("#" + $(this).attr("title") + "_Label").attr("data-related", $(this).attr("title"));
+            $("#" + $(this).attr("title") + "_Label").css({ "visibility": "visible" });
+            $("#" + $(this).attr("title") + "_Label").animate({ "opacity": 1 }, 300);
+            if ($(this).data("value") == "WitoutFilter") {
+                $("#" + $(this).attr("title") + "_Label").removeAttr("style");
+                $("#" + $(this).attr("title") + "_Label").html("");
+            }
+            Advancefilter();
+        });
+
+        $("#CattleDIM_Filter_Menu").on("click", ".filterItem", function () {
+            $("#" + $(this).attr("title")).attr("title", $(this).data("value"));
+            $("#CattleDIM_Filter_Menu").fadeOut(200);
+            $("#" + $(this).attr("title") + "_Label").html($(this).html());
+            $("#" + $(this).attr("title") + "_Label").attr("data-related", $(this).attr("title"));
+            $("#" + $(this).attr("title") + "_Label").css({ "visibility": "visible" });
+            $("#" + $(this).attr("title") + "_Label").animate({ "opacity": 1 }, 300);
+            if ($(this).data("value") == "WitoutFilter") {
+                $("#" + $(this).attr("title") + "_Label").removeAttr("style");
+                $("#" + $(this).attr("title") + "_Label").html("");
+            }
+            Advancefilter();
+        });
+
+        $("#CattleLactationNumber_Filter_Menu").on("click", ".filterItem", function () {
+            $("#" + $(this).attr("title")).attr("title", $(this).data("value"));
+            $("#CattleLactationNumber_Filter_Menu").fadeOut(200);
+            $("#" + $(this).attr("title") + "_Label").html($(this).html());
+            $("#" + $(this).attr("title") + "_Label").attr("data-related", $(this).attr("title"));
+            $("#" + $(this).attr("title") + "_Label").css({ "visibility": "visible" });
+            $("#" + $(this).attr("title") + "_Label").animate({ "opacity": 1 }, 300);
+            if ($(this).data("value") == "WitoutFilter") {
+                $("#" + $(this).attr("title") + "_Label").removeAttr("style");
+                $("#" + $(this).attr("title") + "_Label").html("");
+            }
+            Advancefilter();
+        });
+
+        $("#FertilityState_Filter_Menu").on("click", ".filterItem", function () {
+            $("#" + $(this).attr("title")).attr("title", $(this).data("value"));
+            $("#FertilityState_Filter_Menu").fadeOut(200);
+            $("#" + $(this).attr("title") + "_Label").html($(this).html());
+            $("#" + $(this).attr("title") + "_Label").attr("data-related", $(this).attr("title"));
+            $("#" + $(this).attr("title") + "_Label").css({ "visibility": "visible" });
+            $("#" + $(this).attr("title") + "_Label").animate({ "opacity": 1 }, 300);
+            if ($(this).data("value") == "WitoutFilter") {
+                $("#" + $(this).attr("title") + "_Label").removeAttr("style");
+                $("#" + $(this).attr("title") + "_Label").html("");
+            }
+            Advancefilter();
+        });
+
+        $("#CattleHeatState_Filter_Menu").on("click", ".filterItem", function () {
+            $("#" + $(this).attr("title")).attr("title", $(this).data("value"));
+            $("#CattleHeatState_Filter_Menu").fadeOut(200);
+            $("#" + $(this).attr("title") + "_Label").html($(this).html());
+            $("#" + $(this).attr("title") + "_Label").attr("data-related", $(this).attr("title"));
+            $("#" + $(this).attr("title") + "_Label").css({ "visibility": "visible" });
+            $("#" + $(this).attr("title") + "_Label").animate({ "opacity": 1 }, 300);
+            if ($(this).data("value") == "WitoutFilter") {
+                $("#" + $(this).attr("title") + "_Label").removeAttr("style");
+                $("#" + $(this).attr("title") + "_Label").html("");
+            }
+            Advancefilter();
+        });
+
+        $("#CattleHealthState_Filter_Menu").on("click", ".filterItem", function () {
+            $("#" + $(this).attr("title")).attr("title", $(this).data("value"));
+            $("#CattleHealthState_Filter_Menu").fadeOut(200);
+            $("#" + $(this).attr("title") + "_Label").html($(this).html());
+            $("#" + $(this).attr("title") + "_Label").attr("data-related", $(this).attr("title"));
+            $("#" + $(this).attr("title") + "_Label").css({ "visibility": "visible" });
+            $("#" + $(this).attr("title") + "_Label").animate({ "opacity": 1 }, 300);
+            if ($(this).data("value") == "WitoutFilter") {
+                $("#" + $(this).attr("title") + "_Label").removeAttr("style");
+                $("#" + $(this).attr("title") + "_Label").html("");
+            }
+            Advancefilter();
+        });
+
+    </script>
+    
+    <script>
+        $(document.body).on("click", ".relative", function () {
+            // console.log($(this).offset().left);
+            var rt = ($(window).width() - ($(this).offset().left + $(this).outerWidth()));
+            $('.popover').css({
+                'right': (rt - 100) + 'px'
+            });
+        });
+
+        $(".tabbable li.tab-orange").on("click", function () {
+            var tempScrollTop = $(window).scrollTop();
+            $("#GroupId").val($(this).data("group"));
+            $("#searchable tbody").animate({ opacity: 0 }, 200);
+            $(".loader").fadeIn(300);
+            //Advancefilter();
+            $(window).scrollTop(tempScrollTop);
+        });
+
+        $(document.body).on("click", ".pagination li a", function () {
+            $("#Page").val($(this).parent().data("index"));
+            $("#searchable tbody").animate({ opacity: 0 }, 200);
+            $(".loader").fadeIn(300);
+            Advancefilter();
+            return false;
+        });
+
+    </script>
+
+    <!-- cattle detail script -->
+    <script type="text/javascript">
+        $("body").on("click", "#searchable tbody tr", function () {
+            $("#searchableGridWrapper tbody").animate({ opacity: 0 }, 200);
+            $(".loader").fadeIn(300);
+
+            id = $(this).data("rowid");
+            $.ajax({
+                url: '@Url.Action("Detail", "Cattle")',
+                type:"POST",
+                data: { "CattleId": id },
+                success: function (response) {
+                    $("#cattleList").fadeOut(300);
+                    $("#cattleDetail").html(response).fadeIn(300);
+
+                    $(".loader").hide(100);
+                    $("#searchableGridWrapper tbody").animate({ opacity: 1 }, 200);
+                },
+                error:function(xhr,error)
+                {
+                    alert("Error in Cattle List with Code: 1147");
+                    alert(xhr.responseText);
+
+                    $(".loader").hide(100);
+                    $("#searchableGridWrapper tbody").animate({ opacity: 1 }, 200);
+                }
+            });
+        });
+    </script> 
+
+<!--Easy Pie Charts Needed Scripts-->
+<script src="~/assets/js/charts/easypiechart/jquery.easypiechart.js"></script>
+<script src="~/assets/js/charts/easypiechart/easypiechart-init.js"></script>
+<script src="~/assets/js/HighChart/highcharts.js"></script>
+<script src="~/assets/js/HighChart/exporting.js"></script>
+
+}

@@ -1,0 +1,280 @@
+﻿@using SmartCattle.DomainClass
+@model List<SmartCattle.Web.Domain.CattleGroupTbl>
+    @{
+        ViewBag.Title = Localization.getString("Groups_Management");
+    }
+
+   
+<div class="row">
+    <div class="col-xs-12 col-md-12">
+        <div class="widget">
+            <div class="widget-header ">
+                <span class="widget-caption">@Localization.getString("Groups_List")</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="dispose">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="widget-body">
+                <div class="table-toolbar">
+                    <a id="editabledatatable_new" href="javascript:void(0);" class="btn btn-default">
+                        @Localization.getString("New_Group")
+                    </a>
+                    <div class="btn-group pull-right">
+                        @*<a class="btn btn-default" href="javascript:void(0);">Tools</a>
+                            <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><i class="fa fa-angle-down"></i></a>*@
+                        @*<ul class="dropdown-menu dropdown-default">
+                                <li>
+                                    <a href="javascript:void(0);">Action</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);">Another action</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);">Something else here</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="javascript:void(0);">Separated link</a>
+                                </li>
+                            </ul>*@
+                    </div>
+                </div>
+                <table class="table table-striped table-hover table-bordered" id="editabledatatable">
+                    <thead>
+                        <tr role="row">
+                            <th>
+                                @Localization.getString("Group_Name")
+                            </th>
+                            <th>
+                                @Localization.getString("Group_Description")
+                            </th>
+
+                            <th>
+
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @if (Model != null)
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="roleName">@item.name</td>
+                                    <td class="roleDesc">@item.Description</td>
+                                    <td>
+                                        <a href="#" data-id="@item.Id" class="btn btn-info btn-xs edit"><i class="fa fa-edit"></i> @Localization.getString("Edit")</a>
+
+                                        <a href="#" data-id="@item.Id" class="btn btn-danger btn-xs delete"><i class="fa fa-trash-o"></i>@Localization.getString("Delete") </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section PageScripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <link href="~/assets/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <script src="~/assets/js/datatable/jquery.dataTables.min.js"></script>
+    <script src="~/assets/js/datatable/ZeroClipboard.js"></script>
+    <script src="~/assets/js/datatable/dataTables.tableTools.min.js"></script>
+    <script src="~/assets/js/datatable/dataTables.bootstrap.min.js"></script>
+
+    <script>
+        var InitiateEditableDataTable = function() {
+    return {
+        init: function() {
+            //Datatable Initiating
+            var oTable = $('#editabledatatable').dataTable({
+                "aLengthMenu": [
+                    [5, 15, 20, 100, -1],
+                    [5, 15, 20, 100, "All"]
+                ],
+                "iDisplayLength": 5,
+                "sPaginationType": "bootstrap",
+                "sDom": "Tflt<'row DTTTFooter'<'col-sm-6'i><'col-sm-6'p>>",
+                "oTableTools": {
+                    "aButtons": [
+                        "print"
+                    ]
+                },
+                "language": {
+                    "search": "",
+                    "sLengthMenu": "_MENU_",
+                    "oPaginate": {
+                        "sPrevious": "Prev",
+                        "sNext": "Next"
+                    }
+                },
+                "aoColumns": [
+                    null,
+                    null,
+                    { "bSortable": false }
+                ]
+            });
+
+            var isEditing = null;
+
+            //Add New Row
+            $('#editabledatatable_new').click(function(e) {
+                e.preventDefault();
+                var aiNew = oTable.fnAddData([
+                    '', '','', '',
+                    '<a href="#" class="btn btn-success btn-xs save"><i class="fa fa-edit"></i> @Localization.getString("Save")</a> <a href="#" class="btn btn-warning btn-xs cancel" data-mode="new"><i class="fa fa-times"></i> Cancel</a>'
+                ]);
+                var nRow = oTable.fnGetNodes(aiNew[0]);
+                editAddedRow(oTable, nRow);
+                isEditing = nRow;
+            });
+
+            //Delete an Existing Row
+            $('#editabledatatable').on("click", 'a.delete', function(e) {
+                e.preventDefault();
+                var mustbeDelete = false;
+                if (confirm("Are You Sure To Delete This Row?") == false) {
+                    return;
+                }
+                $.ajax({
+                    url: '@Url.Action("DeleteRole", "Account")',
+                    type: "POST",
+                    async:false,
+                    data: { "RoleId": $(this).data("id") },
+                    success: function (result) {
+                        if (result == "deleted") {
+                            //deleted
+                            mustbeDelete = true;
+                        }
+                    },
+                    error: function (xhr, response) { alert("error in delete row !"); }
+                });
+                if (mustbeDelete) {
+                    var nRow = $(this).parents('tr')[0];
+                    oTable.fnDeleteRow(nRow);
+                }
+            });
+
+            //Cancel Editing or Adding a Row
+            $('#editabledatatable').on("click", 'a.cancel', function(e) {
+                e.preventDefault();
+                if ($(this).attr("data-mode") == "new") {
+                    var nRow = $(this).parents('tr')[0];
+                    oTable.fnDeleteRow(nRow);
+                    isEditing = null;
+                } else {
+                    restoreRow(oTable, isEditing);
+                    isEditing = null;
+                }
+            });
+
+            //Edit A Row
+            $('#editabledatatable').on("click", 'a.edit', function(e) {
+                e.preventDefault();
+
+                var nRow = $(this).parents('tr')[0];
+
+                if (isEditing !== null && isEditing != nRow) {
+                    restoreRow(oTable, isEditing);
+                    editRow(oTable, nRow, $(this).data("id"));
+                    isEditing = nRow;
+                } else {
+                    editRow(oTable, nRow, $(this).data("id"));
+                    isEditing = nRow;
+                }
+            });
+
+            //Save an Editing Row
+            $('#editabledatatable').on("click", 'a.save', function(e) {
+                e.preventDefault();
+                if (this.innerHTML.indexOf(0<="@Localization.getString("Save")")) {
+
+
+                    var jqInputs = $('input', isEditing);
+                    var name = $(jqInputs[0]).val();
+                    var desc = $(jqInputs[1]).val();
+                    var id = $(this).data("id");
+                    var newid;
+
+                    $.ajax({
+                        url: '@Url.Action("CreateRole", "Account")',
+                        type: 'POST',
+                        async:false,
+                        data: { "roleId": $(this).data("id"), "RoleName": name, "Description": desc },
+                        success: function (result) {
+                            if (result.length>0) {
+                                newid = result;
+                            }
+                        },
+                        error: function (xhr, response) { alert("error in update row !"); }
+                    });
+
+                    saveRow(oTable, isEditing, newid);
+                    isEditing = null;
+                    //Some Code to Highlight Updated Row
+                }
+            });
+
+
+            function restoreRow(oTable, nRow) {
+                var aData = oTable.fnGetData(nRow);
+                var jqTds = $('>td', nRow);
+
+                for (var i = 0, iLen = jqTds.length; i < iLen; i++) {
+                    oTable.fnUpdate(aData[i], nRow, i, false);
+                }
+
+                oTable.fnDraw();
+            }
+
+            function editRow(oTable, nRow,dataId) {
+                var aData = oTable.fnGetData(nRow);
+                var jqTds = $('>td', nRow);
+                jqTds[0].innerHTML = '<input type="text" class="form-control input-small roleName" value="' + aData[0] + '">';
+                jqTds[1].innerHTML = '<input type="text" class="form-control input-small roleDesc" value="' + aData[1] + '">';
+                jqTds[2].innerHTML = '<a href="#" data-id='+dataId+' class="btn btn-success btn-xs save"><i class="fa fa-save"></i>@Localization.getString("Save")</a> <a href="#" class="btn btn-warning btn-xs cancel"><i class="fa fa-times"></i> Cancel</a>';
+            }
+
+            function editAddedRow(oTable, nRow) {
+                var aData = oTable.fnGetData(nRow);
+                var jqTds = $('>td', nRow);
+                jqTds[0].innerHTML = '<input type="text" class="form-control input-small roleName" value="' + aData[0] + '">';
+                jqTds[1].innerHTML = '<input type="text" class="form-control input-small roleDesc" value="' + aData[1] + '">';
+                jqTds[2].innerHTML = aData[4];
+            }
+
+            function saveRow(oTable, nRow , newId) {
+                var jqInputs = $('input', nRow);
+                oTable.fnUpdate(jqInputs[0].value, nRow, 0, false);
+                oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);
+                oTable.fnUpdate('<a href="#" class="btn btn-info btn-xs edit"><i class="fa fa-edit"></i> @Localization.getString("Edit")</a> <a href="#" data-id='+newId+' class="btn btn-danger btn-xs delete"><i class="fa fa-trash-o"></i>@Localization.getString("Delete")</a>', nRow, 2, false);
+                oTable.fnDraw();
+            }
+
+            function cancelEditRow(oTable, nRow) {
+                var jqInputs = $('input', nRow);
+                oTable.fnUpdate(jqInputs[0].value, nRow, 0, false);
+                oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);
+                oTable.fnUpdate('<a href="#" class="btn btn-info btn-xs edit"><i class="fa fa-edit"></i> @Localization.getString("Edit")</a> <a href="#" class="btn btn-danger btn-xs delete"><i class="fa fa-trash-o"></i> @Localization.getString("Delete")</a>', nRow, 2, false);
+                oTable.fnDraw();
+            }
+        }
+
+    };
+        }();
+        InitiateEditableDataTable.init();
+    </script>
+}
+
+
+
+

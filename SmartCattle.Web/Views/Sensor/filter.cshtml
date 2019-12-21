@@ -1,0 +1,107 @@
+﻿@using SmartCattle.Web.Domain;
+@using System.Threading;
+@model List<SmartCattle.Web.Controllers.SensorController.EquipmentView>
+@using SmartCattle.DomainClass;
+@using SmartCattle.Web.Controllers;
+
+<table class="table table-bordered table-hover table-striped" id="searchable">
+    <thead class="bordered-darkorange">
+        <tr role="row">
+            @*<th>
+                @Localization.getString("ID")
+            </th>*@
+            <th>
+                @Localization.getString("DeviceType")
+            </th>
+            <th>
+                @Localization.getString("DeviceSubtype")
+            </th>
+            <th>
+                @Localization.getString("Version")
+            </th>
+            <th>
+                @Localization.getString("EquipmentId")
+            </th>
+            <th>
+                @Localization.getString("MAC")
+            </th>
+            <th>
+                @Localization.getString("CattleNumber")
+            </th>
+            <th>
+                @Localization.getString("LastUpdate")
+            </th>
+            <th>
+                @Localization.getString("Status")
+            </th>
+            <th>
+                @Localization.getString("InstallationDate")
+            </th>
+        </tr>
+        <tr>
+            @*<th class="relative">
+                <input id="ID_Input" type="text" class="filter-input" />
+            </th>*@
+            <th class="relative ">
+                <input id="DeviceType_Input" type="text" class="filter-input" />
+            </th>
+            <th class="relative ">
+                <input id="DeviceSubtype_Input" type="text" class="filter-input" />
+            </th>
+            <th class="relative ">
+                <input id="Version_Input" type="text" class="filter-input" />
+            </th>
+            <th class="relative ">
+                <input id="EquipmentId_Input" type="text" class="filter-input" />
+            </th>
+            <th class="relative ">
+                <input id="MAC_Input" type="text" class="filter-input" />
+            </th>
+            <th class="relative ">
+                <input id="CattleId_Input" type="text" class="filter-input" />
+            </th>
+            <th class="relative ">
+                <input id="LastUpdate_Input" type="hidden" class="filter-input" />
+            </th>
+            <th class="relative ">
+                <input id="Status_Input" type="hidden" class="filter-input" />
+            </th>
+            <th class="relative ">
+                <input id="InstallationDate_Input" type="hidden" class="filter-input" />
+            </th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr></tr>
+    </tfoot>
+    <tbody>
+        @{
+            for (int i = 0; i < Model.Count; i++)
+            {
+                var RowId = "RowId" + @Model[i].ID.ToString();
+
+                <tr class="rowData" data-rowid="@i" id="@RowId" onclick="onClickRow(this)">
+                    @*<td class="center">@Model[i].ID</td>*@
+                    <td class="center">@Model[i].DeviceType</td>
+                    <td class="center">@Model[i].DeviceSubtype</td>
+                    <td class="center">@Model[i].Version</td>
+                    <td class="center">@Model[i].Equipmentid</td>
+                    <td class="center">@Model[i].Mac</td>
+                    @{
+                        if (@Model[i].DeviceSubtype == "Ear")
+                        {
+                            <td class="center">@Model[i].CattleNumber</td>
+                        }
+                        else
+                        {
+                            <td class="center"></td>
+                        }
+                    }
+                    <td class="center">@Model[i].Date2</td>
+                    <td class="center">@Model[i].BatteryLevel</td>
+                    <td class="center">@Model[i].Date1</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

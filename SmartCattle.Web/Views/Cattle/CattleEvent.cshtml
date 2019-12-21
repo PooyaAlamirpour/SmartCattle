@@ -1,0 +1,377 @@
+﻿@using System.Threading
+@model List<SmartCattle.DomainClass.CattleEvent>
+@{
+    int counter = 1;
+    var catID = ViewBag.CattleId;
+}
+<div id="eventWrapper" class="well with-header  with-footer">
+    <div class="header bg-yellow">
+        @Localization.getString("Cattle_Event")
+    </div>
+    @using (Html.BeginForm("SetEvent", "Cattle", FormMethod.Post, new { id = "setEventForm" }))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="CattleId" value="@ViewBag.CattleId" />
+
+        <div class="col-lg-2 col-md-2 col-sm-2" id="idCattleEvent_Category">
+            <select class="form-control col-lg-12" name="CattleEvent_Category" onchange="CattleEventCategory(this)">
+                <option value="@SmartCattle.DomainClass.CattleEvent_Category.Heat_Event"> @Localization.getString("Heat_Event")</option>
+                <option value="@SmartCattle.DomainClass.CattleEvent_Category.HealthState"> @Localization.getString("HealthState")</option>
+                <option value="@SmartCattle.DomainClass.CattleEvent_Category.Fertility_Status"> @Localization.getString("Fertility_Status")</option>
+                <option value="@SmartCattle.DomainClass.CattleEvent_Category.Vet"> @Localization.getString("Vet")</option>
+                <option value="@SmartCattle.DomainClass.CattleEvent_Category.Assign_Herd"> @Localization.getString("Assign_Herd")</option>
+                <option value="@SmartCattle.DomainClass.CattleEvent_Category.Assign_Group"> @Localization.getString("Assign_Group")</option>
+                <option value="@SmartCattle.DomainClass.CattleEvent_Category.Assign_Freestall"> @Localization.getString("Assign_Freestall")</option>
+            </select>
+        </div>
+
+        <div class="col-lg-2 col-md-2 col-sm-2" id="idHeat_Event_Subcategory">
+            <select class="form-control col-lg-12" name="Heat_Event_Subcategory">
+                <option value="@SmartCattle.DomainClass.Heat_Event_Subcategory.Select"> @Localization.getString("Select")</option>
+                <option value="@SmartCattle.DomainClass.Heat_Event_Subcategory.Suspicious"> @Localization.getString("Suspicious")</option>
+                <option value="@SmartCattle.DomainClass.Heat_Event_Subcategory.Heat"> @Localization.getString("Heat")</option>
+                <option value="@SmartCattle.DomainClass.Heat_Event_Subcategory.Normal"> @Localization.getString("Normal")</option>
+            </select>
+        </div>
+
+        <div class="col-lg-2 col-md-2 col-sm-2" id="idHealthState_Subcategory" style="display:none">
+            <select class="form-control col-lg-12" name="HealthState_Subcategory">
+                <option value="@SmartCattle.DomainClass.HealthState_Subcategory.Select"> @Localization.getString("Select")</option>
+                <option value="@SmartCattle.DomainClass.HealthState_Subcategory.Suspicious"> @Localization.getString("Suspicious")</option>
+                <option value="@SmartCattle.DomainClass.HealthState_Subcategory.Health"> @Localization.getString("Health")</option>
+                <option value="@SmartCattle.DomainClass.HealthState_Subcategory.Sick"> @Localization.getString("Sick")</option>
+            </select>
+        </div>
+
+        <div class="col-lg-2 col-md-2 col-sm-2" id="idFertility_Status_Subcategory" style="display:none">
+            <select class="form-control col-lg-12" name="Fertility_Status_Subcategory">
+                <option value="@SmartCattle.DomainClass.Fertility_Status_Subcategory.Select"> @Localization.getString("Select")</option>
+                <option value="@SmartCattle.DomainClass.Fertility_Status_Subcategory.Open"> @Localization.getString("Open")</option>
+                <option value="@SmartCattle.DomainClass.Fertility_Status_Subcategory.Insemination"> @Localization.getString("Insemination")</option>
+                <option value="@SmartCattle.DomainClass.Fertility_Status_Subcategory.Pregnant"> @Localization.getString("Pregnant")</option>
+            </select>
+        </div>
+        
+        <div class="col-lg-2 col-md-2 col-sm-2" id="idVet_Subcategory" style="display:none">
+            <select class="form-control col-lg-12" name="Vet_Subcategory">
+                <option value="@SmartCattle.DomainClass.Vet_Subcategory.Select"> @Localization.getString("Select")</option>
+                <option value="@SmartCattle.DomainClass.Vet_Subcategory.Examination"> @Localization.getString("Examination")</option>
+                <option value="@SmartCattle.DomainClass.Vet_Subcategory.Treatment"> @Localization.getString("Treatment")</option>
+                <option value="@SmartCattle.DomainClass.Vet_Subcategory.Calving"> @Localization.getString("Calving")</option>
+            </select>
+        </div>
+
+        <div class="col-lg-2 col-md-2 col-sm-2" id="idHerd_Subcategory" style="display:none">
+            <select class="form-control col-lg-12" name="Herd_Subcategory">
+                <option value="Select">@Localization.getString("Select")</option>
+                @{
+                    for (int i = 0; i < Model.Count; i++)
+                    {
+                        if (Model[i].cattleId == -1)/*for herd*/
+                        {
+                            <option value="@Model[i].ID">@Model[i].value</option>
+                        }
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="col-lg-2 col-md-2 col-sm-2" id="idGroup_Subcategory" style="display:none">
+            <select class="form-control col-lg-12" name="Group_Subcategory">
+                <option value="Select">@Localization.getString("Select")</option>
+                @{
+                    for (int i = 0; i < Model.Count; i++)
+                    {
+                        if (Model[i].cattleId == -2)/*for Group*/
+                        {
+                            <option value="@Model[i].ID">@Model[i].value</option>
+                        }
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="col-lg-2 col-md-2 col-sm-2" id="idFreeStall_Subcategory" style="display:none">
+            <select class="form-control col-lg-12" name="FreeStall_Subcategory">
+                <option value="Select">@Localization.getString("Select")</option>
+                @{
+                    for (int i = 0; i < Model.Count; i++)
+                    {
+                        if (Model[i].cattleId == -3)/*for FreeStal*/
+                        {
+                            <option value="@Model[i].ID">@Model[i].value</option>
+                        }
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="col-sm-3">
+            <div class="form-group">
+                <div id="EventDate_Widget" data-mddatetimepicker="true" data-targetselector="#BirthDate" data-trigger="click" data-enabletimepicker="false" data-isgregorian="false">
+                    <span class="input-icon icon-right">
+                        <input type="text" class="form-control padding-5 col-md-12 col-lg-12 col-sm-12" id="EventDate" name="EventDate" value="" placeholder="@Localization.getString("Date")" />
+                        <i class="glyphicon glyphicon-calendar"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div id="idDescription" class="form-group col-lg-4 col-md-4 col-sm-4">
+            <span class="input-icon icon-right">
+                <input type="text" style="height:35px" class="form-control" name="Description" id="Description" placeholder="@Localization.getString("Description")">
+            </span>
+        </div>
+
+        <div class="col-lg-1 col-md-1">
+            <input type="button" onclick="setEvent()" value="@Localization.getString("Submit")" class="btn btn-yellow margin-right-20" />
+        </div>
+
+    }
+</div>
+
+<div class="col-xs-12 col-md-12">
+    <div class="well with-header  with-footer">
+        <div class="header bg-yellow">
+            @Localization.getString("Cattle_Event_List")
+        </div>
+        <table id="EventTable" class="table table-hover">
+            <thead class="bordered-darkorange">
+                <tr>
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        @Localization.getString("Item")
+                    </th>
+                    <th>
+                        @Localization.getString("Descrition")
+                    </th>
+                    <th>
+                        اقدام کننده
+                    </th>
+                    <th>
+                        @Localization.getString("Date")
+                    </th>
+                    <th>
+                        @Localization.getString("Delete")
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
+                    for (int i = 0; i < Model.Count; i++)
+                    {
+                        if (Model[i].cattleId != -1 && Model[i].cattleId != -2 && Model[i].cattleId != -3)
+                        {
+                            <tr>
+                                <td>
+                                    @(counter++)
+                                </td>
+                                <td>
+                                    @Localization.getString(Model[i].value)
+                                </td>
+                                <td>
+                                    @Model[i].description
+                                </td>
+                                <td>
+                                    @Model[i].User.NameFamily
+                                </td>
+                                <td>
+                                    @Helper.getDateBaseOnCulture(Model[i].date)
+                                </td>
+                                <td>
+                                    <a href="javascript:void(0);" data-id="@Model[i].IDIndex" onclick="removeEvent(this)" class="btn btn-default btn-xs purple"><i class="fa fa-remove"></i> @Localization.getString("Delete")</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+<script>
+    var CattleEventCategory_index = 0;
+
+    function CattleEventCategory(element)
+    {
+        switch (element.selectedIndex) {
+            case 0:
+                $('#idHeat_Event_Subcategory').show();
+                $('#idHealthState_Subcategory').hide();
+                $('#idFertility_Status_Subcategory').hide();
+                $('#idVet_Subcategory').hide();
+                $('#idHerd_Subcategory').hide();
+                $('#idGroup_Subcategory').hide();
+                $('#idFreeStall_Subcategory').hide();
+                break;
+
+            case 1:
+                $('#idHeat_Event_Subcategory').hide();
+                $('#idHealthState_Subcategory').show();
+                $('#idFertility_Status_Subcategory').hide();
+                $('#idVet_Subcategory').hide();
+                $('#idHerd_Subcategory').hide();
+                $('#idGroup_Subcategory').hide();
+                $('#idFreeStall_Subcategory').hide();
+                break;
+
+            case 2:
+                $('#idHeat_Event_Subcategory').hide();
+                $('#idHealthState_Subcategory').hide();
+                $('#idFertility_Status_Subcategory').show();
+                $('#idVet_Subcategory').hide();
+                $('#idHerd_Subcategory').hide();
+                $('#idGroup_Subcategory').hide();
+                $('#idFreeStall_Subcategory').hide();
+                break;
+
+            case 3:
+                $('#idHeat_Event_Subcategory').hide();
+                $('#idHealthState_Subcategory').hide();
+                $('#idFertility_Status_Subcategory').hide();
+                $('#idVet_Subcategory').show();
+                $('#idHerd_Subcategory').hide();
+                $('#idGroup_Subcategory').hide();
+                $('#idFreeStall_Subcategory').hide();
+                break;
+
+            case 4:
+                $('#idHeat_Event_Subcategory').hide();
+                $('#idHealthState_Subcategory').hide();
+                $('#idFertility_Status_Subcategory').hide();
+                $('#idVet_Subcategory').hide();
+                $('#idHerd_Subcategory').show();
+                $('#idGroup_Subcategory').hide();
+                $('#idFreeStall_Subcategory').hide();
+                break;
+
+            case 5:
+                $('#idHeat_Event_Subcategory').hide();
+                $('#idHealthState_Subcategory').hide();
+                $('#idFertility_Status_Subcategory').hide();
+                $('#idVet_Subcategory').hide();
+                $('#idHerd_Subcategory').hide();
+                $('#idGroup_Subcategory').show();
+                $('#idFreeStall_Subcategory').hide();
+                break;
+
+            case 6:
+                $('#idHeat_Event_Subcategory').hide();
+                $('#idHealthState_Subcategory').hide();
+                $('#idFertility_Status_Subcategory').hide();
+                $('#idVet_Subcategory').hide();
+                $('#idHerd_Subcategory').hide();
+                $('#idGroup_Subcategory').hide();
+                $('#idFreeStall_Subcategory').show();
+                break;
+        }
+    }
+
+</script>
+
+<script>
+    function removeEvent(obj) {
+        alertify.success('@Localization.getString("Please_Wait")');
+        $.ajax({
+            url: '@Url.Action("UnSetEvent", "Cattle")',
+            type: "POST",
+            data: AddAntiForgeryToken({ "eventId": $(obj).data("id") }),
+            success: function (data) {
+                var jsonData = JSON.stringify(data);
+                var response = JSON.parse(jsonData);
+                if (response.type == 0) {
+                    $(obj).closest("tr").remove();
+                }
+                reloadEvent();
+                alertify.success('@Localization.getString("Remove_Successfully")');
+            },
+            error: function (xhr, error) {
+                alertify.error("ERROR 1237");
+            }
+        });
+    }
+
+    AddAntiForgeryToken = function (data) {
+        data.__RequestVerificationToken = $('input[name=__RequestVerificationToken]').val();
+        return data;
+    };
+</script>
+
+<script>
+    function setEvent() {
+        alertify.success('@Localization.getString("Please_Wait")');
+        $.ajax({
+            url: '@Url.Action("SetEvent", "Cattle")',
+            type: "POST",
+            data: $("#setEventForm").serialize(),
+            success: function (data) {
+                var jsonData = JSON.stringify(data);
+                var response = JSON.parse(jsonData);
+                reloadEvent();
+                alertify.success('@Localization.getString("Saved_Successfully")');
+            },
+            error: function (xhr, error) {
+                $("#eventWrapper").parent().html(xhr.responseText);
+                alertify.error("Error_in_Add_Cattle_Event");
+            }
+        });
+    }
+
+    function reloadEvent() {
+        $.ajax({
+            url: '@Url.Action("CattleEvent", "Cattle")',
+            type: "POST",
+            data: {"CattleID":@ViewBag.cattleId},
+            success: function (data) {
+                $("#eventWrapper").parent().html(data);
+            },
+            error: function (xhr, error) {
+                alertify.error("Error_Reload_Data");
+            }
+        });
+    }
+
+
+</script>
+
+<script>
+    var cultureInfo = '@Thread.CurrentThread.CurrentCulture.Name';
+    if (cultureInfo == "fa-IR")
+    {
+        $('#EventDate_Widget').MdPersianDateTimePicker({
+            Placement: 'bottom',
+            Trigger: 'click',
+            EnableTimePicker: true,
+            TargetSelector: '#EventDate',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'yyyy/MM/dd HH:mm',
+            IsGregorian: false
+        });
+    }
+    else
+    {
+        $('#EventDate_Widget').MdPersianDateTimePicker({
+            Placement: 'bottom',
+            Trigger: 'click',
+            EnableTimePicker: true,
+            TargetSelector: '#EventDate',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'yyyy/MM/dd HH:mm',
+            IsGregorian: true
+        });
+    }
+</script>

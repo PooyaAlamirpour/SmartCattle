@@ -1,0 +1,717 @@
+﻿@using System.Threading
+@using SmartCattle.DomainClass
+@using Newtonsoft.Json
+@model SmartCattle.Web.Controllers.SettingController.AccountView
+
+<link href="~/assets/css/font-awesome.min.css" rel="stylesheet" />
+<link href="~/assets/css/weather-icons.min.css" rel="stylesheet" />
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300" rel="stylesheet" type="text/css">
+<link href="~/assets/css/demo.min.css" rel="stylesheet" />
+<link href="~/assets/css/typicons.min.css" rel="stylesheet" />
+<link href="~/assets/css/animate.min.css" rel="stylesheet" />
+<script src="~/assets/js/skins.min.js"></script>
+
+<style>
+    .onoffswitch {
+        position: relative;
+        width: 30px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+    }
+
+    .onoffswitch-checkbox {
+        display: none;
+    }
+
+    .onoffswitch-label {
+        display: block;
+        overflow: hidden;
+        cursor: pointer;
+        height: 13px;
+        padding: 0;
+        line-height: 15px;
+        border: 2px solid #999999;
+        border-radius: 13px;
+        background-color: #EEEEEE;
+        transition: background-color 0.3s ease-in;
+    }
+
+        .onoffswitch-label:before {
+            content: "";
+            display: block;
+            width: 13px;
+            margin: 0px;
+            background: #FFFFFF;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 20px;
+            border: 2px solid #999999;
+            border-radius: 13px;
+            transition: all 0.3s ease-in 0s;
+        }
+
+    .onoffswitch-checkbox:checked + .onoffswitch-label {
+        background-color: #34A7C1;
+    }
+
+        .onoffswitch-checkbox:checked + .onoffswitch-label, .onoffswitch-checkbox:checked + .onoffswitch-label:before {
+            border-color: #34A7C1;
+        }
+
+            .onoffswitch-checkbox:checked + .onoffswitch-label:before {
+                right: 0px;
+            }
+</style>
+
+<div class="loading-container">
+    <div class="loader"></div>
+</div>
+
+@{
+    if (PermissionViewer.WillBeShow("Setting-SaveAccount", User.Identity.Name))
+    {
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+                <h5 class="row-title before-themeprimary"><i class="fa fa-user themeprimary"></i>@Localization.getString("define_new_account")</h5>
+                <div id="tabbedwizard" class="wizard wizard-tabbed" data-target="#tabbedwizardsteps">
+                    <ul class="steps">
+                        <li data-target="#tabbedwizardstep1" class="active"><span class="step">1</span>@Localization.getString("account_detail")<span class="chevron"></span></li>
+                    </ul>
+                </div>
+                <div class="step-content" id="tabbedwizardsteps">
+                    <div class="step-pane active" id="tabbedwizardstep1">
+                        <div class="row" style="margin-bottom:-30px">
+                            <div class="col-lg-12 col-sm-12 col-xs-12">
+                                <div class="widget radius-bordered">
+                                    <div class="widget-body">
+                                        <form id="registrationForm" method="post" class="form-horizontal"
+                                              data-bv-message="This value is not valid"
+                                              data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+                                              data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
+                                              data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+                                            <div class="form-group">
+                                                <label class="col-lg-2 control-label">
+                                                    @Localization.getString("Name_Family")
+                                                </label>
+                                                <div class="col-lg-4">
+                                                    <input type="text" class="form-control" id="txtFirstName" name="firstName" placeholder="@Localization.getString("Name")" />
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <input type="text" class="form-control" id="txtLastName" name="lastName" placeholder="@Localization.getString("Family")" />
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-lg-2 control-label">
+                                                    @Localization.getString("Email")
+                                                </label>
+                                                <div class="col-lg-8">
+                                                    <input class="form-control" id="txtEmail" name="txtEmail" type="email" placeholder=@Localization.getString("Email") />
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-lg-2 control-label">
+                                                    @Localization.getString("Password")
+                                                </label>
+                                                <div class="col-lg-4">
+                                                    <input type="password" class="form-control" id="txtPassword" name="password" />
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <input type="password" class="form-control" id="txtConfirmPassword" name="confirmPassword" />
+                                                </div>
+                                            </div>
+                                            @{
+                                                if (Helper.getCurrentFarmId() == -1)
+                                                {
+                                                    <div class="form-group has-feedback">
+                                                        <label class="col-lg-2 control-label">
+                                                            @Localization.getString("Type")
+                                                        </label>
+                                                        <div class="col-lg-3">
+                                                            <select class="form-control" id="SelectedFarmType" name="SelectedFarmType" onchange="onChangeAccountType()">
+                                                                <option value="SystemRole_Farm">
+                                                                    @Localization.getString("FarmUser_Role")
+                                                                </option>
+                                                                <option value="SystemRole_Staff">
+                                                                    @Localization.getString("StaffUser_Role")
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group has-feedback" id="divFarmNameId">
+                                                        <label class="col-lg-2 control-label">
+                                                            @Localization.getString("Farm")
+                                                        </label>
+                                                        <div class="col-lg-3">
+                                                            <select class="form-control" id="SelectedFarmName" name="SelectedFarmName" onchange="onChangeFarm()">
+                                                                @{
+                                                                    if (Helper.getCurrentFarmId() == -1)
+                                                                    {
+                                                                        <option value="NaN">
+                                                                            @Localization.getString("WithoutFarm")
+                                                                        </option>
+                                                                        for (int i = 0; i < @Model.FarmList.Count; i++)
+                                                                        {
+                                                                            <option value=@Model.FarmList[i].ID>@Model.FarmList[i].FarmName</option>
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <option value="@Helper.getCurrentFarmId()">
+                                                                            @Localization.getString("CurrentFarm")
+                                                                        </option>
+                                                                    }
+                                                                }
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else if (Helper.getCurrentFarmId() == 0)
+                                                {
+
+                                                }
+                                                else
+                                                {
+
+                                                }
+                                            }
+
+                                            <div class="form-group has-feedback" id="divSelectedRoleName">
+                                                <label class="col-lg-2 control-label">
+                                                    @Localization.getString("Role")
+                                                </label>
+                                                <div class="col-lg-3">
+                                                    <select class="form-control" id="SelectedRoleName" name="SelectedRoleName">
+                                                        @for (int i = 0; i < @Model.permissionList.Count; i++)
+                                                        {
+                                                            <option value=@Model.permissionList[i].uId>@Model.permissionList[i].jName</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div style="height:20px"></div>
+                                            <div class="row" id="FarmTab" style="display:none">
+                                                <div class="col-xs-12 col-md-12">
+                                                    <div class="widget">
+                                                        <div class="widget-body no-padding">
+                                                            <table class="table table-bordered table-hover table-striped" id="searchable">
+                                                                <thead class="bordered-darkorange">
+                                                                    <tr role="row">
+                                                                        <td>@Localization.getString("ID")</td>
+                                                                        <th>@Localization.getString("FarmName")</th>
+                                                                        <th>@Localization.getString("Email")</th>
+                                                                        <th>@Localization.getString("Country")</th>
+                                                                        <th>@Localization.getString("City")</th>
+                                                                        <th>@Localization.getString("Assress")</th>
+                                                                        <th>@Localization.getString("PostalCode")</th>
+                                                                        <th>@Localization.getString("Phones")</th>
+                                                                        <th>@Localization.getString("Select")</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="divPermissionList">
+                                                                    @{
+                                                                        for (int i = 0; i < Model.FarmList.Count; i++)
+                                                                        {
+                                                                            var Assress = Model.FarmList[i].Street1 + " " + Model.FarmList[i].Street2 + " " + Model.FarmList[i].No;
+                                                                            var Phones = Model.FarmList[i].Phone1 + " " + Model.FarmList[i].Phone2;
+                                                                            var onoffswitch = "onoffswitch" + Model.FarmList[i].ID;
+                                                                            var PermissionSwitch = "PermissionSwitch" + Model.FarmList[i].ID;
+                                                                            <tr>
+                                                                                <td>@(i + 1)</td>
+                                                                                <td>@Model.FarmList[i].FarmName</td>
+                                                                                <td>@Model.FarmList[i].Email</td>
+                                                                                <td>@Model.FarmList[i].Country</td>
+                                                                                <td>@Model.FarmList[i].City</td>
+                                                                                <td>@Assress</td>
+                                                                                <td>@Model.FarmList[i].PostalCode</td>
+                                                                                <td>@Phones</td>
+                                                                                <td>
+                                                                                    <div class="onoffswitch">
+                                                                                        <input type="checkbox" name="@{@onoffswitch}" class="onoffswitch-checkbox" id="@{@PermissionSwitch}" onchange="onChangeFarmList(this)">
+                                                                                        <label class="onoffswitch-label" for="@{@PermissionSwitch}"></label>
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                        }
+                                                                    }
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="actions actions-footer" id="tabbedwizard-actions">
+                    <div class="btn-group">
+                        <button id="btnNextWizard" type="button" class="btn btn-default btn-sm btn-next btn-darkorange" data-last="RegisterAccount" onclick="onCLickNextWizard()">@Localization.getString("RegisterAccount")</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<br />
+
+<div class="row">
+    <div class="col-xs-12 col-md-12">
+        <h5 class="row-title before-themeprimary"><i class="fa fa-user themeprimary"></i>@Localization.getString("DefinedFarmAccountList")</h5>
+        <div class="widget">
+            <div class="widget-header ">
+            </div>
+            <div class="widget-body">
+                <table class="table table-striped table-bordered table-hover" id="expandabledatatable">
+                    <thead>
+                        <tr>
+                            <th>
+                            </th>
+                            <th>
+                                @Localization.getString("Name")
+                            </th>
+                            <th>
+                                @Localization.getString("Family")
+                            </th>
+                            <th>
+                                @Localization.getString("Email")
+                            </th>
+                            <th>
+                                @Localization.getString("Role")
+                            </th>
+                            <th>
+                                @Localization.getString("Farm")
+                            </th>
+                            <th>
+                                @Localization.getString("Edit")/@Localization.getString("Delete")
+                            </th>
+                            <th>
+                                @Localization.getString("Active")/@Localization.getString("Deactive")
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @for (int i = 0; i < Model.DefinedFarmAccountList.Count; i++)
+                        {
+                            var DefinedFarmAccountList_Removename = "DefinedFarmAccountListR" + Model.DefinedFarmAccountList[i].ID;
+                            var DefinedFarmAccountList_Editname = "DefinedFarmAccountListE" + Model.DefinedFarmAccountList[i].ID;
+                            <tr>
+                                <td>
+                                    @(i + 1)
+                                </td>
+                                <td>
+                                    @Model.DefinedFarmAccountList[i].Name
+                                </td>
+                                <td>
+                                    @Model.DefinedFarmAccountList[i].Family
+                                </td>
+                                <td>
+                                    @Model.DefinedFarmAccountList[i].Email
+                                </td>
+                                <td>
+                                    @Model.DefinedFarmAccountList[i].RoleName
+                                </td>
+                                <td>
+                                    @Model.DefinedFarmAccountList[i].FarmName
+                                </td>
+                                <td>
+                                    @{
+                                        if (Model.DefinedFarmAccountList[i].ID == Helper.getCurrentUserId())
+                                        {
+
+                                        }
+                                        else
+                                        {
+                                            if (PermissionViewer.WillBeShow("Setting-RemoveDefineFarmAcc", User.Identity.Name))
+                                            {
+                                                <a name="@DefinedFarmAccountList_Removename" href="javascript:void(0);" class="btn-xs btn-danger" onclick="DefinedFarmAccountList_Removename(this)">@Localization.getString("Delete")</a>
+                                            }
+
+                                            if (PermissionViewer.WillBeShow("Setting-EditDefineFarmAcc", User.Identity.Name) || PermissionViewer.WillBeShow("Setting-UpdateFarmAccount", User.Identity.Name))
+                                            {
+                                                <a name="@DefinedFarmAccountList_Editname" href="javascript:void(0);" class="btn-xs btn-primary" onclick="DefinedFarmAccountList_Editname(this)">@Localization.getString("Edit")</a>
+                                            }
+
+                                        }
+                                    }
+
+                                </td>
+                                <td>
+                                    <div class='onoffswitch'>
+                                        <input type='checkbox' name='onoffswitch' class='onoffswitch-checkbox' id='PermissionSwitch' onclick='onChangePermission(this)' checked />
+                                        <label class='onoffswitch-label' for='PermissionSwitch'></label>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@{
+    if (Helper.getCurrentFarmId() == -1000)
+    {
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <h5 class="row-title before-themeprimary"><i class="fa fa-user themeprimary"></i>@Localization.getString("DefinedSystem_StaffList")</h5>
+                <div class="widget">
+                    <div class="widget-header ">
+                    </div>
+                    <div class="widget-body">
+                        <table class="table table-striped table-bordered table-hover" id="expandabledatatableDefinedSystemStaffList">
+                            <thead>
+                                <tr>
+                                    <th>
+                                    </th>
+                                    <th>
+                                        @Localization.getString("Name")
+                                    </th>
+                                    <th>
+                                        @Localization.getString("Family")
+                                    </th>
+                                    <th>
+                                        @Localization.getString("Email")
+                                    </th>
+                                    <th>
+                                        @Localization.getString("Role")
+                                    </th>
+                                    <th>
+                                        @Localization.getString("Farm")
+                                    </th>
+                                    <th>
+                                        @Localization.getString("Edit")/@Localization.getString("Delete")
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @for (int i = 0; i < Model.DefinedSystem_StaffList.Count; i++)
+                                {
+                                    var DefinedSystem_StaffList_Removename = "DefinedSystem_StaffListR" + Model.DefinedSystem_StaffList[i].ID;
+                                    var DefinedSystem_StaffList_Editname = "DefinedSystem_StaffListE" + Model.DefinedSystem_StaffList[i].ID;
+                                    <tr>
+                                        <td>
+                                            @(i + 1)
+                                        </td>
+                                        <td>
+                                            @Model.DefinedSystem_StaffList[i].Name
+                                        </td>
+                                        <td>
+                                            @Model.DefinedSystem_StaffList[i].Family
+                                        </td>
+                                        <td>
+                                            @Model.DefinedSystem_StaffList[i].Email
+                                        </td>
+                                        <td>
+                                            @Model.DefinedSystem_StaffList[i].RoleName
+                                        </td>
+                                        <td>
+                                            @Model.DefinedSystem_StaffList[i].FarmName
+                                        </td>
+                                        <td>
+                                            @{
+                                                if (Model.DefinedSystem_StaffList[i].ID == Helper.getCurrentUserId())
+                                                {
+
+                                                }
+                                                else
+                                                {
+                                                    <a name="@DefinedSystem_StaffList_Removename" href="javascript:void(0);" class="btn-xs btn-danger" onclick="DefinedSystem_StaffList_Removename(this)">@Localization.getString("Delete")</a>
+                                                    <a name="@DefinedSystem_StaffList_Editname" href="javascript:void(0);" class="btn-xs btn-primary" onclick="DefinedSystem_StaffList_Editname(this)">@Localization.getString("Edit")</a>
+                                                }
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+
+<script src="~/assets/js/jquery.min.js"></script>
+<script src="~/assets/js/bootstrap.min.js"></script>
+<script src="~/assets/js/slimscroll/jquery.slimscroll.min.js"></script>
+@*<script src="~/assets/js/beyond.min.js"></script>*@
+<script src="~/assets/js/validation/bootstrapValidator.js"></script>
+<script src="~/assets/js/fuelux/wizard/wizard-custom.js"></script>
+<script src="~/assets/js/toastr/toastr.js"></script>
+<link href="~/assets/css/dataTables.bootstrap.css" rel="stylesheet" />
+<script src="~/assets/js/datatable/jquery.dataTables.min.js"></script>
+<script src="~/assets/js/datatable/ZeroClipboard.js"></script>
+<script src="~/assets/js/datatable/dataTables.tableTools.min.js"></script>
+<script src="~/assets/js/datatable/dataTables.bootstrap.min.js"></script>
+<script src="~/assets/js/jquery.min.js"></script>
+<script src="~/assets/js/bootstrap.min.js"></script>
+<script src="~/assets/js/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="~/assets/js/datatable/dataTables.tableTools.min.js"></script>
+<script src="~/assets/js/datatable/datatables-init.js"></script>
+<script src="~/assets/js/fuelux/wizard/wizard-custom.js"></script>
+<script src="~/assets/js/toastr/toastr.js"></script>
+<link href="~/assets/css/dataTables.bootstrap.css" rel="stylesheet" />
+<script src="~/assets/js/datatable/jquery.dataTables.min.js"></script>
+<script src="~/assets/js/datatable/ZeroClipboard.js"></script>
+<script src="~/assets/js/datatable/dataTables.tableTools.min.js"></script>
+<script src="~/assets/js/datatable/dataTables.bootstrap.min.js"></script>
+<script src="~/assets/js/datatable/jquery.dataTables.min.js"></script>
+<script src="~/assets/js/datatable/dataTables.tableTools.min.js"></script>
+<script src="~/assets/js/datatable/dataTables.bootstrap.min.js"></script>
+<script src="~/assets/js/datatable/datatables-init.js"></script>
+
+<script>
+    Initial();
+
+    function Initial()
+    {
+        var idRoleField = document.getElementById("divSelectedRoleName");
+        if (@Model.permissionList.Count == 0)
+        {
+            idRoleField.style.display = "none";
+        }
+    }
+
+    function onChangeAccountType() {
+        var idFarm = document.getElementById("divFarmNameId");
+        var StepTwo = document.getElementById("FarmTab");
+        if ($("#SelectedFarmType").val() == "SystemRole_Farm") {
+            idFarm.style.display = "block";
+            StepTwo.style.display = "none";
+            CallLoadAllRoleOfFarm();
+        }
+        else {
+            idFarm.style.display = "none";
+            StepTwo.style.display = "block";
+            CallLoadRoleOfStaff();
+        }
+    }
+
+    function CallLoadAllRoleOfFarm()
+    {
+        $.post("/Setting/LoadAllRoleOfFarm",
+        {
+            FarmId: $("#SelectedFarmName").val()
+        },
+        function (data) {
+            var divSelectedRoleName = document.getElementById("divSelectedRoleName");
+            if (data.length == 0) {
+                divSelectedRoleName.style.display = "none";
+            }
+            else {
+                divSelectedRoleName.style.display = "block";
+                var select = document.getElementById("SelectedRoleName");
+                for (var j = 0; j < 10; j++) {
+                    var length = select.options.length;
+                    for (var i = 0; i < length; i++) {
+                        select.options[i] = null;
+                    }
+                }
+                for (var i = 0; i < data.length / 2; i++) {
+                    select.options[select.options.length] = new Option(data[2 * i + 1], data[2 * i]);
+                }
+            }
+        });
+    }
+
+    function CallLoadRoleOfStaff()
+    {
+        $.post("/Setting/LoadRoleOfStaff",
+        {
+            FarmId: $("#SelectedFarmName").val()
+        },
+        function (data) {
+            var divSelectedRoleName = document.getElementById("divSelectedRoleName");
+            if (data.length == 0) {
+                divSelectedRoleName.style.display = "none";
+            }
+            else {
+                divSelectedRoleName.style.display = "block";
+                var select = document.getElementById("SelectedRoleName");
+                for (var j = 0; j < 10; j++) {
+                    var length = select.options.length;
+                    for (var i = 0; i < length; i++) {
+                        select.options[i] = null;
+                    }
+                }
+                for (var i = 0; i < data.length; i++) {
+                    select.options[select.options.length] = new Option(data[i], data[i]);
+                }
+            }
+        });
+    }
+
+    function onChangeFarm()
+    {
+        var idRoleField = document.getElementById("divSelectedRoleName");
+        if ($("#SelectedFarmName").val() == "NaN") {
+            idRoleField.style.display = "none";
+        }
+        else {
+            idRoleField.style.display = "block";
+            CallLoadAllRoleOfFarm();
+        }
+    }
+</script>
+
+<script>
+    var FarmList = "";
+    function onChangeFarmList(checkbox) {
+        if (checkbox.checked) {
+            FarmList += checkbox.name + ",";
+        }
+        else {
+            FarmList = FarmList.replace(checkbox.name + ",", "");
+        }
+    }
+</script>
+
+<script type="text/javascript">
+    jQuery(function ($) {
+        $('#simplewizardinwidget').wizard();
+        $('#simplewizard').wizard();
+        $('#tabbedwizard').wizard().on('finished', function (e) {
+            var tmpComment = "";
+
+        });
+        $('#WiredWizard').wizard();
+    });
+</script>
+
+<script>
+    $(document).on("click", "#btnRegister", function ()
+    {
+        if($("#firstName").val() != '' && $("#lastName").val()  != '' && $("#email").val()  != '' && $("#password").val()  != '' && $("#confirmPassword").val() != '' && $("#SelectedRoleName").val() != '')
+        {
+            if ($("#password").val() == $("#confirmPassword").val())
+            {
+                alert($("#PermissionSwitch" + model.FarmList.ID.toString()).is(':checked'));
+                //$.post("/Setting/SaveAccount",
+                //{
+                //    firstName: $("#firstName").val(),
+                //    lastName: $("#lastName").val(),
+                //    email: $("#email").val(),
+                //    password: $("#password").val(),
+                //    confirmPassword: $("#confirmPassword").val(),
+                //    SelectedRoleName: $("#SelectedRoleName").val(),
+                //    SelectedFarmName: $("#SelectedFarmName").val()
+                //},
+                //function (data) {
+                //    location.reload(true);
+                //});
+            }
+            else
+            {
+                alert('@Localization.getString("MisMatchPassword")');
+            }
+        }
+        else
+        {
+            alert('@Localization.getString("Empty_Field")');
+        }
+    });
+
+</script>
+
+<script>
+    function DefinedFarmAccountList_Removename(element) {
+        $.post("/Setting/RemoveDefineFarmAcc",
+        {
+            AccountID: element.name.replace("DefinedFarmAccountListR", "")
+        },
+        function (data) {
+            Notify('Thank You! All of your information saved successfully.', 'bottom-right', '5000', 'blue', 'fa-check', true);
+            location.reload(true);
+        });
+    }
+
+    function DefinedFarmAccountList_Editname(element) {
+        window.location.href = '@Url.Content("~")' + '@Thread.CurrentThread.CurrentCulture.Name' + '/Setting/EditDefineFarmAcc?jq=' + element.name.replace("DefinedFarmAccountListE", "");
+    }
+
+    function DefinedSystem_StaffList_Removename(element) {
+        $.post("/Setting/RemoveDefineStaffAcc",
+        {
+            AccountID: element.name
+        },
+        function (data) {
+            Notify('Thank You! All of your information saved successfully.', 'bottom-right', '5000', 'blue', 'fa-check', true);
+            location.reload(true);
+        });
+    }
+
+    function DefinedSystem_StaffList_Editname(element) {
+        $.post("/Setting/EditDefineStaffAcc",
+        {
+            AccountID: element.name
+        },
+        function (data) {
+            Notify('Thank You! All of your information saved successfully.', 'bottom-right', '5000', 'blue', 'fa-check', true);
+            location.reload(true);
+        });
+    }
+</script>
+
+<script>
+    function onCLickNextWizard()
+    {
+        if ($("#txtFirstName").val() !== '' && $("#txtLastName").val() !== '' && $("#txtEmail").val() !== '' && $("#txtPassword").val() !== '' && $("#txtConfirmPassword").val() !== '') {
+            $.post("/Setting/SaveAccount",
+            {
+                txtFirstName: $("#txtFirstName").val(),
+                txtLastName: $("#txtLastName").val(),
+                txtEmail: $("#txtEmail").val(),
+                txtPassword: $("#txtPassword").val(),
+                txtConfirmPassword: $("#txtConfirmPassword").val(),
+                SelectedFarmType: $("#SelectedFarmType").val(),
+                SelectedFarmName: $("#SelectedFarmName").val(),
+                SelectedRoleName: $("#SelectedRoleName").val(),
+                FarmList: FarmList
+            },
+            function (data) {
+                if (data == 'MISSMATCH')
+                {
+                    Notify('فیلد پسوردها با هم یکسان نیستند. آن را اصلاح فرمایید', 'bottom-right', '5000', 'blue', 'fa-check', true);
+                }
+                else if (data == "SIMILAR_EMAIL")
+                {
+                    Notify('کاربری با این ایمیل قبلا ثبت شده است. لطفا ایمیل دیگری درج نمایید.', 'bottom-right', '5000', 'blue', 'fa-check', true);
+                }
+                else if (data == "SAVE")
+                {
+                    Notify('Thank You! All of your information saved successfully.', 'bottom-right', '5000', 'blue', 'fa-check', true);
+                    location.reload(true);
+                }
+                else
+                {
+                    Notify('Error occured.' + data, 'bottom-right', '5000', 'orange', 'fa-check', true);
+                }
+            });
+        }
+        else {
+            alert("@Localization.getString("Please_Fill_Blank")");
+        }
+    }
+</script>
+
+<script type="text/javascript">
+    var PermissionListStr = "";
+    function onChangePermission(element)
+    {
+        Notify('Error occured.', 'bottom-right', '5000', 'orange', 'fa-check', true);
+    }
+</script>

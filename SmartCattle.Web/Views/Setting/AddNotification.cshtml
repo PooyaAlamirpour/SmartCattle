@@ -1,0 +1,111 @@
+﻿@using SmartCattle.DomainClass
+@model List<Notification> 
+@{
+    ViewBag.Title = "AddNotification";  
+}
+
+<div class="col-md-8 col-md-offset-2 bg-white padding-40">
+    @using (Html.BeginForm("AddNotification", "Setting", null, FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="col-md-6 form-group">
+            @if (ViewBag.notifTitle == null)
+            {
+            <input type="text" class="form-control col-md-12" placeholder="Title" name="Title" />
+            }
+            else
+            {
+             <input type="text" class="form-control col-md-12 bg-lightyellow" placeholder="@ViewBag.notifTitle" name="Title"  />
+            }
+        </div>
+        <div class="col-md-6">
+          <select name="Rule" class="form-control col-md-12">
+              <option value="@((int)RuleTypes.Activity)">@RuleTypes.Activity</option>
+              <option value="@((int)RuleTypes.Heat)">@RuleTypes.Heat</option>
+              <option value="@((int)RuleTypes.Temperature)">@RuleTypes.Temperature</option>
+              <option value="@((int)RuleTypes.THI)">@RuleTypes.THI</option>
+          </select>
+        </div>
+        <div class="col-md-12">
+            <textarea class="form-control col-md-12" name="Content" style = "height:150px; padding:5px;"></textarea>        
+        </div>
+        <div>
+            <input type="submit" value="Submit" class="btn btn-success col-md-2 margin-10"/>
+        </div>
+
+    }
+   
+
+</div>
+
+
+<div class="col-md-8 col-md-offset-2 well with-header with-footer">
+    <div class="header bordered-pink">
+       Notification List
+    </div>
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    <i class="fa fa-briefcase"></i> Title
+                </th>
+                <th class="hidden-xs">
+                    <i class="fa fa-user"></i> Rule
+                </th>
+                <th>
+                    <i class="fa fa-shopping-cart"></i> Content
+                </th>
+                <th>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model)
+            {
+                  <tr>
+                    <td>
+                        @item.Title 
+                    </td>
+                    <td class="hidden-xs">
+                       @item.Rule
+                    </td>
+                    <td>
+                      @(item.Content!=null?item.Content:"")
+                    </td>
+                    <td>
+                        <a href="#" onclick="removeNotification('@item.ID', this)"   class="btn btn-default btn-xs purple"><i class="fa fa-remove"></i> Remove</a>
+                    </td>
+                </tr> 
+            }
+        </tbody>
+    </table>  
+</div>
+
+@section pageScripts{
+    <script>
+
+        function removeNotification(id,obj)
+        {
+            var token = $('input[name="__RequestVerificationToken"]').val();
+            $.ajax({
+                url: '@Url.Action("RemoveNotification", "Setting")',
+                type: "Post",
+                data: {"__RequestVerificationToken":token , "id":id},
+                success:function(response)
+                {
+                    console.log(response);
+                    if (response.type == 0)
+                    {
+                        console.log(response.type);
+                        $(obj).parent().parent().remove();
+                    }
+                },
+                error:function(response)
+                {
+
+                }
+            })
+        }
+
+    </script>
+    }

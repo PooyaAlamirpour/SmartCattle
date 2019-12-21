@@ -1,0 +1,41 @@
+﻿@model  int
+
+<div id="paging" class="row">
+    @*<div class="col-sm-6"><div>31Showing @((Model.current - 1) * 15 + 1) to @((Model.current) * 15) entries</div></div>*@
+    <div class="col-sm-6">
+        <div class="dataTables_paginate paging_bootstrap" id="searchable_paginate">
+            <ul class="pagination">
+                <li data-index="1"><a href="#">first</a></li>
+                @if (Model.current - 3 > 0)
+                {
+                    <li><a disabled="disabled">.....</a></li>
+                }
+                @if (Model.current - 2 > 0)
+                {
+                    <li data-index="@(Model.current-2)"><a href="#">@(Model.current - 2)</a></li>
+                }
+                @if (Model.current - 1 > 0)
+                {
+                    <li data-index="@(Model.current-1)"><a href="#">@(Model.current - 1)</a></li>
+                }
+                <li data-index="@(Model.current)" class="active"><a href="#">@Model.current</a></li>
+
+                @if (Model.current + 1 <= Model.pages)
+                {
+                    <li data-index="@(Model.current+1)"><a href="#">@(Model.current + 1)</a></li>
+                }
+                @if (Model.current + 2 <= Model.pages)
+                {
+                    <li data-index="@(Model.current+2)"><a href="#">@(Model.current + 2)</a></li>
+                }
+                @if (Model.current + 3 <= Model.pages)
+                {
+                    <li disabled="disabled"><a>.....</a></li>
+                }
+                <li data-index="@Model.pages"><a href="#">last</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+

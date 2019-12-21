@@ -1,0 +1,235 @@
+﻿
+@{
+    ViewBag.Title = "NewFarm";
+    Layout = "~/Areas/BackOffice/Views/Shared/_AdminLayout.cshtml";
+}
+<style>
+    .notif{
+        text-align:center;
+        font-weight:bold;
+        padding:15px;
+        background-color:#6BB9F0;
+        color:#3A539B;
+        border-radius:4px;
+    }
+</style>
+<div class="row">
+    <div class="col-lg-6 col-lg-offset-3">
+        <div class="card-box p-b-0">
+            <div class="dropdown pull-right">
+                <a href="#" class="dropdown-toggle card-drop" data-toggle="dropdown" aria-expanded="false">
+                    <i class="zmdi zmdi-more-vert"></i>
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">Separated link</a></li>
+                </ul>
+            </div>
+
+            <h4 class="header-title m-t-0 m-b-30">Register New Farm</h4>
+            <form id="newFarmForm" action="@Url.Action("NewFarm")" method="post">
+                @Html.AntiForgeryToken()
+                <div id="progressbarwizard" class="pull-in">
+                    <ul class="nav nav-tabs navtab-wizard nav-justified bg-muted">
+                        <li class="active"><a href="#account-2" data-toggle="tab" aria-expanded="true">Map</a></li>
+                        <li><a href="#profile-tab-2" data-toggle="tab">Account</a></li>
+                        <li data-index="last"><a href="#finish-2" data-toggle="tab">Sensors</a></li>
+                    </ul>
+
+                    <div class="tab-content b-0 m-b-0">
+
+                        <div id="bar" class="progress progress-striped progress-bar-primary-alt">
+                            <div class="bar progress-bar progress-bar-primary" style="width: 33.3333%;"></div>
+                        </div>
+
+                        <div class="tab-pane p-t-10 fade active in" id="account-2">
+                            <div class="form-group clearfix">
+
+                                <div id="farmMap" style="height:300px"></div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="tab-pane p-t-10 fade" id="profile-tab-2">
+                            <div class="row">
+                              
+
+
+                                <div class="row">
+                                    <div class="form-group clearfix">
+                                        <label class="col-md-3 control-label " for="farmName"> Farm Name *</label>
+                                        <div class="col-md-9">
+                                            <input class="form-control required" id="farmName" name="farmName" type="email">
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group clearfix">
+                                        <label class="col-md-3 control-label " for="email"> Email *</label>
+                                        <div class="col-md-9">
+                                            <input class="form-control required" id="email" name="email" type="email">
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                  
+                            </div>
+                        </div>
+
+                        <div class="tab-pane p-t-10 fade" id="finish-2">
+                            <div class="row">
+                               <textarea class="form-control" name="sensors" placeholder="comma seperated MAC Address eg => ab:cd:ef:gh,ij:kl:mn:op,qr:st:uv:wx"></textarea>
+                            </div>
+                        </div>
+                        <ul class="pager m-b-0 wizard">
+                            <li class="previous first disabled" style="display:none;">
+                                <a href="#">First</a>
+                            </li>
+                            <li class="previous disabled"><a href="#" class="btn btn-primary waves-effect waves-light">Previous</a></li> 
+                            <li class="submitBtn left" style="display:none"><a href="#" class="btn btn-success waves-effect waves-light">Submit</a></li>                           
+                            <li class="next"><a href="#" class="btn btn-primary waves-effect waves-light">Next</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+
+                <input type="hidden" id="lat" name="lat" />
+                <input type="hidden" id="lng" name="lng" />
+
+
+            </form>
+             
+        </div>
+    </div>
+</div>
+
+ @if(ViewBag.msg != null)
+ {
+     <div class="col-md-6 col-md-offset-3 notif">  @ViewBag.msg <i class="fa fa-bell"></i>  </div>
+ }
+
+@section PageScripts
+{  
+       <!-- Form wizard -->
+        <script src="~/Areas/BackOffice/assets/plugins/bootstrap-wizard/jquery.bootstrap.wizard.js"></script>
+        <script src="~/Areas/BackOffice/assets/plugins/jquery-validation/dist/jquery.validate.min.js"></script>
+
+        <!-- App js -->
+        <script src="~/Areas/BackOffice/assets/js/jquery.core.js"></script>
+     
+
+    <script type="text/javascript">
+            $(document).ready(function() { 
+
+                $('#progressbarwizard').bootstrapWizard({onTabShow: function(tab, navigation, index) {
+                    var $total = navigation.find('li').length;
+                    var $current = index+1;
+                    var $percent = ($current/$total) * 100;
+                    $('#progressbarwizard').find('.bar').css({width:$percent+'%'});
+                },
+                'tabClass': 'nav nav-tabs navtab-wizard nav-justified bg-muted'});
+
+                $('#btnwizard').bootstrapWizard({'tabClass': 'nav nav-tabs navtab-wizard nav-justified bg-muted','nextSelector': '.button-next', 'previousSelector': '.button-previous', 'firstSelector': '.button-first', 'lastSelector': '.button-last'});
+
+                var $validator = $("#commentForm").validate({
+                    rules: {
+                        emailfield: {
+                            required: true,
+                            email: true,
+                            minlength: 3
+                        },
+                        namefield: {
+                            required: true,
+                            minlength: 3
+                        },
+                        urlfield: {
+                            required: true,
+                            minlength: 3,
+                            url: true
+                        }
+                    }
+                });                 
+            });
+
+</script>
+
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5bp4wHjbZDaZgfL2EIiGS1EK0qCNBy94&callback=initMap">
+</script>
+
+
+<script>
+    var markers = [];
+    var map;
+    function initMap() {
+        map = new google.maps.Map(document.getElementById('farmMap'), {
+            center: new google.maps.LatLng(35.719665, 50.851157),
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.HYBRID,
+            mapTypeControl: true
+        });
+        var icon = {
+            url: "/assets/img/pin.svg", // url
+            scaledSize: new google.maps.Size(16, 16), // scaled size
+            origin: new google.maps.Point(0, 0), // origin
+            anchor: new google.maps.Point(0, 0) // anchor
+        };
+
+        google.maps.event.addListener(map, 'click', function (event) {
+            placeMarker(event.latLng);
+            $("#lat").val(event.latLng.lat());
+            $("#lng").val(event.latLng.lng());
+        });
+
+        function placeMarker(location) {
+            for (var i = 0; i < markers.length; i++) {
+                markers[i].setMap(null);
+            }
+            markers.length = 0;
+            var marker = new google.maps.Marker({
+                position: location,
+                map: map,
+                icon:icon
+            });
+            markers.push(marker);
+        }         
+    }; 
+       
+ 
+    $(".next , .previous , ul.nav-tabs li").on("click", function () {
+
+        setTimeout(ToggleSubmit, 100);
+    });
+
+    function ToggleSubmit()
+    {
+        if ($("ul.nav-tabs li.active").data("index") == "last") {
+            $(".next").hide();
+            $(".submitBtn").show(200);
+        }
+        else {
+            $(".next").show();
+            $(".submitBtn").hide();
+        }
+    }
+
+</script>
+<script> 
+
+    $(".submitBtn").on("click", function () {
+        $("#newFarmForm").submit();
+    });
+    @if(ViewBag.msg=="success")
+    {
+        <text> $("#sa-success").trigger("click") </text>
+    }
+</script>     
+
+}

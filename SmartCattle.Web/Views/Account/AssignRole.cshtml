@@ -1,0 +1,155 @@
+﻿@using System.Threading
+@model SmartCattle.Web.Controllers.AssignRoleModel
+@{
+    ViewBag.Title = "Assign role to user";
+    //Layout = "~/Views/Shared/_Default.cshtml";
+}
+
+@using (Html.BeginForm("AssignRole", "Account", null, FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+<div class="row margin-bottom-20">
+    <div class="col-lg-4 col-sm-4 col-xs-12">
+        <div>
+            <select id="userId" name="userId" style="width:100%;">
+                <option value="null" />@Localization.getString("UserName")
+                @foreach (var item in Model.users)
+                {
+                    <option value="@item.Id" />@item.UserName
+
+                }
+            </select>
+        </div>
+    </div>
+    <div class="col-lg-4 col-sm-4 col-xs-12">
+        <div>
+            <select id="roleName" name="roleName" style="width:100%;">
+                <option value="null" />@Localization.getString("Role")
+                @foreach (var item in Model.roles)
+                {
+                    <option value="@item.Name" />@item.Name
+                }
+            </select>
+        </div>
+    </div>
+    <div class="col-lg-4 col-sm-4 col-xs-12">
+        <input type="submit" id="RoleAssign" class="btn btn-palegreen col-lg-6 col-sm-6 col-xs-12" value="@Localization.getString("Assign")">   
+    </div>
+    <hr class="wide">
+</div>
+}
+
+<div id="roleList">
+    <div class="col-lg-12 col-sm-12 col-xs-12 no-padding">
+
+
+        <div class="col-xs-12 col-md-12 col-lg-12 no-padding">
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-yellow">
+                    <div class="widget-buttons">
+                        <a href="#" data-toggle="dispose">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="widget-body no-padding" id="searchableGridWrapper">
+                    <table class="table table-bordered table-hover table-striped" id="searchable">
+                        <thead class="bordered-darkorange">
+                            <tr role="row">
+
+                                <th>
+                                    @Localization.getString("UserName")
+                                </th>
+                                <th>
+                                    @Localization.getString("Role")
+                                </th>                            
+                                <th>
+                                    @Localization.getString("deny ")
+                                </th>
+                            </tr>
+
+                        </thead>
+                        <tfoot>
+                            <tr>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                                @if (Model != null && Model.users != null)
+                                {
+                                    foreach (var item in Model.users)
+                                    {
+                                        if (item.Roles != null && item.Roles.Count > 0)
+                                        {
+                                            foreach (var role in item.Roles)
+                                            {
+                                                <tr class="rowData" data-rowid="@item.Id">
+                                                    <td class="info">@item.UserName</td>
+
+                                                    <td class="info">
+                                                        @Model.roles.FirstOrDefault(r => r.Id == role.RoleId).Name
+                                                    </td>
+                                                    <td>
+                                                        <button data-id="@item.Id" data-role="@Model.roles.FirstOrDefault(r => r.Id == role.RoleId).Name" class="denyRole btn btn-maroon"> @Localization.getString("deny")</button>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }                                   
+                                    }
+                                }
+                        </tbody>
+                    </table>                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section PageScripts{
+    <script src="/assets/js/datatable/jquery.dataTables.min.js"></script>
+    <script src="/assets/js/datatable/dataTables.bootstrap.min.js"></script>
+    <script src="/assets/js/datatable/datatables-init.js"></script>
+    <script>
+
+
+        @*$("body").on("click", "#RoleAssign", function (e) {
+
+            $.ajax({
+                url: '/@Thread.CurrentThread.CurrentCulture.Name' + '/Account/AssignRole',
+                type: "POST",
+                data: AddAntiForgeryToken({ "userId": $("#userId").val(), "roleName": $("#roleName").val() }),
+                success: function (data) {
+                    if(data=="ok")
+                    {
+                        window.location='/@Thread.CurrentThread.CurrentCulture.Name'+'/account/AssignRole';
+                    }
+                }
+            })
+            e.preventDefault();
+        });*@
+
+        $("body").on("click", ".denyRole", function () {
+            userid = $(this).data("id");
+            role = $(this).data("role");
+            obj = this;
+            $.ajax({
+                url: '@Url.Action("DenyRole", "Account")',
+                type: "POST",
+                data: AddAntiForgeryToken({ "userId": userid, "roleName": role }),
+                success: function (data) {
+                    if (data == "ok") {
+                        window.location = '/@Thread.CurrentThread.CurrentCulture.Name' + '/account/AssignRole';
+                    }
+                }
+            })
+            e.preventDefault();
+        });
+
+        AddAntiForgeryToken = function (data) {
+            data.__RequestVerificationToken = $('input[name=__RequestVerificationToken]').val();
+            return data;
+        };
+    </script>
+}

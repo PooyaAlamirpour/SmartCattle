@@ -1,0 +1,734 @@
+﻿@using System.Threading;
+@model IList<SmartCattle.Web.Domain.NotificationsTable>
+
+<link rel="shortcut icon" href="~/assets/img/favicon.png" type="image/x-icon">
+<link href="~/assets/css/font-awesome.min.css" rel="stylesheet" />
+<link href="~/assets/css/weather-icons.min.css" rel="stylesheet" />
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300" rel="stylesheet" type="text/css">
+<link href="~/assets/css/typicons.min.css" rel="stylesheet" />
+<link href="~/assets/css/animate.min.css" rel="stylesheet" />
+<script src="~/assets/js/skins.min.js"></script>
+<style>
+    .modal {
+        display: none; /* Hidden by default */
+        z-index: 1; /* Sit on top */
+        padding-top: 150px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 0;
+        border: 1px solid #888;
+        width: 65%;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+        -webkit-animation-name: animatetop;
+        -webkit-animation-duration: 0.4s;
+        animation-name: animatetop;
+        animation-duration: 0.4s;
+    }
+
+    .close {
+        color: black;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    .modal-header {
+        padding: 2px 16px;
+        background-color: #FFF;
+        color: white;
+    }
+
+    .modal-body {
+        padding: 2px 16px;
+    }
+
+    .modal-footer {
+        padding: 2px 16px;
+        background-color: #FFF;
+        color: white;
+    }
+
+    .onoffswitch {
+        position: relative;
+        width: 30px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+    }
+
+    .onoffswitch-checkbox {
+        display: none;
+    }
+
+    .onoffswitch-label {
+        display: block;
+        overflow: hidden;
+        cursor: pointer;
+        height: 13px;
+        padding: 0;
+        line-height: 15px;
+        border: 2px solid #999999;
+        border-radius: 13px;
+        background-color: #EEEEEE;
+        transition: background-color 0.3s ease-in;
+    }
+
+        .onoffswitch-label:before {
+            content: "";
+            display: block;
+            width: 13px;
+            margin: 0px;
+            background: #FFFFFF;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 20px;
+            border: 2px solid #999999;
+            border-radius: 13px;
+            transition: all 0.3s ease-in 0s;
+        }
+
+    .onoffswitch-checkbox:checked + .onoffswitch-label {
+        background-color: #34A7C1;
+    }
+
+        .onoffswitch-checkbox:checked + .onoffswitch-label, .onoffswitch-checkbox:checked + .onoffswitch-label:before {
+            border-color: #34A7C1;
+        }
+
+            .onoffswitch-checkbox:checked + .onoffswitch-label:before {
+                right: 0px;
+            }
+</style>
+
+<div id="myModal" class="modal">
+    <div class="modal-content" style="margin-top:-60px">
+        <div class="modal-header">
+            <span class="close" id="spanClose">&times;</span>
+        </div>
+        <div class="modal-body" style="margin-top:0px">
+            <div id="divContentDetail">
+                <div class="col-xs-12 col-md-12">
+                    <div class="widget">
+                        
+                        <div class="widget-body" style="margin-top:0px">
+                            <div class="">
+                                <div class="btn-group pull-right">
+                                    <ul class="dropdown-menu dropdown-default">
+                                        <li>
+                                            Num
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0);">Action</a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0);">Another action</a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0);">Something else here</a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0);">Separated link</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <table class="table table-striped table-hover table-bordered" id="editabledatatable">
+                                <thead>
+                                    <tr role="row">
+                                        <th style="width:30px">
+                                            ردیف
+                                        </th>
+                                        <th>
+                                            توضیحات
+                                        </th>
+                                        <th>
+                                            پیام
+                                        </th>
+                                        <th>
+                                            ثبت شده توسط
+                                        </th>
+                                        <th>
+                                            تاریخ ثبت پیام
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="myTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="divLoading">
+    <div style="background-color:aliceblue;width:220px;height:100px;margin:auto;border-radius:10px">
+        <div style="width:100%;height:10px"></div>
+        <div style="text-align:center;height:40px">
+            <h5>
+                @Localization.getString("Please_Wait")
+            </h5>
+        </div>
+        <div class="progress progress-striped active" style="margin-left:10px;margin-right:10px">
+            <div class="progress-bar progress-bar-orange" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                <span class="sr-only">
+                    40% Complete (success)
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="SnoozeMsgWindow" class="modal">
+    <div class="modal-content" style="width:30%">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+        </div>
+        <div class="modal-body" style="margin-top:10px">
+            <h4>
+                @Localization.getString("SnoozeResean")
+            </h4>
+            <div style="margin-top:20px">
+                <textarea id="txtSnoozeMessage" style="width:100%;resize:none;" rows="4" cols="50"></textarea>
+            </div>
+            <div dir="ltr" style="margin-top:15px;margin-bottom:10px">
+                <a href="javascript:void(0);" class="btn-sm btn-warning" onclick="onCLickSaveSnoozeMessage()">@Localization.getString("Snooze")</a>
+                <a href="javascript:void(0);" class="btn-sm btn-warning" onclick="onCLickCancelSnoozeMessage()">@Localization.getString("Cancel")</a>
+            </div>
+        </div>
+        <div class="modal-footer"></div>
+    </div>
+</div>
+
+<div class="row" id="tabledon">
+    <div class="col-xs-12 col-md-12">
+        <div class="widget">
+            <div class="widget-body no-padding" style="margin-top:-45px">
+                <table class="table table-bordered table-hover table-striped" id="mSearchable">
+                    <thead class="bordered-darkorange">
+                        <tr role="row">
+                            <th style="width:20px">@Localization.getString("Num")</th>
+                            <th>@Localization.getString("Topic")</th>
+                            <th>@Localization.getString("Comment")</th>
+                            <th>@Localization.getString("SnoozeMsg")</th>
+                            <th>@Localization.getString("CreateDate")</th>
+                            <th>@Localization.getString("Action")</th>
+                            <th>@Localization.getString("Info")</th>
+                        </tr>
+                    </thead>
+
+                    <tfoot>
+                        <tr>
+                            @*<th rowspan="1" colspan="1"></th>*@
+                            @*<th rowspan="1" colspan="1"><input type="text" name="search_browser" placeholder="@Localization.getString("Topic")" class="form-control input-sm"></th>*@
+                            @*<th rowspan="1" colspan="1"><input type="text" name="search_platform" placeholder="@Localization.getString("Comment")" class="form-control input-sm"></th>*@
+                            @*<th rowspan="1" colspan="1"><input type="text" name="search_version" placeholder="@Localization.getString("SnoozeMsg")" class="form-control input-sm"></th>*@
+                            @*<th rowspan="1" colspan="1"><input type="text" name="search_grade" placeholder="@Localization.getString("CreateDate")" class="form-control input-sm"></th>*@
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            var btnSnoozeName = "btnSnoozeName" + Model[i].ID;
+                            var btnDeactiveName = "btnDeactiveName" + Model[i].ID;
+                            var btnInfoName = "btnInfoName" + Model[i].ID;
+                            if (Model[i].Status == "UNREAD")
+                            {
+                                <tr class="danger">
+                                    <td>
+                                        @(i + 1)
+                                    </td>
+                                    <td>
+                                        @Model[i].Topic
+                                    </td>
+                                    <td>
+                                        @Model[i].Comment
+                                    </td>
+                                    <td>
+                                        @Model[i].SnoozeMsg
+                                    </td>
+                                    <td>
+                                        @Model[i].CreatedDate
+                                    </td>
+                                    <td>
+                                        @{
+                                            <a href="javascript:void(0);" class="btn-xs btn-warning" name="@{@btnSnoozeName}" onclick="OnClickSnooze(this)">@Localization.getString("Snooze")</a>
+                                            <div style="margin-top:10px"></div>
+                                            <a href="javascript:void(0);" class="btn-xs btn-azure" name="@{@btnDeactiveName}" onclick="OnClickDeactive(this)">@Localization.getString("Deactive")</a>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a href="javascript:void(0);" class="btn-xs icon-only btn-azure" name="@{@btnInfoName}" onclick="OnClickInfo(this)">
+                                            <i class="btn-label fa fa-exclamation"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td>
+                                        @(i + 1)
+                                    </td>
+                                    <td>
+                                        @Model[i].Topic
+                                    </td>
+                                    <td>
+                                        @Model[i].Comment
+                                    </td>
+                                    <td>
+                                        @Model[i].SnoozeMsg
+                                    </td>
+                                    <td>
+                                        @Model[i].CreatedDate
+                                    </td>
+                                    <td>
+                                        @{
+                                            if (Model[i].Status == "DEACTIVE")
+                                            {
+
+                                            }
+                                            else if (Model[i].Status == "SNOOZED")
+                                            {
+                                                <button type="button" class="btn-xs btn-yellow" name="@{@btnSnoozeName}" disabled="disabled">@Localization.getString("Snooze")</button>
+                                                            <div style="margin-top:10px"></div>
+                                                                    <a href="javascript:void(0);" class="btn-xs btn-azure" name="@{@btnDeactiveName}" onclick="OnClickDeactive(this)">@Localization.getString("Deactive")</a>
+                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        <a href="javascript:void(0);" class="btn-xs icon-only btn-azure" name="@{@btnInfoName}" onclick="OnClickInfo(this)">
+                                            <i class="btn-label fa fa-exclamation"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                }
+                            }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/js/datatable/jquery.dataTables.min.js"></script>
+<script src="~/assets/js/datatable/ZeroClipboard.js"></script>
+<script src="~/assets/js/datatable/dataTables.tableTools.min.js"></script>
+<script src="~/assets/js/datatable/dataTables.bootstrap.min.js"></script>
+<script src="~/assets/js/jquery.min.js"></script>
+<script src="~/assets/js/bootstrap.min.js"></script>
+<script src="~/assets/js/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="~/assets/js/datatable/jquery.dataTables.min.js"></script>
+<script src="~/assets/js/datatable/jquery.dataTables.js"></script>
+<script src="~/assets/js/datatable/ZeroClipboard.js"></script>
+<script src="~/assets/js/datatable/dataTables.tableTools.min.js"></script>
+<script src="~/assets/js/datatable/dataTables.bootstrap.min.js"></script>
+<script src="~/assets/js/datatable/datatables-init.js"></script>
+
+<script type="text/javascript">
+    var mInitiateEditableDataTable;
+    var oTable;
+    InitialTable();
+
+    function InitialTable() {
+        mInitiateEditableDataTable = function () {
+            return {
+                init: function () {
+                    //Datatable Initiating
+                    oTable = $('#editabledatatable').dataTable({
+                        "aLengthMenu": [
+                            [5, 15, 20, 100, -1],
+                            [5, 15, 20, 100, "All"]
+                        ],
+                        "iDisplayLength": 5,
+                        "sPaginationType": "bootstrap",
+                        "sDom": "Tflt<'row DTTTFooter'<'col-sm-6'i><'col-sm-6'p>>",
+                        "oTableTools": {
+                            "aButtons": [
+                                "copy",
+                                "print",
+                                {
+                                    "sExtends": "collection",
+                                    "sButtonText": "Save <i class=\"fa fa-angle-down\"></i>",
+                                    "aButtons": ["csv", "xls", "pdf"]
+                                }
+                            ]
+                        },
+                        "language": {
+                            "search": "",
+                            "sLengthMenu": "_MENU_",
+                            "oPaginate": {
+                                "sPrevious": "Prev",
+                                "sNext": "Next"
+                            }
+                        },
+                        "aoColumns": [
+                            null,
+                            null,
+                            null,
+                            null,
+                            { "bSortable": false }
+                        ]
+                    });
+
+                    var isEditing = null;
+
+                    //Add New Row
+                    $('#editabledatatable_new').click(function (e) {
+                        e.preventDefault();
+                        var aiNew = oTable.fnAddData([
+                            '', '', '', '',
+                            '<a href="#" class="btn btn-success btn-xs save"><i class="fa fa-edit"></i> Save</a> <a href="#" class="btn btn-warning btn-xs cancel" data-mode="new"><i class="fa fa-times"></i> Cancel</a>'
+                        ]);
+                        var nRow = oTable.fnGetNodes(aiNew[0]);
+                        editAddedRow(oTable, nRow);
+                        isEditing = nRow;
+                    });
+
+                    //Delete an Existing Row
+                    $('#editabledatatable').on("click", 'a.delete', function (e) {
+                        e.preventDefault();
+
+                        if (confirm("Are You Sure To Delete This Row?") == false) {
+                            return;
+                        }
+
+                        var nRow = $(this).parents('tr')[0];
+                        oTable.fnDeleteRow(nRow);
+                        alert("Row Has Been Deleted!");
+                    });
+
+                    //Cancel Editing or Adding a Row
+                    $('#editabledatatable').on("click", 'a.cancel', function (e) {
+                        e.preventDefault();
+                        if ($(this).attr("data-mode") == "new") {
+                            var nRow = $(this).parents('tr')[0];
+                            oTable.fnDeleteRow(nRow);
+                            isEditing = null;
+                        } else {
+                            restoreRow(oTable, isEditing);
+                            isEditing = null;
+                        }
+                    });
+
+                    //Edit A Row
+                    $('#editabledatatable').on("click", 'a.edit', function (e) {
+                        e.preventDefault();
+
+                        var nRow = $(this).parents('tr')[0];
+
+                        if (isEditing !== null && isEditing != nRow) {
+                            restoreRow(oTable, isEditing);
+                            editRow(oTable, nRow);
+                            isEditing = nRow;
+                        } else {
+                            editRow(oTable, nRow);
+                            isEditing = nRow;
+                        }
+                    });
+
+                    //Save an Editing Row
+                    $('#editabledatatable').on("click", 'a.save', function (e) {
+                        e.preventDefault();
+                        if (this.innerHTML.indexOf("Save") >= 0) {
+                            saveRow(oTable, isEditing);
+                            isEditing = null;
+                            //Some Code to Highlight Updated Row
+                        }
+                    });
+
+
+                    function restoreRow(oTable, nRow) {
+                        var aData = oTable.fnGetData(nRow);
+                        var jqTds = $('>td', nRow);
+
+                        for (var i = 0, iLen = jqTds.length; i < iLen; i++) {
+                            oTable.fnUpdate(aData[i], nRow, i, false);
+                        }
+
+                        oTable.fnDraw();
+                    }
+
+                    function editRow(oTable, nRow) {
+                        var aData = oTable.fnGetData(nRow);
+                        var jqTds = $('>td', nRow);
+                        jqTds[0].innerHTML = '<input type="text" class="form-control input-small" value="' + aData[0] + '">';
+                        jqTds[1].innerHTML = '<input type="text" class="form-control input-small" value="' + aData[1] + '">';
+                        jqTds[2].innerHTML = '<input type="text" class="form-control input-small" value="' + aData[2] + '">';
+                        jqTds[3].innerHTML = '<input type="text" class="form-control input-small" value="' + aData[3] + '">';
+                    }
+
+                    function editAddedRow(oTable, nRow) {
+                        var aData = oTable.fnGetData(nRow);
+                        var jqTds = $('>td', nRow);
+                        jqTds[0].innerHTML = '<input type="text" class="form-control input-small" value="' + aData[0] + '">';
+                        jqTds[1].innerHTML = '<input type="text" class="form-control input-small" value="' + aData[1] + '">';
+                        jqTds[2].innerHTML = '<input type="text" class="form-control input-small" value="' + aData[2] + '">';
+                        jqTds[3].innerHTML = '<input type="text" class="form-control input-small" value="' + aData[3] + '">';
+                    }
+
+                    function saveRow(oTable, nRow) {
+                        var jqInputs = $('input', nRow);
+                        oTable.fnUpdate(jqInputs[0].value, nRow, 0, false);
+                        oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);
+                        oTable.fnUpdate(jqInputs[2].value, nRow, 2, false);
+                        oTable.fnUpdate(jqInputs[3].value, nRow, 3, false);
+                        oTable.fnUpdate('<a href="#" class="btn btn-info btn-xs edit"><i class="fa fa-edit"></i> Edit</a> <a href="#" class="btn btn-danger btn-xs delete"><i class="fa fa-trash-o"></i> Delete</a>', nRow, 4, false);
+                        oTable.fnDraw();
+                    }
+
+                    function cancelEditRow(oTable, nRow) {
+                        var jqInputs = $('input', nRow);
+                        oTable.fnUpdate(jqInputs[0].value, nRow, 0, false);
+                        oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);
+                        oTable.fnUpdate(jqInputs[2].value, nRow, 2, false);
+                        oTable.fnUpdate(jqInputs[3].value, nRow, 3, false);
+                        oTable.fnUpdate('<a href="#" class="btn btn-info btn-xs edit"><i class="fa fa-edit"></i> Edit</a> <a href="#" class="btn btn-danger btn-xs delete"><i class="fa fa-trash-o"></i> Delete</a>', nRow, 4, false);
+                        oTable.fnDraw();
+                    }
+                }
+
+            };
+        }();
+        mInitiateEditableDataTable.init();
+    }
+
+    InitiateSimpleDataTable.init();
+    InitiateNonExpandableDataTable.init();
+
+    var mInitiateSearchableDataTable = function () {
+        return {
+            init: function () {
+                var oTable = $('#mSearchable').dataTable({
+                    "paging": false,
+                    "ordering": false,
+                    "sDom": "Tflt<'row DTTTFooter'<'col-sm-6'i><'col-sm-6'p>>",
+                    "aaSorting": [[1, 'asc']],
+                    "aLengthMenu": [
+                        [5, 15, 20, -1],
+                        [5, 15, 20, "All"]
+                    ],
+                    "iDisplayLength": 10,
+                    "oTableTools": {
+                        "aButtons": [
+                        ]
+                    },
+                    "language": {
+                        "search": "",
+                        "sLengthMenu": "_MENU_",
+                        "oPaginate": {
+                            "sPrevious": "Prev",
+                            "sNext": "Next"
+                        }
+                    }
+                });
+
+                $("tfoot input").keyup(function () {
+                    /* Filter on the column (the index) of this element */
+                    oTable.fnFilter(this.value, $("tfoot input").index(this));
+                });
+
+            }
+        };
+    }();
+    mInitiateSearchableDataTable.init();
+    $("#msearchable_length").remove();
+</script>
+<script src="~/assets/js/beyond.min.js"></script>
+<script src="~/assets/js/charts/flot/jquery.flot.js"></script>
+<script src="~/assets/js/charts/flot/jquery.flot.orderBars.js"></script>
+<script src="~/assets/js/charts/flot/jquery.flot.tooltip.js"></script>
+<script src="~/assets/js/charts/flot/jquery.flot.resize.js"></script>
+<script src="~/assets/js/charts/flot/jquery.flot.selection.js"></script>
+<script src="~/assets/js/charts/flot/jquery.flot.crosshair.js"></script>
+<script src="~/assets/js/charts/flot/jquery.flot.stack.js"></script>
+<script src="~/assets/js/charts/flot/jquery.flot.time.js"></script>
+<script src="~/assets/js/charts/flot/jquery.flot.pie.js"></script>
+<script src="~/assets/js/charts/flot/flot-init.js"></script>
+
+<script src="~/assets/js/fuelux/wizard/wizard-custom.js"></script>
+<script src="~/assets/js/toastr/toastr.js"></script>
+<script src="~/assets/js/bootbox/bootbox.js"></script>
+
+<script>
+    document.getElementById("mToolTables_editabledatatable_1").style.display = "none";
+    document.getElementById("mToolTables_editabledatatable_2").style.display = "none";
+</script>
+
+<script>
+    function ShowWaiting() {
+        CloseTab();
+        document.getElementById('divLoading').style.display = "block";
+    }
+
+    function CloseWaiting() {
+        ShowTab();
+        document.getElementById('divLoading').style.display = "none";
+    }
+
+    function ShowSnoozeWindow()
+    {
+        SnoozeMsgWindow.style.display = "block";
+        CloseTab();
+    }
+
+    function CloseSnoozeWindow() {
+        SnoozeMsgWindow.style.display = "none";
+        ShowTab();
+    }
+</script>
+<script>
+    var RowId = "";
+    function OnClickSnooze(element) {
+        RowId = element.name;
+        ShowSnoozeWindow();
+    }
+
+    function OnClickDeactive(element) {
+        var ID = "";
+        if (element.name.includes("btnDeactiveName")) {
+            ID = element.name.replace("btnDeactiveName", "");
+        }
+        else {
+            ID = element.name.replace("btnSnoozeName", "");
+        }
+        $.post("/Notification/Deactive",
+        {
+            ID: ID
+        },
+        function (data) {
+            alert('@Localization.getString("NotificationDeactived")');
+            location.reload();
+        });
+    }
+</script>
+<script>
+    var modal = document.getElementById('myModal');
+    var SnoozeMsgWindow = document.getElementById('SnoozeMsgWindow');
+    var btn = document.getElementById("myBtn");
+    var span = document.getElementById("spanClose");
+
+    span.onclick = function () {
+        modal.style.display = "none";
+        SnoozeMsgWindow.style.display = "none";
+        document.getElementById("myTab11").style.display = "block";
+        document.getElementById('tabledon').style.display = "block";
+    }
+
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            SnoozeMsgWindow.style.display = "none";
+            document.getElementById("myTab11").style.display = "block";
+            document.getElementById('tabledon').style.display = "block";
+        }
+    }
+
+    function OnClickInfo(element)
+    {
+        ShowWaiting();
+        $.post("/Notification/LoadDetail",
+        {
+            ID: element.name.replace("btnInfoName", ""),
+        },
+        function (data) {
+            CloseWaiting();
+            if (data == 'NaN')
+            {
+                alert('@Localization.getString("ThereIsNotMsg")');
+            }
+            else
+            {
+                CloseTab();
+                var obj = JSON.parse(data);
+                var nRow = 0;
+                for (var i = 0; i < obj.length; i++)
+                {
+                    var addData = [];
+                    addData.push(obj[i].ID);
+                    addData.push(obj[i].Comment);
+                    addData.push(obj[i].SnoozeMsg);
+                    addData.push(obj[i].Username);
+                    addData.push(obj[i].Date);
+                    oTable.fnAddData(addData);
+                }
+
+                modal.style.display = "block";
+                document.getElementById('tabledon').style.display = "none";
+            }
+
+        });
+    }
+</script>
+<script>
+    function onCLickSaveSnoozeMessage()
+    {
+        CloseSnoozeWindow();
+        var txtSnoozeMessage = document.getElementById('txtSnoozeMessage');
+        if (txtSnoozeMessage.value == '')
+        {
+            alert("لطفا فیلد را خالی نگذارید");
+        }
+        else
+        {
+            ShowWaiting();
+            $.post("/Notification/SaveSnooze",
+            {
+                ID: RowId.replace("btnSnoozeName", ""),
+                Msg: txtSnoozeMessage.value,
+                User: document.getElementById('SmartCattleUserName').innerHTML.replace("</span>", "").replace("<span>", "")
+            },
+            function (data) {
+                CloseWaiting();
+                if (data == 'NaN')
+                {
+                    alert('@Localization.getString("LoginPlease")');
+                    window.location.href = "/" + '@Thread.CurrentThread.CurrentCulture.Name' + "/Account/Login";
+                }
+                else
+                {
+                    alert('@Localization.getString("Snoozed")');
+                    location.reload();
+                }
+            });
+        }
+    }
+
+    function onCLickCancelSnoozeMessage() {
+        SnoozeMsgWindow.style.display = "none";
+        ShowTab();
+    }
+
+    function ShowTab()
+    {
+        document.getElementById("myTab11").style.display = "block";
+    }
+
+    function CloseTab()
+    {
+        document.getElementById("myTab11").style.display = "none";
+    }
+</script>
+

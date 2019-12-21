@@ -1,0 +1,1365 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="lang" xml:space="preserve">
+    <value>en-US</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>Profile</value>
+  </data>
+  <data name="Setting" xml:space="preserve">
+    <value>Setting</value>
+  </data>
+  <data name="Sign_out" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
+  <data name="change_photo" xml:space="preserve">
+    <value>change photo</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Eating" xml:space="preserve">
+    <value>Eating</value>
+  </data>
+  <data name="Free_stall" xml:space="preserve">
+    <value>Barn</value>
+  </data>
+  <data name="High_Active" xml:space="preserve">
+    <value>High Active</value>
+  </data>
+  <data name="Not_Active" xml:space="preserve">
+    <value>Not Active</value>
+  </data>
+  <data name="Percent" xml:space="preserve">
+    <value>Percent</value>
+  </data>
+  <data name="Rumination" xml:space="preserve">
+    <value>Ruminate</value>
+  </data>
+  <data name="Total_Daily_activity" xml:space="preserve">
+    <value>Total Daily Activity</value>
+  </data>
+  <data name="Aborted" xml:space="preserve">
+    <value>Aborted</value>
+  </data>
+  <data name="Cattle_Group" xml:space="preserve">
+    <value>Cattle Group</value>
+  </data>
+  <data name="Cattle_Number" xml:space="preserve">
+    <value>Cattle nr</value>
+  </data>
+  <data name="Day_Scine_Last_Breeding" xml:space="preserve">
+    <value>Day Scine Last Breeding</value>
+  </data>
+  <data name="DIM" xml:space="preserve">
+    <value>DIM</value>
+  </data>
+  <data name="Eating_Time_Minute" xml:space="preserve">
+    <value>Eating Time Minute</value>
+  </data>
+  <data name="Fertility_Status" xml:space="preserve">
+    <value>Fertility Status</value>
+  </data>
+  <data name="Fresh" xml:space="preserve">
+    <value>Fresh</value>
+  </data>
+  <data name="Health_Status_Hour" xml:space="preserve">
+    <value>In Health Status(Hour)</value>
+  </data>
+  <data name="In_heat" xml:space="preserve">
+    <value>In heat</value>
+  </data>
+  <data name="In_Heat_Status_Hour" xml:space="preserve">
+    <value>In Heat Status(Hour)</value>
+  </data>
+  <data name="Lactation_Number" xml:space="preserve">
+    <value>Lactation nr</value>
+  </data>
+  <data name="No_movement" xml:space="preserve">
+    <value>No movement</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Potential" xml:space="preserve">
+    <value>Potential</value>
+  </data>
+  <data name="Pregnant" xml:space="preserve">
+    <value>Pregnant</value>
+  </data>
+  <data name="Rumination_Time_Minute" xml:space="preserve">
+    <value>Rumination Time Minute</value>
+  </data>
+  <data name="Sick" xml:space="preserve">
+    <value>Sick</value>
+  </data>
+  <data name="Suspicious" xml:space="preserve">
+    <value>Suspicious</value>
+  </data>
+  <data name="Very_sick" xml:space="preserve">
+    <value>Very sick</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="Create_Role" xml:space="preserve">
+    <value>Create Role</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Done" xml:space="preserve">
+    <value>Done</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="RoleName" xml:space="preserve">
+    <value>Role Name</value>
+  </data>
+  <data name="Role_Add_Failed" xml:space="preserve">
+    <value>Role Add Failed</value>
+  </data>
+  <data name="Role_Add_Successfully" xml:space="preserve">
+    <value>Role Added Successfully</value>
+  </data>
+  <data name="Add_Role" xml:space="preserve">
+    <value>Add Role</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="New_Role" xml:space="preserve">
+    <value>New Role</value>
+  </data>
+  <data name="Role_Description" xml:space="preserve">
+    <value>Role Description</value>
+  </data>
+  <data name="Role_List" xml:space="preserve">
+    <value>Role List</value>
+  </data>
+  <data name="Role_Name" xml:space="preserve">
+    <value>Role Name</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Group_Description" xml:space="preserve">
+    <value>Group Description</value>
+  </data>
+  <data name="Group_Name" xml:space="preserve">
+    <value>Group Name</value>
+  </data>
+  <data name="Cow_group_Distribution" xml:space="preserve">
+    <value>Cow group Distribution</value>
+  </data>
+  <data name="feeding" xml:space="preserve">
+    <value>feeding</value>
+  </data>
+  <data name="lying" xml:space="preserve">
+    <value>lying</value>
+  </data>
+  <data name="milking" xml:space="preserve">
+    <value>milking</value>
+  </data>
+  <data name="standing" xml:space="preserve">
+    <value>Stand</value>
+  </data>
+  <data name="walking" xml:space="preserve">
+    <value>Walk</value>
+  </data>
+  <data name="watering" xml:space="preserve">
+    <value>Drink</value>
+  </data>
+  <data name="Monthly_Average_Lactation_FreeStall" xml:space="preserve">
+    <value>Monthly Average Lactation free stall</value>
+  </data>
+  <data name="Cow_location_in_zone" xml:space="preserve">
+    <value>Cow location in zone</value>
+  </data>
+  <data name="of_free_tall" xml:space="preserve">
+    <value>of free tall</value>
+  </data>
+  <data name="Herds_List" xml:space="preserve">
+    <value>Herds List</value>
+  </data>
+  <data name="Herds_Management" xml:space="preserve">
+    <value>Herds Management</value>
+  </data>
+  <data name="Herd_Description" xml:space="preserve">
+    <value>Herd Description</value>
+  </data>
+  <data name="Herd_Name" xml:space="preserve">
+    <value>Herd Name</value>
+  </data>
+  <data name="New_Herd" xml:space="preserve">
+    <value>New Herd</value>
+  </data>
+  <data name="NEW_ALERTS" xml:space="preserve">
+    <value>NEW ALERTS</value>
+  </data>
+  <data name="NEW_MESSAGE" xml:space="preserve">
+    <value>NEW MESSAGE</value>
+  </data>
+  <data name="NEW_TASKS" xml:space="preserve">
+    <value>NEW TASKS</value>
+  </data>
+  <data name="FreeStall_Description" xml:space="preserve">
+    <value>Barn Description</value>
+  </data>
+  <data name="FreeStall_List" xml:space="preserve">
+    <value>Barn List</value>
+  </data>
+  <data name="FreeStall_Management" xml:space="preserve">
+    <value>Barn Management</value>
+  </data>
+  <data name="FreeStall_Name" xml:space="preserve">
+    <value>Barn Name</value>
+  </data>
+  <data name="New_FreeStall" xml:space="preserve">
+    <value>New FreeStall</value>
+  </data>
+  <data name="New_Sensor" xml:space="preserve">
+    <value>New Sensor</value>
+  </data>
+  <data name="Sensor_Code" xml:space="preserve">
+    <value>Sensor Code</value>
+  </data>
+  <data name="Sensor_List" xml:space="preserve">
+    <value>Sensor List</value>
+  </data>
+  <data name="Sensor_Management" xml:space="preserve">
+    <value>Sensor Management</value>
+  </data>
+  <data name="Software_Version" xml:space="preserve">
+    <value>Software Version</value>
+  </data>
+  <data name="Invalid_Farm" xml:space="preserve">
+    <value>Invalid Farm</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Equal" xml:space="preserve">
+    <value>Equal</value>
+  </data>
+  <data name="GreateThan" xml:space="preserve">
+    <value>Greate than</value>
+  </data>
+  <data name="GreateThanOrEqualTo" xml:space="preserve">
+    <value>Greate than or equal to</value>
+  </data>
+  <data name="InHeat" xml:space="preserve">
+    <value>In Heat</value>
+  </data>
+  <data name="IsNull" xml:space="preserve">
+    <value>Is null</value>
+  </data>
+  <data name="LessThan" xml:space="preserve">
+    <value>Less than</value>
+  </data>
+  <data name="LessThanOrEqualTo" xml:space="preserve">
+    <value>Less than or equal to</value>
+  </data>
+  <data name="NoMovement" xml:space="preserve">
+    <value>No Movement</value>
+  </data>
+  <data name="NotEqual" xml:space="preserve">
+    <value>Not Equal</value>
+  </data>
+  <data name="NotIsNull" xml:space="preserve">
+    <value>Not is null</value>
+  </data>
+  <data name="VerySick" xml:space="preserve">
+    <value>Very Sick</value>
+  </data>
+  <data name="Cattles_List" xml:space="preserve">
+    <value>Cattles List</value>
+  </data>
+  <data name="Cattle_Detail" xml:space="preserve">
+    <value>Cattle Detail</value>
+  </data>
+  <data name="Activity" xml:space="preserve">
+    <value>Activity</value>
+  </data>
+  <data name="Cattle_info" xml:space="preserve">
+    <value>Cattle info</value>
+  </data>
+  <data name="Events" xml:space="preserve">
+    <value>Events</value>
+  </data>
+  <data name="Tempreture" xml:space="preserve">
+    <value>Tempreture</value>
+  </data>
+  <data name="Add_Group_Time_Budget" xml:space="preserve">
+    <value>Add Group Time Budget</value>
+  </data>
+  <data name="Group_Time_Budget_List" xml:space="preserve">
+    <value>Group Time Budget List</value>
+  </data>
+  <data name="Add_Group_Time_Budget_Item" xml:space="preserve">
+    <value>Add Group Time Budget Item</value>
+  </data>
+  <data name="Group_Time_Budget_Item_List" xml:space="preserve">
+    <value>Group Time Budget Item List</value>
+  </data>
+  <data name="Add_Gourp_TimeBudget" xml:space="preserve">
+    <value>Add CattleGroup Gourp TimeBudget</value>
+  </data>
+  <data name="TimeBudget" xml:space="preserve">
+    <value>TimeBudget</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="In_Heat_Status" xml:space="preserve">
+    <value>Heat Status</value>
+  </data>
+  <data name="Health_Status" xml:space="preserve">
+    <value>Health Status</value>
+  </data>
+  <data name="Male" xml:space="preserve">
+    <value>Male</value>
+  </data>
+  <data name="Female" xml:space="preserve">
+    <value>Female</value>
+  </data>
+  <data name="Animal_Number" xml:space="preserve">
+    <value>Animal Number</value>
+  </data>
+  <data name="Register_Number" xml:space="preserve">
+    <value>Register Number</value>
+  </data>
+  <data name="Birth_Date" xml:space="preserve">
+    <value>Birth Date</value>
+  </data>
+  <data name="LastCalving" xml:space="preserve">
+    <value>Last Calving Date</value>
+  </data>
+  <data name="Lactation_Numbere" xml:space="preserve">
+    <value>Lactation Number</value>
+  </data>
+  <data name="Heat_Status" xml:space="preserve">
+    <value>Heat Status</value>
+  </data>
+  <data name="Detail_Info" xml:space="preserve">
+    <value>Detail Info</value>
+  </data>
+  <data name="Primary_Info" xml:space="preserve">
+    <value>Primary Info</value>
+  </data>
+  <data name="Cattle_Insert_Form" xml:space="preserve">
+    <value>Cattle Registration Form</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="Calving" xml:space="preserve">
+    <value>Calving</value>
+  </data>
+  <data name="Heat" xml:space="preserve">
+    <value>Heat</value>
+  </data>
+  <data name="Hormone_Treatment" xml:space="preserve">
+    <value>Hormone Treatment</value>
+  </data>
+  <data name="Insemination" xml:space="preserve">
+    <value>Insemination</value>
+  </data>
+  <data name="Pregnancy_Check" xml:space="preserve">
+    <value>Pregnancy Check</value>
+  </data>
+  <data name="SensorId" xml:space="preserve">
+    <value>SensorId</value>
+  </data>
+  <data name="SCC" xml:space="preserve">
+    <value>SCC</value>
+  </data>
+  <data name="Current_Fat" xml:space="preserve">
+    <value>Current Fat</value>
+  </data>
+  <data name="Current_Protein" xml:space="preserve">
+    <value>Current Protein</value>
+  </data>
+  <data name="Current_Fat_Protein_Index" xml:space="preserve">
+    <value>Current Fat Protein Index</value>
+  </data>
+  <data name="Age" xml:space="preserve">
+    <value>Age</value>
+  </data>
+  <data name="Previous_Fat" xml:space="preserve">
+    <value>Previous Fat</value>
+  </data>
+  <data name="Previous_Protein" xml:space="preserve">
+    <value>Previous Protein</value>
+  </data>
+  <data name="Previous_Fat_Protein_Index" xml:space="preserve">
+    <value>Previous Fat Protein Index</value>
+  </data>
+  <data name="Linked" xml:space="preserve">
+    <value>Linked</value>
+  </data>
+  <data name="Is_Young_Stock" xml:space="preserve">
+    <value>Is Young Stock</value>
+  </data>
+  <data name="Is_Dry" xml:space="preserve">
+    <value>Is Dry</value>
+  </data>
+  <data name="Dry_Off" xml:space="preserve">
+    <value>Dry Off</value>
+  </data>
+  <data name="ET_Flushed" xml:space="preserve">
+    <value>ET Flushed</value>
+  </data>
+  <data name="Group" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="Event_Info" xml:space="preserve">
+    <value>Event Info</value>
+  </data>
+  <data name="Event" xml:space="preserve">
+    <value>Event</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="DayAgo" xml:space="preserve">
+    <value>Day Ago</value>
+  </data>
+  <data name="Drinking_Cattle" xml:space="preserve">
+    <value>Drinking</value>
+  </data>
+  <data name="Eating_Cattle" xml:space="preserve">
+    <value>Eating</value>
+  </data>
+  <data name="Idle_Cattle" xml:space="preserve">
+    <value>Idle</value>
+  </data>
+  <data name="Lie_Down_Cattle" xml:space="preserve">
+    <value>Lie Down</value>
+  </data>
+  <data name="Milking_Cattle" xml:space="preserve">
+    <value>Milking</value>
+  </data>
+  <data name="Quid_Cattle" xml:space="preserve">
+    <value>Quid</value>
+  </data>
+  <data name="Body_Score" xml:space="preserve">
+    <value>Body Score</value>
+  </data>
+  <data name="Calving_Event" xml:space="preserve">
+    <value>Calving Event</value>
+  </data>
+  <data name="Cattle_Event" xml:space="preserve">
+    <value>Cattle Event</value>
+  </data>
+  <data name="Cattle_Scores" xml:space="preserve">
+    <value>Cattle Scores</value>
+  </data>
+  <data name="Cattle_Score_List" xml:space="preserve">
+    <value>Cattle Score List</value>
+  </data>
+  <data name="Clearity_Score" xml:space="preserve">
+    <value>Clearity Score</value>
+  </data>
+  <data name="DoNotBreed_Event" xml:space="preserve">
+    <value>DoNotBreed Event</value>
+  </data>
+  <data name="DryOff_Event" xml:space="preserve">
+    <value>DryOff Event</value>
+  </data>
+  <data name="ETFlushed_Event" xml:space="preserve">
+    <value>ETFlushed Event</value>
+  </data>
+  <data name="Heat_Event" xml:space="preserve">
+    <value>Heat Event</value>
+  </data>
+  <data name="Hocks_Score" xml:space="preserve">
+    <value>Hocks Score</value>
+  </data>
+  <data name="HormoneTreatment_Event" xml:space="preserve">
+    <value>HormoneTreatment Event</value>
+  </data>
+  <data name="Insemination_Event" xml:space="preserve">
+    <value>Insemination Event</value>
+  </data>
+  <data name="Lameness_Score" xml:space="preserve">
+    <value>Lameness Score</value>
+  </data>
+  <data name="Manure_Score" xml:space="preserve">
+    <value>Manure Score</value>
+  </data>
+  <data name="Open_Event" xml:space="preserve">
+    <value>Open Event</value>
+  </data>
+  <data name="Rumen_Score" xml:space="preserve">
+    <value>Rumen Score</value>
+  </data>
+  <data name="Teat_Score" xml:space="preserve">
+    <value>Teat Score</value>
+  </data>
+  <data name="Cattle_Event_List" xml:space="preserve">
+    <value>Cattle Event List</value>
+  </data>
+  <data name="Fertility_Age" xml:space="preserve">
+    <value>Fertility Age</value>
+  </data>
+  <data name="Position" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="Show_Activity" xml:space="preserve">
+    <value>Show Activity</value>
+  </data>
+  <data name="Step_Hour" xml:space="preserve">
+    <value>HH</value>
+  </data>
+  <data name="Show_Temp" xml:space="preserve">
+    <value>Show Temp</value>
+  </data>
+  <data name="Step_Minute" xml:space="preserve">
+    <value>mm</value>
+  </data>
+  <data name="Step_Second" xml:space="preserve">
+    <value>Sec</value>
+  </data>
+  <data name="ActionName" xml:space="preserve">
+    <value>Action Name</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="ControlerName" xml:space="preserve">
+    <value>Controler Name</value>
+  </data>
+  <data name="DefinedRoleList" xml:space="preserve">
+    <value>Defined Role List</value>
+  </data>
+  <data name="define_new_role" xml:space="preserve">
+    <value>Create New Role</value>
+  </data>
+  <data name="define_permission_level" xml:space="preserve">
+    <value>Permissions</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="Permission" xml:space="preserve">
+    <value>Permission</value>
+  </data>
+  <data name="RoleComment" xml:space="preserve">
+    <value>Role Comment</value>
+  </data>
+  <data name="RoleMessage" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="role_detail" xml:space="preserve">
+    <value>Role Details</value>
+  </data>
+  <data name="Cattle_Temp" xml:space="preserve">
+    <value>Body Temp</value>
+  </data>
+  <data name="Deactive" xml:space="preserve">
+    <value>Deactive</value>
+  </data>
+  <data name="Defined_Cattle_Notification_List" xml:space="preserve">
+    <value>Cattle Defined Notifications List</value>
+  </data>
+  <data name="Defined_FreeStall_Notification_List" xml:space="preserve">
+    <value>Barn Defined Notification List</value>
+  </data>
+  <data name="EnvTemp" xml:space="preserve">
+    <value>Environment Temperature</value>
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value>Per</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value>Roles</value>
+  </data>
+  <data name="Snooze_Time" xml:space="preserve">
+    <value>Snooze Time</value>
+  </data>
+  <data name="Topic" xml:space="preserve">
+    <value>Topic</value>
+  </data>
+  <data name="Window" xml:space="preserve">
+    <value>Win</value>
+  </data>
+  <data name="Accounts" xml:space="preserve">
+    <value>Accounts</value>
+  </data>
+  <data name="Cattle_Position" xml:space="preserve">
+    <value>Cattle Position</value>
+  </data>
+  <data name="Cattle_position_Msg" xml:space="preserve">
+    <value>cattle position data are loading. Please wait...</value>
+  </data>
+  <data name="Create_And_Edit_Roles" xml:space="preserve">
+    <value>Create And Edit Roles</value>
+  </data>
+  <data name="Create_New_Account" xml:space="preserve">
+    <value>Create New Account</value>
+  </data>
+  <data name="Create_New_Notification" xml:space="preserve">
+    <value>Create New Notification</value>
+  </data>
+  <data name="define_new_account" xml:space="preserve">
+    <value>Create New Account</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Empty_Field" xml:space="preserve">
+    <value>Please fill bank fields.</value>
+  </data>
+  <data name="Family" xml:space="preserve">
+    <value>Family</value>
+  </data>
+  <data name="FreeStall_Map" xml:space="preserve">
+    <value>Barn Map</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>From</value>
+  </data>
+  <data name="Humidity" xml:space="preserve">
+    <value>Humidity</value>
+  </data>
+  <data name="MisMatchPassword" xml:space="preserve">
+    <value>A password mismatch has been detected</value>
+  </data>
+  <data name="Name_Family" xml:space="preserve">
+    <value>Name and Family</value>
+  </data>
+  <data name="Notification" xml:space="preserve">
+    <value>Notification</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="RePassword" xml:space="preserve">
+    <value>Re-Password</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>Show</value>
+  </data>
+  <data name="Sitting" xml:space="preserve">
+    <value>Sitting</value>
+  </data>
+  <data name="Temperature" xml:space="preserve">
+    <value>Temperature</value>
+  </data>
+  <data name="THI" xml:space="preserve">
+    <value>THI</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>To</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="CreateDate" xml:space="preserve">
+    <value>Create Date</value>
+  </data>
+  <data name="NotificationSnoozed" xml:space="preserve">
+    <value>Notification Snoozed</value>
+  </data>
+  <data name="SnoozeMsg" xml:space="preserve">
+    <value>Snooze Message</value>
+  </data>
+  <data name="ThereIsNotMsg" xml:space="preserve">
+    <value>There is not any message</value>
+  </data>
+  <data name="Cattle_Activity" xml:space="preserve">
+    <value>Cattle Activity</value>
+  </data>
+  <data name="Cattle_Activity_Loading" xml:space="preserve">
+    <value>Cattle activity data are loading. Please wait...</value>
+  </data>
+  <data name="Cattle_Body_Temp" xml:space="preserve">
+    <value>Cattle Body Temperature</value>
+  </data>
+  <data name="Cattle_Body_Temp_Loading" xml:space="preserve">
+    <value>Cattle body temperature data are loading. Please wait...</value>
+  </data>
+  <data name="Cattle_Position_Loading" xml:space="preserve">
+    <value>Cattle position data are loading. Please wait...</value>
+  </data>
+  <data name="Every_12H" xml:space="preserve">
+    <value>Every 12H</value>
+  </data>
+  <data name="Every_1Day" xml:space="preserve">
+    <value>Every 1Day</value>
+  </data>
+  <data name="Every_1H" xml:space="preserve">
+    <value>Every 1H</value>
+  </data>
+  <data name="Every_2H" xml:space="preserve">
+    <value>Every 2H</value>
+  </data>
+  <data name="Every_6H" xml:space="preserve">
+    <value>Every 6H</value>
+  </data>
+  <data name="Freestall_Loading" xml:space="preserve">
+    <value>Barn data are loading...</value>
+  </data>
+  <data name="There_Is_Not_Data" xml:space="preserve">
+    <value>There is not any data</value>
+  </data>
+  <data name="Save_New_Name" xml:space="preserve">
+    <value>New name is saving, please wait...</value>
+  </data>
+  <data name="New_Name" xml:space="preserve">
+    <value>New Name</value>
+  </data>
+  <data name="Define_Freestall_Notification" xml:space="preserve">
+    <value>Define Freestall Notification</value>
+  </data>
+  <data name="Define_Parameters" xml:space="preserve">
+    <value>Define Parameters</value>
+  </data>
+  <data name="Defining_Cattle_Notification" xml:space="preserve">
+    <value>Defining Cattle Notification</value>
+  </data>
+  <data name="Freestall_Defined_Notifications_List" xml:space="preserve">
+    <value>Barn Defined Notifications List</value>
+  </data>
+  <data name="Save_Notification_Settings" xml:space="preserve">
+    <value>Save Notification Settings</value>
+  </data>
+  <data name="Are_You_Sure_Delete" xml:space="preserve">
+    <value>Are you sure you want to permanently delete this object?</value>
+  </data>
+  <data name="Notification_Setting_Removed" xml:space="preserve">
+    <value>Notification setting removed successfully.</value>
+  </data>
+  <data name="Notification_Active" xml:space="preserve">
+    <value>Notification Active</value>
+  </data>
+  <data name="Notification_Dective" xml:space="preserve">
+    <value>Notification Dective</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Loading</value>
+  </data>
+  <data name="Please_Wait" xml:space="preserve">
+    <value>Please Wait...</value>
+  </data>
+  <data name="Maximum" xml:space="preserve">
+    <value>Maximum</value>
+  </data>
+  <data name="Minimum" xml:space="preserve">
+    <value>Minimum</value>
+  </data>
+  <data name="Snooze" xml:space="preserve">
+    <value>Snooze</value>
+  </data>
+  <data name="Edit_Cattle_Notification" xml:space="preserve">
+    <value>Edit Cattle Notification</value>
+  </data>
+  <data name="Edit_Freestall_Notification" xml:space="preserve">
+    <value>Edit Freestall Notification</value>
+  </data>
+  <data name="Saved_Successfully" xml:space="preserve">
+    <value>Thank You! All of your information saved successfully.</value>
+  </data>
+  <data name="NotificationDeactived" xml:space="preserve">
+    <value>Notification Deactived</value>
+  </data>
+  <data name="Snoozed" xml:space="preserve">
+    <value>Notification Snoozed</value>
+  </data>
+  <data name="SnoozeResean" xml:space="preserve">
+    <value>Write your story and be happy.</value>
+  </data>
+  <data name="Num" xml:space="preserve">
+    <value>Num</value>
+  </data>
+  <data name="LoginPlease" xml:space="preserve">
+    <value>You need to login to view this content.</value>
+  </data>
+  <data name="CattleNotification" xml:space="preserve">
+    <value>Cattle Notificationes</value>
+  </data>
+  <data name="Ack" xml:space="preserve">
+    <value>Acknowledge</value>
+  </data>
+  <data name="ActAt" xml:space="preserve">
+    <value>Acknowledge At</value>
+  </data>
+  <data name="ActUser" xml:space="preserve">
+    <value>by User</value>
+  </data>
+  <data name="DeactiveAt" xml:space="preserve">
+    <value>Deactive At</value>
+  </data>
+  <data name="EventDate" xml:space="preserve">
+    <value>Event Date</value>
+  </data>
+  <data name="ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="SelectItem" xml:space="preserve">
+    <value>Select every button you want.</value>
+  </data>
+  <data name="CattleFreestallID" xml:space="preserve">
+    <value>Cattle\Freestall ID</value>
+  </data>
+  <data name="ActComment" xml:space="preserve">
+    <value>Act Comment</value>
+  </data>
+  <data name="ActTime" xml:space="preserve">
+    <value>Act Time</value>
+  </data>
+  <data name="AlarmDescription" xml:space="preserve">
+    <value>AlarmDescription</value>
+  </data>
+  <data name="AlarmID" xml:space="preserve">
+    <value>Alarm ID</value>
+  </data>
+  <data name="AlarmNote" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="AlarmState" xml:space="preserve">
+    <value>Alarm State</value>
+  </data>
+  <data name="AlarmSubject" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="AlarmType" xml:space="preserve">
+    <value>Alarm Type</value>
+  </data>
+  <data name="AlarmUser" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="DeactivationTime" xml:space="preserve">
+    <value>Deactivation Time</value>
+  </data>
+  <data name="TimeIssued" xml:space="preserve">
+    <value>Time Issued</value>
+  </data>
+  <data name="Row" xml:space="preserve">
+    <value>Row</value>
+  </data>
+  <data name="Deactive_Successfully" xml:space="preserve">
+    <value>Alarm deactive successfully</value>
+  </data>
+  <data name="Active_Again" xml:space="preserve">
+    <value>Active Again</value>
+  </data>
+  <data name="Active_Successfully" xml:space="preserve">
+    <value>Alarm active successfully</value>
+  </data>
+  <data name="This_msg_created_by_system_alarm_active_again" xml:space="preserve">
+    <value>This message automatically created by system. Alarm active again by user</value>
+  </data>
+  <data name="This_msg_created_by_system_deactive" xml:space="preserve">
+    <value>This message automatically created by system. Alarm deactive by user.</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>History</value>
+  </data>
+  <data name="FIRST" xml:space="preserve">
+    <value>First</value>
+  </data>
+  <data name="LAST" xml:space="preserve">
+    <value>Last</value>
+  </data>
+  <data name="WitoutFilter" xml:space="preserve">
+    <value>Witout Filter</value>
+  </data>
+  <data name="Basic_Cattle_Info" xml:space="preserve">
+    <value>Basic Cattle Info</value>
+  </data>
+  <data name="Cattle_ID" xml:space="preserve">
+    <value>Cattle ID</value>
+  </data>
+  <data name="Cattle_Identity" xml:space="preserve">
+    <value>Primary Info</value>
+  </data>
+  <data name="date_of_birth" xml:space="preserve">
+    <value>DoB</value>
+  </data>
+  <data name="Days_In_Milk" xml:space="preserve">
+    <value>Days In Milk</value>
+  </data>
+  <data name="Days_Open" xml:space="preserve">
+    <value>Days Open</value>
+  </data>
+  <data name="FertilityStatus" xml:space="preserve">
+    <value>Fertility Status</value>
+  </data>
+  <data name="FreeStall" xml:space="preserve">
+    <value>Barn</value>
+  </data>
+  <data name="Genetics_type_num" xml:space="preserve">
+    <value>Genetics: Sperm Type and Number</value>
+  </data>
+  <data name="HealthState" xml:space="preserve">
+    <value>Health Status</value>
+  </data>
+  <data name="HeatStatus" xml:space="preserve">
+    <value>Heat Status</value>
+  </data>
+  <data name="Lacation_Number" xml:space="preserve">
+    <value>Lactation Number</value>
+  </data>
+  <data name="Last_Calving_Date" xml:space="preserve">
+    <value>Last Calving Date</value>
+  </data>
+  <data name="MotherID" xml:space="preserve">
+    <value>Mother ID</value>
+  </data>
+  <data name="Sensor_ID" xml:space="preserve">
+    <value>Sensor ID</value>
+  </data>
+  <data name="Sex" xml:space="preserve">
+    <value>Sex</value>
+  </data>
+  <data name="Body_Condition_Score" xml:space="preserve">
+    <value>Body Conditioning Score</value>
+  </data>
+  <data name="Cattle_Score" xml:space="preserve">
+    <value>Cattle Score</value>
+  </data>
+  <data name="Cattle_Status" xml:space="preserve">
+    <value>Cattle Status</value>
+  </data>
+  <data name="Cleanliness" xml:space="preserve">
+    <value>Cleanliness</value>
+  </data>
+  <data name="Hock" xml:space="preserve">
+    <value>Hock</value>
+  </data>
+  <data name="Manure" xml:space="preserve">
+    <value>Manure</value>
+  </data>
+  <data name="Milk_Production" xml:space="preserve">
+    <value>Milk Production</value>
+  </data>
+  <data name="Mobility" xml:space="preserve">
+    <value>Mobility</value>
+  </data>
+  <data name="Rumen" xml:space="preserve">
+    <value>Rumen</value>
+  </data>
+  <data name="Teat" xml:space="preserve">
+    <value>Teat</value>
+  </data>
+  <data name="Abortion" xml:space="preserve">
+    <value>Abortion</value>
+  </data>
+  <data name="Diagnosis" xml:space="preserve">
+    <value>Diagnosis</value>
+  </data>
+  <data name="Examination" xml:space="preserve">
+    <value>Examination</value>
+  </data>
+  <data name="Health" xml:space="preserve">
+    <value>Health</value>
+  </data>
+  <data name="Normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="Pregnancy" xml:space="preserve">
+    <value>Pregnancy</value>
+  </data>
+  <data name="Treatment" xml:space="preserve">
+    <value>Treatment</value>
+  </data>
+  <data name="Vet" xml:space="preserve">
+    <value>Vet</value>
+  </data>
+  <data name="Please_Fill_Blank" xml:space="preserve">
+    <value>Please Fill Blank</value>
+  </data>
+  <data name="Number_Value" xml:space="preserve">
+    <value>Number Value</value>
+  </data>
+  <data name="CattleScore" xml:space="preserve">
+    <value>Scores</value>
+  </data>
+  <data name="Descrition" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Item" xml:space="preserve">
+    <value>Item</value>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="UpdateDate" xml:space="preserve">
+    <value>Update Date</value>
+  </data>
+  <data name="Scores" xml:space="preserve">
+    <value>Scores</value>
+  </data>
+  <data name="Remove_Successfully" xml:space="preserve">
+    <value>Remove Successfully</value>
+  </data>
+  <data name="Assign_Freestall" xml:space="preserve">
+    <value>Move to Barn</value>
+  </data>
+  <data name="Assign_Group" xml:space="preserve">
+    <value>Assign Group</value>
+  </data>
+  <data name="Assign_Herd" xml:space="preserve">
+    <value>Assign Herd</value>
+  </data>
+  <data name="Herd" xml:space="preserve">
+    <value>Herd</value>
+  </data>
+  <data name="FreeStall_Subcategory" xml:space="preserve">
+    <value>Move to Barn</value>
+  </data>
+  <data name="Group_Subcategory" xml:space="preserve">
+    <value>Assign Group</value>
+  </data>
+  <data name="Herd_Subcategory" xml:space="preserve">
+    <value>Assign Herd</value>
+  </data>
+  <data name="Delete_Edit" xml:space="preserve">
+    <value>Remove\Edit</value>
+  </data>
+  <data name="SIMILAR_Cattle_Error" xml:space="preserve">
+    <value>Please choose another Animal Number. Current Animal Number Exists.</value>
+  </data>
+  <data name="Add_or_Edit_Farm" xml:space="preserve">
+    <value>Add or Edit Farm</value>
+  </data>
+  <data name="Farm" xml:space="preserve">
+    <value>Farm</value>
+  </data>
+  <data name="Select_Farm" xml:space="preserve">
+    <value>Select Farm</value>
+  </data>
+  <data name="define_new_farm" xml:space="preserve">
+    <value>Define New Farm</value>
+  </data>
+  <data name="Assress" xml:space="preserve">
+    <value>Assress</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="CityName" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="DefinedFarm" xml:space="preserve">
+    <value>Defined Farm</value>
+  </data>
+  <data name="FarmName" xml:space="preserve">
+    <value>Farm Name</value>
+  </data>
+  <data name="FarmNo" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="FarmRole" xml:space="preserve">
+    <value>Farm Type</value>
+  </data>
+  <data name="FarmUserId" xml:space="preserve">
+    <value>Farm User</value>
+  </data>
+  <data name="farm_address" xml:space="preserve">
+    <value>Farm Address</value>
+  </data>
+  <data name="farm_assets_import" xml:space="preserve">
+    <value>Import Assets Data</value>
+  </data>
+  <data name="farm_cattle_import" xml:space="preserve">
+    <value>Import Cattles Data</value>
+  </data>
+  <data name="farm_location" xml:space="preserve">
+    <value>Farm Location</value>
+  </data>
+  <data name="farm_primary_data" xml:space="preserve">
+    <value>Farm Primary Data</value>
+  </data>
+  <data name="Phones" xml:space="preserve">
+    <value>Phones</value>
+  </data>
+  <data name="Phone_1" xml:space="preserve">
+    <value>Phone 1</value>
+  </data>
+  <data name="Phone_2" xml:space="preserve">
+    <value>Phone 2</value>
+  </data>
+  <data name="PostalCode" xml:space="preserve">
+    <value>Postal Code</value>
+  </data>
+  <data name="Province" xml:space="preserve">
+    <value>Province</value>
+  </data>
+  <data name="Street_Name1" xml:space="preserve">
+    <value>Street 1</value>
+  </data>
+  <data name="Street_Name2" xml:space="preserve">
+    <value>Street 2</value>
+  </data>
+  <data name="NoAddress" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Report_Equipment" xml:space="preserve">
+    <value>Report Equipment</value>
+  </data>
+  <data name="Lacation_Number_default" xml:space="preserve">
+    <value>Lacation Number (default value 0)</value>
+  </data>
+  <data name="DefinedFarmAccountList" xml:space="preserve">
+    <value>Farm Account List</value>
+  </data>
+  <data name="Free_Stall_Plot" xml:space="preserve">
+    <value>Free_Stall_Plot</value>
+  </data>
+  <data name="Cattle_Group_list" xml:space="preserve">
+    <value>Cattle Group List</value>
+  </data>
+  <data name="Groups_List" xml:space="preserve">
+    <value>Groups List</value>
+  </data>
+  <data name="New_Group" xml:space="preserve">
+    <value>New Group</value>
+  </data>
+  <data name="Cattle_Time_Budget_Loading" xml:space="preserve">
+    <value>Time Budget data is loading. Please wait...</value>
+  </data>
+  <data name="Cattle_Time_Budget" xml:space="preserve">
+    <value>Cattle Time Budget</value>
+  </data>
+  <data name="Account" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="Cattle" xml:space="preserve">
+    <value>Cattle</value>
+  </data>
+  <data name="CattleGroup" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="CattleHerd" xml:space="preserve">
+    <value>Herd</value>
+  </data>
+  <data name="CreateAccountWizard" xml:space="preserve">
+    <value>Create Account Wizard</value>
+  </data>
+  <data name="CreateRole" xml:space="preserve">
+    <value>Create Role</value>
+  </data>
+  <data name="DefinedSystemRole_FarmList" xml:space="preserve">
+    <value>Defined System Role for Farm</value>
+  </data>
+  <data name="FreeStallPlot" xml:space="preserve">
+    <value>Barn Plot</value>
+  </data>
+  <data name="Insert" xml:space="preserve">
+    <value>Insert</value>
+  </data>
+  <data name="List" xml:space="preserve">
+    <value>List</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Alerts" xml:space="preserve">
+    <value>Alert</value>
+  </data>
+  <data name="AssignToCattle" xml:space="preserve">
+    <value>Assign to Cattle</value>
+  </data>
+  <data name="Report" xml:space="preserve">
+    <value>Report</value>
+  </data>
+  <data name="Sensor" xml:space="preserve">
+    <value>Sensor</value>
+  </data>
+  <data name="Cattle_Id_sensor" xml:space="preserve">
+    <value>Cattle ID</value>
+  </data>
+  <data name="FreeStall_Map_Loading" xml:space="preserve">
+    <value>Map is loading. Thank you for waiting.</value>
+  </data>
+  <data name="SortASC" xml:space="preserve">
+    <value>Sort ASC</value>
+  </data>
+  <data name="SortDESC" xml:space="preserve">
+    <value>Sort DESC</value>
+  </data>
+  <data name="Calf" xml:space="preserve">
+    <value>Calf</value>
+  </data>
+  <data name="Dry" xml:space="preserve">
+    <value>Dry off</value>
+  </data>
+  <data name="Heifer" xml:space="preserve">
+    <value>Heifer</value>
+  </data>
+  <data name="Insem" xml:space="preserve">
+    <value>Inseminated</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="Preg" xml:space="preserve">
+    <value>Pregnant</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>Ready</value>
+  </data>
+  <data name="Date_Example" xml:space="preserve">
+    <value>1999/01/01</value>
+  </data>
+  <data name="Number_Example" xml:space="preserve">
+    <value>123</value>
+  </data>
+  <data name="String_Example" xml:space="preserve">
+    <value>String</value>
+  </data>
+  <data name="Edit_GroupOf_Cattle" xml:space="preserve">
+    <value>Edit Group of Cattles</value>
+  </data>
+  <data name="EditGroupOfCattle" xml:space="preserve">
+    <value>Edit Group of Cattles</value>
+  </data>
+</root>

@@ -1,0 +1,26 @@
+﻿@model MvcSiteMapProvider.Web.Html.Models.SiteMapPathHelperModel
+@using System.Web.Mvc.Html
+@using System.Linq
+@using MvcSiteMapProvider.Web.Html.Models
+<ul class="breadcrumb">
+    @foreach (var node in Model)
+    {
+        <li class="@(node != Model.Last() ? "active" : null)">
+
+            @if (node != Model.Last())
+            {
+                if (node == Model.First())
+                    {
+                    <i class="fa fa-home"></i>
+                    }
+                    <a href="@Url.Action(node.Action, node.Controller)">
+                        @node.Title
+                    </a>
+            }
+            else
+            {
+                @node.Title
+            }
+        </li>
+    }
+</ul>

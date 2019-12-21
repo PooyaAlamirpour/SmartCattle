@@ -1,0 +1,61 @@
+﻿
+@{
+//Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>unAuthorized</title>
+    <style>
+        .middle{
+            position:absolute;
+            top:50%;
+            left:50%;
+            transform:translate(-50%,-50%);
+            margin:50px 0px;    
+            text-align:center
+        }
+        .middle img{
+            max-width:50%;
+            max-height:50%;
+            display:block;
+            margin:auto;
+        }
+        .button{
+            background-color:aquamarine;
+            padding:20px 0px;
+            border-radius:4px;
+            margin-top:80px;
+            cursor:pointer;
+            color:#29b036;
+        }
+        .title{
+            margin:40px ;
+            color:darksalmon;
+            text-align:center;
+            font-size:72px;
+          
+        }
+    </style>
+</head>
+<body>
+
+    <h2 class="title"> ACCESS DENIED</h2>
+
+    <div class="middle text-align-center"> 
+      
+        <img src="~/assets/img/smartCattle.png" />
+
+        <div onclick="retrun()" class="button" > Back To Page </div>
+    </div>
+
+    <script>
+       function retrun(){
+           window.history.go(-1);
+        }
+    </script>
+</body>
+</html>

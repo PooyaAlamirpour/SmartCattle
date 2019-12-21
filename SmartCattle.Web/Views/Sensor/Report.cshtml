@@ -1,0 +1,655 @@
+﻿@using SmartCattle.Web.Domain;
+@using System.Threading;
+@model List<SmartCattle.Web.Controllers.SensorController.EquipmentView>
+@using SmartCattle.DomainClass;
+@using SmartCattle.Web.Controllers;
+
+@{
+    ViewBag.Title = "لیست تجهیزات";
+}
+
+<link href="~/assets/css/MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.css" rel="stylesheet" />
+<style>
+    tr {
+        cursor: pointer;
+    }
+
+    th, td {
+        max-width: 110px !important;
+        min-width: 110px !important;
+        display: table-cell;
+        font-size: 95%;
+    }
+
+        th input {
+            width: 110px !important;
+            height: 25px;
+            display: inline-block;
+        }
+
+    tr i.fa {
+        display: inline-block !important;
+        padding: 2px 4px;
+        border: 1px solid #808080;
+        background-color: #b9b9b9;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .widget-body {
+        overflow-y: hidden;
+        overflow-x: auto;
+    }
+
+    .filter-input {
+        display: inline-block !important;
+        width: 55px !important;
+        height: 25px !important;
+    }
+
+    #dateInput {
+        height: 25px !important;
+        float: left;
+        padding: 2px !important;
+    }
+
+    .FilterBox {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: none;
+        z-index: 200;
+    }
+
+    .relative {
+        position: relative;
+    }
+
+    #datePickerbtn {
+        border: none !important;
+    }
+
+    .input-group-addon {
+        padding: 0px 6px;
+        border: none;
+        display: inline-block;
+    }
+
+    #dateHeader {
+        max-width: 170px !important;
+        min-width: 170px !important;
+        padding: 8px 2px;
+    }
+
+    .popover table td, th {
+        min-width: 5px !important;
+        max-width: none !important;
+        font-family: 'WYekan';
+    }
+
+    .selectedFilter {
+        font-size: 10px;
+        display: block;
+        margin: 2px auto;
+        text-align: center;
+        background-color: #EE7469;
+        padding: 2px;
+        cursor: no-drop;
+        border-radius: 2px;
+        clear: both;
+        height: 20px;
+        visibility: hidden;
+        color: #fefefe;
+    }
+</style>
+
+<div class="row no-padding" id="cattleList">
+    <div class="well with-header with-footer col-lg-12 col-sm-12 col-xs-12 no-padding">
+        <div class="col-lg-12 col-sm-12 col-xs-12 no-padding">
+            <div class="tabbable">
+                <div class="tab-content col-lg-12 col-md-12 col-xs-12 ">
+                    <div class="col-xs-12 col-md-12 col-lg-12 no-padding">
+                        <div class="widget">
+                            <div class="widget-header bordered-bottom bordered-darkorange">
+                                <div class="widget-buttons">
+                                </div>
+                            </div>
+                            <div class="widget-body no-padding" id="searchableGridWrapper">
+                                <table class="table table-bordered table-hover table-striped" id="searchable">
+                                    @{
+                                        if (PermissionViewer.WillBeShow("Sensor-Advancefilter", User.Identity.Name))
+                                        {
+                                            <thead class="bordered-darkorange">
+                                                <tr role="row">
+                                                    @*<th>
+			                            @Localization.getString("ID")
+			                        	</th>*@
+                                                    <th>
+                                                        @Localization.getString("DeviceType")
+                                                    </th>
+                                                    <th>
+                                                        @Localization.getString("DeviceSubtype")
+                                                    </th>
+                                                    <th>
+                                                        @Localization.getString("Version")
+                                                    </th>
+                                                    <th>
+                                                        @Localization.getString("EquipmentId")
+                                                    </th>
+                                                    <th>
+                                                        @Localization.getString("MAC")
+                                                    </th>
+                                                    <th>
+                                                        @Localization.getString("CattleNumber")
+                                                    </th>
+                                                    <th>
+                                                        @Localization.getString("LastUpdate")
+                                                    </th>
+                                                    <th>
+                                                        @Localization.getString("Status")
+                                                    </th>
+                                                    <th>
+                                                        @Localization.getString("InstallationDate")
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    @*<th class="relative">
+                            <input id="ID_Input" type="text" class="filter-input" />
+                        </th>*@
+                                                    <th class="relative ">
+                                                        <input id="DeviceType_Input" type="text" class="filter-input" />
+                                                    </th>
+                                                    <th class="relative ">
+                                                        <input id="DeviceSubtype_Input" type="text" class="filter-input" />
+                                                    </th>
+                                                    <th class="relative ">
+                                                        <input id="Version_Input" type="text" class="filter-input" />
+                                                    </th>
+                                                    <th class="relative ">
+                                                        <input id="EquipmentId_Input" type="text" class="filter-input" />
+                                                    </th>
+                                                    <th class="relative ">
+                                                        <input id="MAC_Input" type="text" class="filter-input" />
+                                                    </th>
+                                                    <th class="relative ">
+                                                        <input id="CattleId_Input" type="text" class="filter-input" />
+                                                    </th>
+                                                    <th class="relative ">
+                                                        <input id="LastUpdate_Input" type="hidden" class="filter-input" />
+                                                    </th>
+                                                    <th class="relative ">
+                                                        <input id="Status_Input" type="hidden" class="filter-input" />
+                                                    </th>
+                                                    <th class="relative ">
+                                                        <input id="InstallationDate_Input" type="hidden" class="filter-input" />
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                        }
+                                    }
+
+                                    <tfoot>
+                                        <tr></tr>
+                                    </tfoot>
+                                    <tbody>
+                                        @{
+                                            for (int i = 0; i < Model.Count; i++)
+                                            {
+                                                var RowId = "RowId" + @Model[i].ID.ToString();
+
+                                                <tr class="rowData" data-rowid="@i" id="@RowId" onclick="onClickRow(this)">
+                                                    @*<td class="center">@Model[i].ID</td>*@
+                                                    <td class="center">@Model[i].DeviceType</td>
+                                                    <td class="center">@Model[i].DeviceSubtype</td>
+                                                    <td class="center">@Model[i].Version</td>
+                                                    <td class="center">@Model[i].Equipmentid</td>
+                                                    <td class="center">@Model[i].Mac</td>
+                                                    @{
+                                                        if (@Model[i].DeviceSubtype == "Ear")
+                                                        {
+                                                            <td class="center">@Model[i].CattleNumber</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td class="center"></td>
+                                                        }
+                                                    }
+                                                    <td class="center">@Model[i].Date2</td>
+                                                    <td class="center">@Model[i].BatteryLevel</td>
+                                                    <td class="center">@Model[i].Date1</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                                @*@{Html.RenderPartial("PagingReport", Model);}*@
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/js/datatable/jquery.dataTables.min.js"></script>
+<script src="~/assets/js/datatable/dataTables.bootstrap.min.js"></script>
+<script src="~/assets/js/datatable/datatables-init.js"></script>
+<script src="~/assets/js/MdBootstrapPersianDateTimePicker/jalaali.js"></script>
+<script src="~/assets/js/MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="~/assets/js/toastr/toastr.js"></script>
+<script src="~/assets/js/datatable/jquery.dataTables.min.js"></script>
+<script src="~/assets/js/datatable/ZeroClipboard.js"></script>
+<script src="~/assets/js/datatable/dataTables.tableTools.min.js"></script>
+<script src="~/assets/js/datatable/dataTables.bootstrap.min.js"></script>
+<script src="~/assets/js/jquery.min.js"></script>
+<script src="~/assets/js/bootstrap.min.js"></script>
+<script src="~/assets/js/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="~/assets/js/datatable/jquery.dataTables.min.js"></script>
+<script src="~/assets/js/datatable/jquery.dataTables.js"></script>
+<script src="~/assets/js/datatable/ZeroClipboard.js"></script>
+<script src="~/assets/js/datatable/dataTables.tableTools.min.js"></script>
+
+<script type="text/javascript">
+    var mInitiateEditableDataTable;
+    var oTable;
+    InitialTable();
+
+    function InitialTable() {
+        mInitiateEditableDataTable = function () {
+            return {
+                init: function () {
+                    //Datatable Initiating
+                    oTable = $('#editabledatatable').dataTable({
+                        "aLengthMenu": [
+                            [5, 15, 20, 100, -1],
+                            [5, 15, 20, 100, "All"]
+                        ],
+                        "iDisplayLength": 5,
+                        "sPaginationType": "bootstrap",
+                        "sDom": "Tflt<'row DTTTFooter'<'col-sm-6'i><'col-sm-6'p>>",
+                        "language": {
+                            "search": "",
+                            "sLengthMenu": "_MENU_",
+                            "oPaginate": {
+                                "sPrevious": "Prev",
+                                "sNext": "Next"
+                            }
+                        },
+                        "aoColumns": [
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            { "bSortable": true }
+                        ]
+                    });
+
+                    var isEditing = null;
+
+                    function restoreRow(oTable, nRow) {
+                        var aData = oTable.fnGetData(nRow);
+                        var jqTds = $('>td', nRow);
+
+                        for (var i = 0, iLen = jqTds.length; i < iLen; i++) {
+                            oTable.fnUpdate(aData[i], nRow, i, false);
+                        }
+
+                        oTable.fnDraw();
+                    }
+
+
+                }
+
+            };
+        }();
+        mInitiateEditableDataTable.init();
+    }
+
+</script>
+<script>
+    function ShowTableWaiting() {
+        $("#searchableGridWrapper tbody").animate({ opacity: 0 }, 200);
+        $(".loader").fadeIn(300);
+    }
+
+    function CloseTableWaiting() {
+        $(".loader").hide(100);
+        $("#searchableGridWrapper tbody").animate({ opacity: 1 }, 200);
+    }
+</script>
+<script>
+    $(window).click(function (e) {
+        $("body").css("padding-right", 0);
+        $("body").css("padding-right", 0);
+    });
+
+    $("#exampleModalCenter").on("hidden.bs.modal", function () {
+        $("body").css("padding-right", 0);
+        $("body").css("padding-right", 0);
+    });
+
+    $('.fa-filter').on('click', function (e) {
+        $(".FilterBox").hide();
+        filter = $(this).data("filter");
+        column = $(this).data("column");
+
+        if (filter == "NotificationID_Filter") {
+            console.log("field : " + column);
+            $("#NotificationID_Filter_Menu .filterItem").attr("title", column);
+            $("#NotificationID_Filter_Menu").hide();
+            $("#NotificationID_Filter_Menu").css({ top: $(this).parent().offset().top - 150, left: $(this).parent().offset().left - ($(this).width()) });
+            $("#NotificationID_Filter_Menu").fadeIn(400);
+        }
+
+        if (filter == "NotificationCattleFreestallID_Filter") {
+            console.log("field : " + column);
+            $("#NotificationCattleFreestallID_Filter_Menu .filterItem").attr("title", column);
+            $("#NotificationCattleFreestallID_Filter_Menu").hide();
+            $("#NotificationCattleFreestallID_Filter_Menu").css({ top: $(this).parent().offset().top - 150, left: $(this).parent().offset().left - ($(this).width()) });
+            $("#NotificationCattleFreestallID_Filter_Menu").fadeIn(400);
+        }
+
+        if (filter == "NotificationType_Filter") {
+            console.log("field : " + column);
+            $("#NotificationType_Filter_Menu .filterItem").attr("title", column);
+            $("#NotificationType_Filter_Menu").hide();
+            $("#NotificationType_Filter_Menu").css({ top: $(this).parent().offset().top - 150, left: $(this).parent().offset().left - ($(this).width()) });
+            $("#NotificationType_Filter_Menu").fadeIn(400);
+        }
+
+        if (filter == "NotificationState_Filter") {
+            console.log("field : " + column);
+            $("#NotificationState_Filter_Menu .filterItem").attr("title", column);
+            $("#NotificationState_Filter_Menu").hide();
+            $("#NotificationState_Filter_Menu").css({ top: $(this).parent().offset().top - 150, left: $(this).parent().offset().left - ($(this).width()) });
+            $("#NotificationState_Filter_Menu").fadeIn(400);
+        }
+
+        if (filter == "NotificationAct_Filter") {
+            console.log("field : " + column);
+            $("#NotificationAct_Filter_Menu .filterItem").attr("title", column);
+            $("#NotificationAct_Filter_Menu").hide();
+            $("#NotificationAct_Filter_Menu").css({ top: $(this).parent().offset().top - 150, left: $(this).parent().offset().left - ($(this).width()) });
+            $("#NotificationAct_Filter_Menu").fadeIn(400);
+        }
+
+        if (filter == "NotificationEventDate_Filter") {
+            console.log("field : " + column);
+            $("#NotificationEventDate_Filter_Menu .filterItem").attr("title", column);
+            $("#NotificationEventDate_Filter_Menu").hide();
+            $("#NotificationEventDate_Filter_Menu").css({ top: $(this).parent().offset().top - 150, left: $(this).parent().offset().left - ($(this).width()) });
+            $("#NotificationEventDate_Filter_Menu").fadeIn(400);
+        }
+
+        if (filter == "NotificationDeactiveDate_Filter") {
+            console.log("field : " + column);
+            $("#NotificationDeactiveDate_Filter_Menu .filterItem").attr("title", column);
+            $("#NotificationDeactiveDate_Filter_Menu").hide();
+            $("#NotificationDeactiveDate_Filter_Menu").css({ top: $(this).parent().offset().top - 150, left: $(this).parent().offset().left - ($(this).width()) });
+            $("#NotificationDeactiveDate_Filter_Menu").fadeIn(400);
+        }
+
+        if (filter == "NotificationActDate_Filter") {
+            console.log("field : " + column);
+            $("#NotificationActDate_Filter_Menu .filterItem").attr("title", column);
+            $("#NotificationActDate_Filter_Menu").hide();
+            $("#NotificationActDate_Filter_Menu").css({ top: $(this).parent().offset().top - 150, left: $(this).parent().offset().left - ($(this).width()) });
+            $("#NotificationActDate_Filter_Menu").fadeIn(400);
+        }
+    });
+
+    $("#NotificationID_Filter_Menu").on("click", ".filterItem", function () {
+        $("#" + $(this).attr("title")).attr("title", $(this).data("value"));
+        $("#NotificationID_Filter_Menu").fadeOut(200);
+        $("#" + $(this).attr("title") + "_Label").html($(this).html());
+        $("#" + $(this).attr("title") + "_Label").attr("data-related", $(this).attr("title"));
+        $("#" + $(this).attr("title") + "_Label").css({ "visibility": "visible" });
+        $("#" + $(this).attr("title") + "_Label").animate({ "opacity": 1 }, 300);
+        if ($(this).data("value") == "WitoutFilter") {
+            $("#" + $(this).attr("title") + "_Label").removeAttr("style");
+            $("#" + $(this).attr("title") + "_Label").html("");
+        }
+        Advancefilter();
+    });
+
+    $("#NotificationCattleFreestallID_Filter_Menu").on("click", ".filterItem", function () {
+        $("#" + $(this).attr("title")).attr("title", $(this).data("value"));
+        $("#NotificationCattleFreestallID_Filter_Menu").fadeOut(200);
+        $("#" + $(this).attr("title") + "_Label").html($(this).html());
+        $("#" + $(this).attr("title") + "_Label").attr("data-related", $(this).attr("title"));
+        $("#" + $(this).attr("title") + "_Label").css({ "visibility": "visible" });
+        $("#" + $(this).attr("title") + "_Label").animate({ "opacity": 1 }, 300);
+        if ($(this).data("value") == "WitoutFilter") {
+            $("#" + $(this).attr("title") + "_Label").removeAttr("style");
+            $("#" + $(this).attr("title") + "_Label").html("");
+        }
+        Advancefilter();
+    });
+
+    $("#NotificationType_Filter_Menu").on("click", ".filterItem", function () {
+        $("#" + $(this).attr("title")).attr("title", $(this).data("value"));
+        $("#NotificationType_Filter_Menu").fadeOut(200);
+        $("#" + $(this).attr("title") + "_Label").html($(this).html());
+        $("#" + $(this).attr("title") + "_Label").attr("data-related", $(this).attr("title"));
+        $("#" + $(this).attr("title") + "_Label").css({ "visibility": "visible" });
+        $("#" + $(this).attr("title") + "_Label").animate({ "opacity": 1 }, 300);
+        if ($(this).data("value") == "WitoutFilter") {
+            $("#" + $(this).attr("title") + "_Label").removeAttr("style");
+            $("#" + $(this).attr("title") + "_Label").html("");
+        }
+        Advancefilter();
+    });
+
+    $("#NotificationState_Filter_Menu").on("click", ".filterItem", function () {
+        $("#" + $(this).attr("title")).attr("title", $(this).data("value"));
+        $("#NotificationState_Filter_Menu").fadeOut(200);
+        $("#" + $(this).attr("title") + "_Label").html($(this).html());
+        $("#" + $(this).attr("title") + "_Label").attr("data-related", $(this).attr("title"));
+        $("#" + $(this).attr("title") + "_Label").css({ "visibility": "visible" });
+        $("#" + $(this).attr("title") + "_Label").animate({ "opacity": 1 }, 300);
+        if ($(this).data("value") == "WitoutFilter") {
+            $("#" + $(this).attr("title") + "_Label").removeAttr("style");
+            $("#" + $(this).attr("title") + "_Label").html("");
+        }
+        Advancefilter();
+    });
+
+    $("#NotificationAct_Filter_Menu").on("click", ".filterItem", function () {
+        $("#" + $(this).attr("title")).attr("title", $(this).data("value"));
+        $("#NotificationAct_Filter_Menu").fadeOut(200);
+        $("#" + $(this).attr("title") + "_Label").html($(this).html());
+        $("#" + $(this).attr("title") + "_Label").attr("data-related", $(this).attr("title"));
+        $("#" + $(this).attr("title") + "_Label").css({ "visibility": "visible" });
+        $("#" + $(this).attr("title") + "_Label").animate({ "opacity": 1 }, 300);
+        if ($(this).data("value") == "WitoutFilter") {
+            $("#" + $(this).attr("title") + "_Label").removeAttr("style");
+            $("#" + $(this).attr("title") + "_Label").html("");
+        }
+        Advancefilter();
+    });
+
+    $("#NotificationEventDate_Filter_Menu").on("click", ".filterItem", function () {
+        $("#" + $(this).attr("title")).attr("title", $(this).data("value"));
+        $("#NotificationEventDate_Filter_Menu").fadeOut(200);
+        $("#" + $(this).attr("title") + "_Label").html($(this).html());
+        $("#" + $(this).attr("title") + "_Label").attr("data-related", $(this).attr("title"));
+        $("#" + $(this).attr("title") + "_Label").css({ "visibility": "visible" });
+        $("#" + $(this).attr("title") + "_Label").animate({ "opacity": 1 }, 300);
+        if ($(this).data("value") == "WitoutFilter") {
+            $("#" + $(this).attr("title") + "_Label").removeAttr("style");
+            $("#" + $(this).attr("title") + "_Label").html("");
+        }
+        Advancefilter();
+    });
+
+    $("#NotificationDeactiveDate_Filter_Menu").on("click", ".filterItem", function () {
+        $("#" + $(this).attr("title")).attr("title", $(this).data("value"));
+        $("#NotificationDeactiveDate_Filter_Menu").fadeOut(200);
+        $("#" + $(this).attr("title") + "_Label").html($(this).html());
+        $("#" + $(this).attr("title") + "_Label").attr("data-related", $(this).attr("title"));
+        $("#" + $(this).attr("title") + "_Label").css({ "visibility": "visible" });
+        $("#" + $(this).attr("title") + "_Label").animate({ "opacity": 1 }, 300);
+        if ($(this).data("value") == "WitoutFilter") {
+            $("#" + $(this).attr("title") + "_Label").removeAttr("style");
+            $("#" + $(this).attr("title") + "_Label").html("");
+        }
+        Advancefilter();
+    });
+
+    $("#NotificationActDate_Filter_Menu").on("click", ".filterItem", function () {
+        $("#" + $(this).attr("title")).attr("title", $(this).data("value"));
+        $("#NotificationActDate_Filter_Menu").fadeOut(200);
+        $("#" + $(this).attr("title") + "_Label").html($(this).html());
+        $("#" + $(this).attr("title") + "_Label").attr("data-related", $(this).attr("title"));
+        $("#" + $(this).attr("title") + "_Label").css({ "visibility": "visible" });
+        $("#" + $(this).attr("title") + "_Label").animate({ "opacity": 1 }, 300);
+        if ($(this).data("value") == "WitoutFilter") {
+            $("#" + $(this).attr("title") + "_Label").removeAttr("style");
+            $("#" + $(this).attr("title") + "_Label").html("");
+        }
+        Advancefilter();
+    });
+
+</script>
+<script>
+    
+    var ID_Input = "";
+    var DeviceType_Input = document.getElementById("DeviceType_Input");
+    var DeviceSubtype_Input = document.getElementById("DeviceSubtype_Input");
+    var Version_Input = document.getElementById("Version_Input");
+    var EquipmentId_Input = document.getElementById("EquipmentId_Input");
+    var MAC_Input = document.getElementById("MAC_Input");
+    var LastUpdate_Input = document.getElementById("LastUpdate_Input");
+    var Status_Input = document.getElementById("Status_Input");
+    var CattleId_Input = document.getElementById("CattleId_Input");
+    var InstallationDate_Input = document.getElementById("InstallationDate_Input");
+
+    DeviceType_Input.addEventListener("keyup", function (event) {
+        event.preventDefault();
+        if (event.keyCode === 13) {
+            Advancefilter();
+        }
+    });
+
+    DeviceSubtype_Input.addEventListener("keyup", function (event) {
+        event.preventDefault();
+        if (event.keyCode === 13) {
+            Advancefilter();
+        }
+    });
+
+    Version_Input.addEventListener("keyup", function (event) {
+        event.preventDefault();
+        if (event.keyCode === 13) {
+            Advancefilter();
+        }
+    });
+
+    EquipmentId_Input.addEventListener("keyup", function (event) {
+        event.preventDefault();
+        if (event.keyCode === 13) {
+            Advancefilter();
+        }
+    });
+
+    MAC_Input.addEventListener("keyup", function (event) {
+        event.preventDefault();
+        if (event.keyCode === 13) {
+            Advancefilter();
+        }
+    });
+
+    LastUpdate_Input.addEventListener("keyup", function (event) {
+        event.preventDefault();
+        if (event.keyCode === 13) {
+            Advancefilter();
+        }
+    });
+
+    Status_Input.addEventListener("keyup", function (event) {
+        event.preventDefault();
+        if (event.keyCode === 13) {
+            Advancefilter();
+        }
+    });
+
+    CattleId_Input.addEventListener("keyup", function (event) {
+        event.preventDefault();
+        if (event.keyCode === 13) {
+            Advancefilter();
+        }
+    });
+
+    InstallationDate_Input.addEventListener("keyup", function (event) {
+        event.preventDefault();
+        if (event.keyCode === 13) {
+            Advancefilter();
+        }
+    });
+
+    function Advancefilter() {
+        $("#searchableGridWrapper tbody").animate({ opacity: 0 }, 200);
+        $(".loader").fadeIn(300);
+
+        ID_Input = "";
+        DeviceType_Input = document.getElementById("DeviceType_Input").value;
+        DeviceSubtype_Input = document.getElementById("DeviceSubtype_Input").value;
+        Version_Input = document.getElementById("Version_Input").value;
+        EquipmentId_Input = document.getElementById("EquipmentId_Input").value;
+        MAC_Input = document.getElementById("MAC_Input").value;
+        LastUpdate_Input = document.getElementById("LastUpdate_Input").value;
+        Status_Input = document.getElementById("Status_Input").value;
+        CattleId_Input = document.getElementById("CattleId_Input").value;
+        InstallationDate_Input = document.getElementById("InstallationDate_Input").value;
+
+        var AllFields =
+        [
+            ID_Input,
+            DeviceType_Input,
+            DeviceSubtype_Input,
+            Version_Input,
+            EquipmentId_Input,
+            MAC_Input,
+            LastUpdate_Input,
+            Status_Input,
+            CattleId_Input,
+            InstallationDate_Input
+        ];
+
+        $.post("/Sensor/Empty",
+        {
+        },
+        function (data) {
+            parser = new DOMParser();
+            tmpBody = $(parser.parseFromString(data, "text/html")).find("tbody").html();
+            $("#searchableGridWrapper tbody").html(tmpBody);
+
+            $.post("/Sensor/Advancefilter",
+            {
+                AllFields: AllFields
+            },
+            function (data) {
+                parser = new DOMParser();
+                tmpBody = $(parser.parseFromString(data, "text/html")).find("tbody").html();
+                $("#searchableGridWrapper tbody").html(tmpBody);
+                parser = new DOMParser();
+                //tmpHtml = $(parser.parseFromString(data, "text/html")).find("#paging").html();
+                //$("#searchableGridWrapper #paging").html(tmpHtml);
+                $(".loader").hide(100);
+                $("#searchableGridWrapper tbody").animate({ opacity: 1 }, 200);
+            });
+        });
+
+        
+    }
+</script>
+<script src="~/assets/js/charts/easypiechart/jquery.easypiechart.js"></script>
+<script src="~/assets/js/charts/easypiechart/easypiechart-init.js"></script>
+<script src="~/assets/js/HighChart/highcharts.js"></script>
+<script src="~/assets/js/HighChart/exporting.js"></script>

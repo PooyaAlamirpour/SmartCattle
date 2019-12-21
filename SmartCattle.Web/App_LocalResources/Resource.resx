@@ -1,0 +1,1368 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Dashboard" xml:space="preserve">
+    <value>داشبورد</value>
+  </data>
+  <data name="lang" xml:space="preserve">
+    <value>fa-IR</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>نام</value>
+  </data>
+  <data name="Sign_out" xml:space="preserve">
+    <value>خروج</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>پروفايل</value>
+  </data>
+  <data name="Setting" xml:space="preserve">
+    <value>تنظيمات</value>
+  </data>
+  <data name="change_photo" xml:space="preserve">
+    <value>تغيير تصوير</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>فعال</value>
+  </data>
+  <data name="Eating" xml:space="preserve">
+    <value>خوردن</value>
+  </data>
+  <data name="Free_stall" xml:space="preserve">
+    <value>بهاربند</value>
+  </data>
+  <data name="High_Active" xml:space="preserve">
+    <value>پرتحرك</value>
+  </data>
+  <data name="Not_Active" xml:space="preserve">
+    <value>بي تحرك</value>
+  </data>
+  <data name="Percent" xml:space="preserve">
+    <value>درصد</value>
+  </data>
+  <data name="Rumination" xml:space="preserve">
+    <value>نشخوار کردن</value>
+  </data>
+  <data name="Total_Daily_activity" xml:space="preserve">
+    <value>فعاليت روزانه</value>
+  </data>
+  <data name="Aborted" xml:space="preserve">
+    <value>سقط كرده</value>
+  </data>
+  <data name="Cattle_Group" xml:space="preserve">
+    <value>شماره گروه</value>
+  </data>
+  <data name="Cattle_Number" xml:space="preserve">
+    <value>شماره دام</value>
+  </data>
+  <data name="Day_Scine_Last_Breeding" xml:space="preserve">
+    <value> آخرين توليد مثل(روز قبل)</value>
+  </data>
+  <data name="DIM" xml:space="preserve">
+    <value>روزهای شیردهی</value>
+  </data>
+  <data name="Eating_Time_Minute" xml:space="preserve">
+    <value>خوردن (دقيقه)</value>
+  </data>
+  <data name="Fertility_Status" xml:space="preserve">
+    <value>وضعیت آبستنی</value>
+  </data>
+  <data name="Fresh" xml:space="preserve">
+    <value>تازه بارور شده</value>
+  </data>
+  <data name="Health_Status_Hour" xml:space="preserve">
+    <value>سلامت(ساعت)</value>
+  </data>
+  <data name="In_heat" xml:space="preserve">
+    <value>فحل</value>
+  </data>
+  <data name="In_Heat_Status_Hour" xml:space="preserve">
+    <value>فحلي(ساعت)</value>
+  </data>
+  <data name="Lactation_Number" xml:space="preserve">
+    <value>شکم زایش</value>
+  </data>
+  <data name="No_movement" xml:space="preserve">
+    <value>بي حركت</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>باز</value>
+  </data>
+  <data name="Potential" xml:space="preserve">
+    <value>مستعد</value>
+  </data>
+  <data name="Pregnant" xml:space="preserve">
+    <value>باردار</value>
+  </data>
+  <data name="Rumination_Time_Minute" xml:space="preserve">
+    <value>نشخوار(دقيقه)</value>
+  </data>
+  <data name="Sick" xml:space="preserve">
+    <value>بيمار</value>
+  </data>
+  <data name="Suspicious" xml:space="preserve">
+    <value>مشكوك</value>
+  </data>
+  <data name="Very_sick" xml:space="preserve">
+    <value>بسيار بيمار</value>
+  </data>
+  <data name="Create_Role" xml:space="preserve">
+    <value>ايجاد نقش</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>ثبت</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>توضيحات</value>
+  </data>
+  <data name="Done" xml:space="preserve">
+    <value>انجام شد</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>خطا</value>
+  </data>
+  <data name="RoleName" xml:space="preserve">
+    <value>نام نقش</value>
+  </data>
+  <data name="Role_Add_Failed" xml:space="preserve">
+    <value>خطا در ثبت نقش</value>
+  </data>
+  <data name="Role_Add_Successfully" xml:space="preserve">
+    <value>نقش ثبت شد</value>
+  </data>
+  <data name="Add_Role" xml:space="preserve">
+    <value>ثبت نقش</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>حذف</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>ويرايش</value>
+  </data>
+  <data name="New_Role" xml:space="preserve">
+    <value>نقش جديد</value>
+  </data>
+  <data name="Role_Description" xml:space="preserve">
+    <value>توضيحات نقش</value>
+  </data>
+  <data name="Role_List" xml:space="preserve">
+    <value>ليست نقش ها</value>
+  </data>
+  <data name="Role_Name" xml:space="preserve">
+    <value>نام نقش</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>ذخيره</value>
+  </data>
+  <data name="Herds_Management" xml:space="preserve">
+    <value>مديريت گله</value>
+  </data>
+  <data name="Groups_Management" xml:space="preserve">
+    <value>مديريت گروه ها</value>
+  </data>
+  <data name="Groups_List" xml:space="preserve">
+    <value>ليست گروه ها</value>
+  </data>
+  <data name="New_Group" xml:space="preserve">
+    <value>گروه جديد</value>
+  </data>
+  <data name="Group_Description" xml:space="preserve">
+    <value>توضيحات گروه</value>
+  </data>
+  <data name="Group_Name" xml:space="preserve">
+    <value>نام گروه</value>
+  </data>
+  <data name="Cow_group_Distribution" xml:space="preserve">
+    <value>توزيع دام شير ده</value>
+  </data>
+  <data name="feeding" xml:space="preserve">
+    <value>تغذيه</value>
+  </data>
+  <data name="lying" xml:space="preserve">
+    <value>دراز كشيدن</value>
+  </data>
+  <data name="milking" xml:space="preserve">
+    <value>دوشش</value>
+  </data>
+  <data name="standing" xml:space="preserve">
+    <value>ايستادن</value>
+  </data>
+  <data name="walking" xml:space="preserve">
+    <value>راه رفتن</value>
+  </data>
+  <data name="watering" xml:space="preserve">
+    <value>نوشيدن</value>
+  </data>
+  <data name="Monthly_Average_Lactation_FreeStall" xml:space="preserve">
+    <value>ميانگين شير توليدي ماهانه بهاربند</value>
+  </data>
+  <data name="Cow_location_in_zone" xml:space="preserve">
+    <value>موقعيت دام در ناحيه</value>
+  </data>
+  <data name="of_free_tall" xml:space="preserve">
+    <value>از بهاربند</value>
+  </data>
+  <data name="Herds_List" xml:space="preserve">
+    <value>ليست گله ها</value>
+  </data>
+  <data name="Herd_Description" xml:space="preserve">
+    <value>توضيحات گله</value>
+  </data>
+  <data name="Herd_Name" xml:space="preserve">
+    <value>نام گله</value>
+  </data>
+  <data name="New_Herd" xml:space="preserve">
+    <value>گله جديد</value>
+  </data>
+  <data name="NEW_ALERTS" xml:space="preserve">
+    <value>هشدار جديد</value>
+  </data>
+  <data name="NEW_MESSAGE" xml:space="preserve">
+    <value>پيام جديد</value>
+  </data>
+  <data name="NEW_TASKS" xml:space="preserve">
+    <value>وظيفه جديد</value>
+  </data>
+  <data name="FreeStall_Description" xml:space="preserve">
+    <value>توضيحات بهاربند(فری استال)</value>
+  </data>
+  <data name="FreeStall_List" xml:space="preserve">
+    <value>ليست بهاربندها(فری استال ها)</value>
+  </data>
+  <data name="FreeStall_Management" xml:space="preserve">
+    <value>مديريت بهاربندها</value>
+  </data>
+  <data name="FreeStall_Name" xml:space="preserve">
+    <value>نام بهاربند(فری استال)</value>
+  </data>
+  <data name="New_FreeStall" xml:space="preserve">
+    <value>بهاربند(فری استال)</value>
+  </data>
+  <data name="New_Sensor" xml:space="preserve">
+    <value>سنسور جديد</value>
+  </data>
+  <data name="Sensor_Code" xml:space="preserve">
+    <value>كد سنسور</value>
+  </data>
+  <data name="Sensor_List" xml:space="preserve">
+    <value>ليست سنسور ها</value>
+  </data>
+  <data name="Sensor_Management" xml:space="preserve">
+    <value>مديريت سنسور ها</value>
+  </data>
+  <data name="Software_Version" xml:space="preserve">
+    <value>نسخه  سنسور</value>
+  </data>
+  <data name="Invalid_Farm" xml:space="preserve">
+    <value>مزرعه نامعتبر است</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>جستجو</value>
+  </data>
+  <data name="Equal" xml:space="preserve">
+    <value>برابر</value>
+  </data>
+  <data name="GreateThan" xml:space="preserve">
+    <value>بزرگتر</value>
+  </data>
+  <data name="GreateThanOrEqualTo" xml:space="preserve">
+    <value>بزرگتر یا مساوی</value>
+  </data>
+  <data name="InHeat" xml:space="preserve">
+    <value>فحل</value>
+  </data>
+  <data name="IsNull" xml:space="preserve">
+    <value>تهی</value>
+  </data>
+  <data name="LessThan" xml:space="preserve">
+    <value>کوچکتر</value>
+  </data>
+  <data name="LessThanOrEqualTo" xml:space="preserve">
+    <value>کوچکتر یا مساوی</value>
+  </data>
+  <data name="NoMovement" xml:space="preserve">
+    <value>بی حرکت</value>
+  </data>
+  <data name="NotEqual" xml:space="preserve">
+    <value>نابرابر</value>
+  </data>
+  <data name="NotIsNull" xml:space="preserve">
+    <value>ناتهی</value>
+  </data>
+  <data name="VerySick" xml:space="preserve">
+    <value>بسیار بیمار</value>
+  </data>
+  <data name="Cattles_List" xml:space="preserve">
+    <value>لیست دام ها</value>
+  </data>
+  <data name="Cattle_Detail" xml:space="preserve">
+    <value>جزییات اطلاعات دام</value>
+  </data>
+  <data name="Activity" xml:space="preserve">
+    <value>فعالیت ها</value>
+  </data>
+  <data name="Cattle_info" xml:space="preserve">
+    <value>اطلاعات دام</value>
+  </data>
+  <data name="Events" xml:space="preserve">
+    <value>رویدادها</value>
+  </data>
+  <data name="Tempreture" xml:space="preserve">
+    <value>دما</value>
+  </data>
+  <data name="Add_Group_Time_Budget" xml:space="preserve">
+    <value>ثبت بودجه زمانی</value>
+  </data>
+  <data name="Group_Time_Budget_List" xml:space="preserve">
+    <value>لیست بودجه زمانی گروه های دام</value>
+  </data>
+  <data name="Add_Group_Time_Budget_Item" xml:space="preserve">
+    <value>ثبت آیتم بودجه زمانی</value>
+  </data>
+  <data name="Group_Time_Budget_Item_List" xml:space="preserve">
+    <value>لیست آیتم های بودجه زمانی</value>
+  </data>
+  <data name="Add_Gourp_TimeBudget" xml:space="preserve">
+    <value>ثبت بودجه زمانی برای گروه دام</value>
+  </data>
+  <data name="TimeBudget" xml:space="preserve">
+    <value>بودجه زمانی</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>همه</value>
+  </data>
+  <data name="In_Heat_Status" xml:space="preserve">
+    <value>وضعیت فحلی</value>
+  </data>
+  <data name="Health_Status" xml:space="preserve">
+    <value>وضعیت سلامت</value>
+  </data>
+  <data name="Male" xml:space="preserve">
+    <value>گاو نر</value>
+  </data>
+  <data name="Female" xml:space="preserve">
+    <value>گاو ماده</value>
+  </data>
+  <data name="Animal_Number" xml:space="preserve">
+    <value>شماره دام</value>
+  </data>
+  <data name="Register_Number" xml:space="preserve">
+    <value>شماره ثبت شده</value>
+  </data>
+  <data name="Birth_Date" xml:space="preserve">
+    <value>تاریخ تولد</value>
+  </data>
+  <data name="LastCalving" xml:space="preserve">
+    <value>تاریخ آخرین زایمان</value>
+  </data>
+  <data name="Lactation_Numbere" xml:space="preserve">
+    <value>شکم زایش</value>
+  </data>
+  <data name="Heat_Status" xml:space="preserve">
+    <value>وضعیت فحلی</value>
+  </data>
+  <data name="Detail_Info" xml:space="preserve">
+    <value>اطلاعات تکمیلی</value>
+  </data>
+  <data name="Primary_Info" xml:space="preserve">
+    <value>اطلاعات ضروری</value>
+  </data>
+  <data name="Cattle_Insert_Form" xml:space="preserve">
+    <value>فرم ثبت دام</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>ثبت دام</value>
+  </data>
+  <data name="Calving" xml:space="preserve">
+    <value>زایش(زایمان)</value>
+  </data>
+  <data name="Heat" xml:space="preserve">
+    <value>فحل</value>
+  </data>
+  <data name="Hormone_Treatment" xml:space="preserve">
+    <value>تزریق هورمون</value>
+  </data>
+  <data name="Insemination" xml:space="preserve">
+    <value>تلقیح</value>
+  </data>
+  <data name="Pregnancy_Check" xml:space="preserve">
+    <value>تشخیص آبستنی</value>
+  </data>
+  <data name="SensorId" xml:space="preserve">
+    <value>شناسه حسگر</value>
+  </data>
+  <data name="SCC" xml:space="preserve">
+    <value>تعداد سلول های سوماتیک</value>
+  </data>
+  <data name="Current_Fat" xml:space="preserve">
+    <value>آخرین درصد چربی شیر</value>
+  </data>
+  <data name="Current_Protein" xml:space="preserve">
+    <value>آخرین درصد پروتئین شیر</value>
+  </data>
+  <data name="Current_Fat_Protein_Index" xml:space="preserve">
+    <value>نسبت چربی به پروتئین فعلی</value>
+  </data>
+  <data name="Age" xml:space="preserve">
+    <value>سن</value>
+  </data>
+  <data name="Previous_Fat" xml:space="preserve">
+    <value>درصد چربی شیر قبلی</value>
+  </data>
+  <data name="Previous_Protein" xml:space="preserve">
+    <value>درصد پروتئین شیر قبلی</value>
+  </data>
+  <data name="Previous_Fat_Protein_Index" xml:space="preserve">
+    <value>نسبت چربی به پروتئین قبلی</value>
+  </data>
+  <data name="Linked" xml:space="preserve">
+    <value>متصل</value>
+  </data>
+  <data name="Is_Young_Stock" xml:space="preserve">
+    <value>دام تلیسه است؟</value>
+  </data>
+  <data name="Is_Dry" xml:space="preserve">
+    <value>دام شیرده هست؟</value>
+  </data>
+  <data name="Dry_Off" xml:space="preserve">
+    <value>خشک</value>
+  </data>
+  <data name="ET_Flushed" xml:space="preserve">
+    <value>تلقیح</value>
+  </data>
+  <data name="Group" xml:space="preserve">
+    <value>گروه</value>
+  </data>
+  <data name="Event_Info" xml:space="preserve">
+    <value>اطلاعات رخدادها</value>
+  </data>
+  <data name="Event" xml:space="preserve">
+    <value>رخداد</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>تاریخ</value>
+  </data>
+  <data name="DayAgo" xml:space="preserve">
+    <value>تاریخ قبلی</value>
+  </data>
+  <data name="Drinking_Cattle" xml:space="preserve">
+    <value>نوشیدن آب</value>
+  </data>
+  <data name="Eating_Cattle" xml:space="preserve">
+    <value>خوردن</value>
+  </data>
+  <data name="Idle_Cattle" xml:space="preserve">
+    <value>تعاملات اجتماعی</value>
+  </data>
+  <data name="Lie_Down_Cattle" xml:space="preserve">
+    <value>دراز کشیدن</value>
+  </data>
+  <data name="Milking_Cattle" xml:space="preserve">
+    <value>شیردوشی و سایر اقدامات مدیریتی</value>
+  </data>
+  <data name="Quid_Cattle" xml:space="preserve">
+    <value>نشخوار کردن</value>
+  </data>
+  <data name="Body_Score" xml:space="preserve">
+    <value>امتیاز شرایط بدنی</value>
+  </data>
+  <data name="Calving_Event" xml:space="preserve">
+    <value>زایش</value>
+  </data>
+  <data name="Cattle_Event" xml:space="preserve">
+    <value>رویدادها</value>
+  </data>
+  <data name="Cattle_Scores" xml:space="preserve">
+    <value>امتیازها</value>
+  </data>
+  <data name="Cattle_Score_List" xml:space="preserve">
+    <value>لیست امتیازها</value>
+  </data>
+  <data name="Clearity_Score" xml:space="preserve">
+    <value>امتیاز تمیزی</value>
+  </data>
+  <data name="DoNotBreed_Event" xml:space="preserve">
+    <value>تلقیح نشده</value>
+  </data>
+  <data name="DryOff_Event" xml:space="preserve">
+    <value>خشک کردن</value>
+  </data>
+  <data name="ETFlushed_Event" xml:space="preserve">
+    <value>سقط</value>
+  </data>
+  <data name="Heat_Event" xml:space="preserve">
+    <value>وضعیت فحلی</value>
+  </data>
+  <data name="Hocks_Score" xml:space="preserve">
+    <value>امتیاز هوک</value>
+  </data>
+  <data name="HormoneTreatment_Event" xml:space="preserve">
+    <value>درمان هورمونی</value>
+  </data>
+  <data name="Insemination_Event" xml:space="preserve">
+    <value>تلقیح</value>
+  </data>
+  <data name="Lameness_Score" xml:space="preserve">
+    <value>امتیاز حرکتی</value>
+  </data>
+  <data name="Manure_Score" xml:space="preserve">
+    <value>امتیاز مدفوع</value>
+  </data>
+  <data name="Open_Event" xml:space="preserve">
+    <value>باز(غیر آبستن)</value>
+  </data>
+  <data name="Rumen_Score" xml:space="preserve">
+    <value>امتایز شکمبه</value>
+  </data>
+  <data name="Teat_Score" xml:space="preserve">
+    <value>امتیاز سرپستان</value>
+  </data>
+  <data name="Cattle_Event_List" xml:space="preserve">
+    <value>لیست رخدادها</value>
+  </data>
+  <data name="Fertility_Age" xml:space="preserve">
+    <value>سن آبستنی</value>
+  </data>
+  <data name="Position" xml:space="preserve">
+    <value>موقعیت</value>
+  </data>
+  <data name="Show_Activity" xml:space="preserve">
+    <value>نمایش نمودار فعالیت</value>
+  </data>
+  <data name="Step_Hour" xml:space="preserve">
+    <value>HH</value>
+  </data>
+  <data name="Show_Temp" xml:space="preserve">
+    <value>نمایش دمای دام</value>
+  </data>
+  <data name="Step_Minute" xml:space="preserve">
+    <value>mm</value>
+  </data>
+  <data name="Step_Second" xml:space="preserve">
+    <value>Sec</value>
+  </data>
+  <data name="ActionName" xml:space="preserve">
+    <value>نام اکشن</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>توضیحات</value>
+  </data>
+  <data name="ControlerName" xml:space="preserve">
+    <value>نام کنترلر</value>
+  </data>
+  <data name="DefinedRoleList" xml:space="preserve">
+    <value>لیست نقش های تعریف شده</value>
+  </data>
+  <data name="define_new_role" xml:space="preserve">
+    <value>تعریف نقش جدید</value>
+  </data>
+  <data name="define_permission_level" xml:space="preserve">
+    <value>تعیین سطح دسترسی</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>بعدی</value>
+  </data>
+  <data name="Permission" xml:space="preserve">
+    <value>دسترسی</value>
+  </data>
+  <data name="RoleComment" xml:space="preserve">
+    <value>توضیحات نقش</value>
+  </data>
+  <data name="RoleMessage" xml:space="preserve">
+    <value>پیام قابل نمایش</value>
+  </data>
+  <data name="role_detail" xml:space="preserve">
+    <value>مشخصات نقش</value>
+  </data>
+  <data name="Cattle_Temp" xml:space="preserve">
+    <value>دمای بدن دام</value>
+  </data>
+  <data name="Deactive" xml:space="preserve">
+    <value>غیرفعال</value>
+  </data>
+  <data name="Defined_Cattle_Notification_List" xml:space="preserve">
+    <value>لیست آلارم های تعریف شده برای دام ها</value>
+  </data>
+  <data name="Defined_FreeStall_Notification_List" xml:space="preserve">
+    <value>لیست نوتیفیکیشن های تعریف شده برای بهاربندها</value>
+  </data>
+  <data name="EnvTemp" xml:space="preserve">
+    <value>دمای محیط</value>
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value>Period</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value>نقش ها</value>
+  </data>
+  <data name="Snooze_Time" xml:space="preserve">
+    <value>Snooze Time</value>
+  </data>
+  <data name="Topic" xml:space="preserve">
+    <value>عنوان</value>
+  </data>
+  <data name="Window" xml:space="preserve">
+    <value>Window</value>
+  </data>
+  <data name="Accounts" xml:space="preserve">
+    <value>اکانت ها</value>
+  </data>
+  <data name="Cattle_Position" xml:space="preserve">
+    <value>موقعیت دام</value>
+  </data>
+  <data name="Cattle_position_Msg" xml:space="preserve">
+    <value>داده های مربوط به موقعیت دام در حال فراخوانی است. لطفا شکیبا باشید...</value>
+  </data>
+  <data name="Create_And_Edit_Roles" xml:space="preserve">
+    <value>ایجاد و ویرایش نقش های</value>
+  </data>
+  <data name="Create_New_Account" xml:space="preserve">
+    <value>ایجاد اکانت جدید و نسبت دادن نقش به آن</value>
+  </data>
+  <data name="Create_New_Notification" xml:space="preserve">
+    <value>ایجاد آلارم جدید</value>
+  </data>
+  <data name="define_new_account" xml:space="preserve">
+    <value>تعریف اکانت جدید</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>آدرس ایمیل</value>
+  </data>
+  <data name="Empty_Field" xml:space="preserve">
+    <value>هیچ یک از فیلدها نباید خالی باشند.</value>
+  </data>
+  <data name="Family" xml:space="preserve">
+    <value>نام خانوادگی</value>
+  </data>
+  <data name="FreeStall_Map" xml:space="preserve">
+    <value>نقشه بهاربند</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>از</value>
+  </data>
+  <data name="Humidity" xml:space="preserve">
+    <value>رطوبت</value>
+  </data>
+  <data name="MisMatchPassword" xml:space="preserve">
+    <value>رمز عبورها یکسان نیستند</value>
+  </data>
+  <data name="Name_Family" xml:space="preserve">
+    <value>نام و نام خانوادگی</value>
+  </data>
+  <data name="Notification" xml:space="preserve">
+    <value>آلارم</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>رمز عبور</value>
+  </data>
+  <data name="RePassword" xml:space="preserve">
+    <value>تکرار رمز عبور</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>انتخاب</value>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>نمایش</value>
+  </data>
+  <data name="Sitting" xml:space="preserve">
+    <value>نشستن</value>
+  </data>
+  <data name="Temperature" xml:space="preserve">
+    <value>دما</value>
+  </data>
+  <data name="THI" xml:space="preserve">
+    <value>THI</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>تا</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>رسیدگی</value>
+  </data>
+  <data name="CreateDate" xml:space="preserve">
+    <value>تاریخ ایجاد</value>
+  </data>
+  <data name="NotificationSnoozed" xml:space="preserve">
+    <value>نوتیفیکیشن به تعویق افتاد</value>
+  </data>
+  <data name="SnoozeMsg" xml:space="preserve">
+    <value>پیام تعویق</value>
+  </data>
+  <data name="ThereIsNotMsg" xml:space="preserve">
+    <value>موردی برای نمایش وجود ندارد</value>
+  </data>
+  <data name="Cattle_Activity" xml:space="preserve">
+    <value>فعالیت دام</value>
+  </data>
+  <data name="Cattle_Activity_Loading" xml:space="preserve">
+    <value>داده های مربوط به فعالیت دام در حال فراخوانی است. لطفا شکیبا باشید...</value>
+  </data>
+  <data name="Cattle_Body_Temp" xml:space="preserve">
+    <value>دمای بدن دام</value>
+  </data>
+  <data name="Cattle_Body_Temp_Loading" xml:space="preserve">
+    <value>داده های مربوط به دمای بدن دام در حال فراخوانی است. لطفا شکیبا باشید...</value>
+  </data>
+  <data name="Cattle_Position_Loading" xml:space="preserve">
+    <value>داده های مربوط به موقعیت دام در حال فراخوانی است. لطفا شکیبا باشید...</value>
+  </data>
+  <data name="Every_12H" xml:space="preserve">
+    <value>هر دوازده ساعت</value>
+  </data>
+  <data name="Every_1Day" xml:space="preserve">
+    <value>هر یک روز</value>
+  </data>
+  <data name="Every_1H" xml:space="preserve">
+    <value>هر یک ساعت</value>
+  </data>
+  <data name="Every_2H" xml:space="preserve">
+    <value>هر دو ساعت</value>
+  </data>
+  <data name="Every_6H" xml:space="preserve">
+    <value>هر شش ساعت</value>
+  </data>
+  <data name="Freestall_Loading" xml:space="preserve">
+    <value>داده های مربوط به بهاربند در حال فراخوانی است. لطفا شکیبا باشید...</value>
+  </data>
+  <data name="There_Is_Not_Data" xml:space="preserve">
+    <value>داده ای برای فراخوانی وجود ندارد</value>
+  </data>
+  <data name="New_Name" xml:space="preserve">
+    <value>نام جدید</value>
+  </data>
+  <data name="Save_New_Name" xml:space="preserve">
+    <value>نام جدید در حال ذخیره سازیست لطفا شکیبا باشید</value>
+  </data>
+  <data name="Define_Freestall_Notification" xml:space="preserve">
+    <value>تعریف آلارم برای بهاربند</value>
+  </data>
+  <data name="Define_Parameters" xml:space="preserve">
+    <value>تعریف پارامترها</value>
+  </data>
+  <data name="Defining_Cattle_Notification" xml:space="preserve">
+    <value>تعریف آلارم برای دام ها</value>
+  </data>
+  <data name="Freestall_Defined_Notifications_List" xml:space="preserve">
+    <value>لیست آلارم های تعریف شده برای بهاربندها</value>
+  </data>
+  <data name="Save_Notification_Settings" xml:space="preserve">
+    <value>ذخیره تنظیمات</value>
+  </data>
+  <data name="Are_You_Sure_Delete" xml:space="preserve">
+    <value>آیا مطمئن هستید که می خواهید این مورد را پاک کنید؟</value>
+  </data>
+  <data name="Notification_Setting_Removed" xml:space="preserve">
+    <value>تنظیمات آلارم با موفقیت پاک شدند</value>
+  </data>
+  <data name="Notification_Active" xml:space="preserve">
+    <value>نوتیفیکیشن فعال شد</value>
+  </data>
+  <data name="Notification_Dective" xml:space="preserve">
+    <value>نوتیفیکیشن غیر فعال شد</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>در حال فراخوانی</value>
+  </data>
+  <data name="Please_Wait" xml:space="preserve">
+    <value>لطفا شکیبا باشید...</value>
+  </data>
+  <data name="Maximum" xml:space="preserve">
+    <value>بیشینه</value>
+  </data>
+  <data name="Minimum" xml:space="preserve">
+    <value>کمینه</value>
+  </data>
+  <data name="Snooze" xml:space="preserve">
+    <value>Snooze</value>
+  </data>
+  <data name="Edit_Cattle_Notification" xml:space="preserve">
+    <value>ویرایش نوتیفیکیشن دام</value>
+  </data>
+  <data name="Edit_Freestall_Notification" xml:space="preserve">
+    <value>ویرایش نوتیفیکیشن بهاربند</value>
+  </data>
+  <data name="Saved_Successfully" xml:space="preserve">
+    <value>اطلاعات با موفقیت ذخیره شدند.</value>
+  </data>
+  <data name="NotificationDeactived" xml:space="preserve">
+    <value>نوتیفیکیشن غیرفعال شد</value>
+  </data>
+  <data name="Snoozed" xml:space="preserve">
+    <value>نوتیفیکیشن به تعویق افتاد</value>
+  </data>
+  <data name="SnoozeResean" xml:space="preserve">
+    <value>اقداماتی که برای رفع مشکل انجام داده ای را بیان کنید</value>
+  </data>
+  <data name="Num" xml:space="preserve">
+    <value>ردیف</value>
+  </data>
+  <data name="LoginPlease" xml:space="preserve">
+    <value>لطفا قبل از انجام هر کاری لاگین نمایید</value>
+  </data>
+  <data name="CattleNotification" xml:space="preserve">
+    <value>نوتیفیکیشن های دام</value>
+  </data>
+  <data name="Ack" xml:space="preserve">
+    <value>رسیدگی</value>
+  </data>
+  <data name="ActAt" xml:space="preserve">
+    <value>رسیدگی</value>
+  </data>
+  <data name="ActUser" xml:space="preserve">
+    <value>رسیدگی کننده</value>
+  </data>
+  <data name="DeactiveAt" xml:space="preserve">
+    <value>Deactive At</value>
+  </data>
+  <data name="EventDate" xml:space="preserve">
+    <value>زمان رخداد</value>
+  </data>
+  <data name="ID" xml:space="preserve">
+    <value>شناسه</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>وضعیت</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>نوع</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>پیام</value>
+  </data>
+  <data name="SelectItem" xml:space="preserve">
+    <value>یکی از گزینه های زیر را انتخاب کنید</value>
+  </data>
+  <data name="CattleFreestallID" xml:space="preserve">
+    <value>شناسه دام/بهاربند</value>
+  </data>
+  <data name="ActComment" xml:space="preserve">
+    <value>شرح اقدام</value>
+  </data>
+  <data name="ActTime" xml:space="preserve">
+    <value>زمان رسیدگی</value>
+  </data>
+  <data name="AlarmDescription" xml:space="preserve">
+    <value>پیام</value>
+  </data>
+  <data name="AlarmID" xml:space="preserve">
+    <value>شناسه نوتیفیکیشن</value>
+  </data>
+  <data name="AlarmNote" xml:space="preserve">
+    <value>شرح اقدام</value>
+  </data>
+  <data name="AlarmState" xml:space="preserve">
+    <value>وضعیت نوتیفیکیشن</value>
+  </data>
+  <data name="AlarmSubject" xml:space="preserve">
+    <value>عنوان نوتیفیکیشن</value>
+  </data>
+  <data name="AlarmType" xml:space="preserve">
+    <value>نوع نوتیفیکیشن</value>
+  </data>
+  <data name="AlarmUser" xml:space="preserve">
+    <value>نام اقدام کننده</value>
+  </data>
+  <data name="DeactivationTime" xml:space="preserve">
+    <value>زمان غیر فعال شدن</value>
+  </data>
+  <data name="TimeIssued" xml:space="preserve">
+    <value>زمان رخداد</value>
+  </data>
+  <data name="Row" xml:space="preserve">
+    <value>ردیف</value>
+  </data>
+  <data name="Deactive_Successfully" xml:space="preserve">
+    <value>آلارم با موفقیت غیر فعال شد.</value>
+  </data>
+  <data name="Active_Again" xml:space="preserve">
+    <value>فعال سازی مجدد</value>
+  </data>
+  <data name="Active_Successfully" xml:space="preserve">
+    <value>آلارم با موفقیت فعال شد</value>
+  </data>
+  <data name="This_msg_created_by_system_alarm_active_again" xml:space="preserve">
+    <value>این پیام به صورت خودکار توسط سیستم ایجاد شده است. آلارم توسط یوزر مجدد فعال شد.</value>
+  </data>
+  <data name="This_msg_created_by_system_deactive" xml:space="preserve">
+    <value>این پیام به صورت خودکار توسط سیستم ایجاد شده است. آلارم توسط یوزر غیر فعال شد.</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>تاریخچه</value>
+  </data>
+  <data name="FIRST" xml:space="preserve">
+    <value>ابتدا</value>
+  </data>
+  <data name="LAST" xml:space="preserve">
+    <value>انتها</value>
+  </data>
+  <data name="WitoutFilter" xml:space="preserve">
+    <value>بدون فیلتر</value>
+  </data>
+  <data name="Basic_Cattle_Info" xml:space="preserve">
+    <value>اطلاعات پایه دام</value>
+  </data>
+  <data name="Cattle_ID" xml:space="preserve">
+    <value>شماره بدن</value>
+  </data>
+  <data name="Cattle_Identity" xml:space="preserve">
+    <value>اطلاعات شناسنامه ای دام</value>
+  </data>
+  <data name="date_of_birth" xml:space="preserve">
+    <value>تاریخ تولد</value>
+  </data>
+  <data name="Days_In_Milk" xml:space="preserve">
+    <value>روزهای شیردهی</value>
+  </data>
+  <data name="Days_Open" xml:space="preserve">
+    <value>روزهای باز</value>
+  </data>
+  <data name="FertilityStatus" xml:space="preserve">
+    <value>وضعیت باروری</value>
+  </data>
+  <data name="FreeStall" xml:space="preserve">
+    <value>بهاربند</value>
+  </data>
+  <data name="Genetics_type_num" xml:space="preserve">
+    <value>ژنتیک: شماره اسپرم</value>
+  </data>
+  <data name="HealthState" xml:space="preserve">
+    <value>وضعیت سلامت</value>
+  </data>
+  <data name="HeatStatus" xml:space="preserve">
+    <value>وضعیت فحلی</value>
+  </data>
+  <data name="Lacation_Number" xml:space="preserve">
+    <value>شکم زایش</value>
+  </data>
+  <data name="Last_Calving_Date" xml:space="preserve">
+    <value>آخرین تاریخ زایمان</value>
+  </data>
+  <data name="MotherID" xml:space="preserve">
+    <value>شماره شناسه مادر</value>
+  </data>
+  <data name="Sensor_ID" xml:space="preserve">
+    <value>شناسه حسگر</value>
+  </data>
+  <data name="Sex" xml:space="preserve">
+    <value>جنسیت</value>
+  </data>
+  <data name="Body_Condition_Score" xml:space="preserve">
+    <value>شرایط بدنی</value>
+  </data>
+  <data name="Cattle_Score" xml:space="preserve">
+    <value>امتیازات دام</value>
+  </data>
+  <data name="Cattle_Status" xml:space="preserve">
+    <value>وضعیت دام</value>
+  </data>
+  <data name="Cleanliness" xml:space="preserve">
+    <value>تمیزی</value>
+  </data>
+  <data name="Hock" xml:space="preserve">
+    <value>هوک</value>
+  </data>
+  <data name="Manure" xml:space="preserve">
+    <value>مدفوع</value>
+  </data>
+  <data name="Milk_Production" xml:space="preserve">
+    <value>تولید شیر</value>
+  </data>
+  <data name="Mobility" xml:space="preserve">
+    <value>حرکتی</value>
+  </data>
+  <data name="Rumen" xml:space="preserve">
+    <value>شکمبه</value>
+  </data>
+  <data name="Teat" xml:space="preserve">
+    <value>سرپستان</value>
+  </data>
+  <data name="Abortion" xml:space="preserve">
+    <value>سقط</value>
+  </data>
+  <data name="Diagnosis" xml:space="preserve">
+    <value>تشخیص بیماری</value>
+  </data>
+  <data name="Examination" xml:space="preserve">
+    <value>معاینه</value>
+  </data>
+  <data name="Health" xml:space="preserve">
+    <value>سلامت</value>
+  </data>
+  <data name="Normal" xml:space="preserve">
+    <value>عادی</value>
+  </data>
+  <data name="Pregnancy" xml:space="preserve">
+    <value>تشخیص آبستنی</value>
+  </data>
+  <data name="Treatment" xml:space="preserve">
+    <value>اقدام درمانی</value>
+  </data>
+  <data name="Vet" xml:space="preserve">
+    <value>دامپزشک</value>
+  </data>
+  <data name="Please_Fill_Blank" xml:space="preserve">
+    <value>لطفا فیلد خالی را پر نمایید</value>
+  </data>
+  <data name="Number_Value" xml:space="preserve">
+    <value>مقدار عددی</value>
+  </data>
+  <data name="CattleScore" xml:space="preserve">
+    <value>امتیازها</value>
+  </data>
+  <data name="Descrition" xml:space="preserve">
+    <value>شرح</value>
+  </data>
+  <data name="Item" xml:space="preserve">
+    <value>موضوع</value>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>اعمال</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>مقدار</value>
+  </data>
+  <data name="UpdateDate" xml:space="preserve">
+    <value>تاریخ به روز رسانی</value>
+  </data>
+  <data name="Scores" xml:space="preserve">
+    <value>امتیازها</value>
+  </data>
+  <data name="Remove_Successfully" xml:space="preserve">
+    <value>داده مورد نظر با موفقیت پاک شد</value>
+  </data>
+  <data name="Assign_Freestall" xml:space="preserve">
+    <value>انتقال به بهاربند</value>
+  </data>
+  <data name="Assign_Group" xml:space="preserve">
+    <value>انتساب به گروه</value>
+  </data>
+  <data name="Assign_Herd" xml:space="preserve">
+    <value>انتساب به گله</value>
+  </data>
+  <data name="Herd" xml:space="preserve">
+    <value>گله</value>
+  </data>
+  <data name="FreeStall_Subcategory" xml:space="preserve">
+    <value>انتقال به بهاربند</value>
+  </data>
+  <data name="Group_Subcategory" xml:space="preserve">
+    <value>انتساب به گروه</value>
+  </data>
+  <data name="Herd_Subcategory" xml:space="preserve">
+    <value>انتساب به گله</value>
+  </data>
+  <data name="Delete_Edit" xml:space="preserve">
+    <value>حذف/ویرایش</value>
+  </data>
+  <data name="SIMILAR_Cattle_Error" xml:space="preserve">
+    <value>قبلا یک دام با شناسه وارد شده ثبت شده است. شناسه دیگری را انتخاب نمایید</value>
+  </data>
+  <data name="Add_or_Edit_Farm" xml:space="preserve">
+    <value>ایجاد و ویرایش مزرعه</value>
+  </data>
+  <data name="Farm" xml:space="preserve">
+    <value>مزرعه</value>
+  </data>
+  <data name="Select_Farm" xml:space="preserve">
+    <value>انتخاب مزرعه</value>
+  </data>
+  <data name="define_new_farm" xml:space="preserve">
+    <value>ایجاد مزرعه</value>
+  </data>
+  <data name="Assress" xml:space="preserve">
+    <value>آدرس</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>شهر</value>
+  </data>
+  <data name="CityName" xml:space="preserve">
+    <value>شهر</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>کشور</value>
+  </data>
+  <data name="DefinedFarm" xml:space="preserve">
+    <value>فارم های ایجاد شده</value>
+  </data>
+  <data name="FarmName" xml:space="preserve">
+    <value>نام مزرعه</value>
+  </data>
+  <data name="FarmNo" xml:space="preserve">
+    <value>پلاک</value>
+  </data>
+  <data name="FarmRole" xml:space="preserve">
+    <value>نوع مزرعه</value>
+  </data>
+  <data name="FarmUserId" xml:space="preserve">
+    <value>نام کاربری</value>
+  </data>
+  <data name="farm_address" xml:space="preserve">
+    <value>آدرس مزرعه</value>
+  </data>
+  <data name="farm_assets_import" xml:space="preserve">
+    <value>ورود تجهیزات مزرعه</value>
+  </data>
+  <data name="farm_cattle_import" xml:space="preserve">
+    <value>ورود اطلاعات دامی</value>
+  </data>
+  <data name="farm_location" xml:space="preserve">
+    <value>محل فارم</value>
+  </data>
+  <data name="farm_primary_data" xml:space="preserve">
+    <value>اطلاعات فارم</value>
+  </data>
+  <data name="Phones" xml:space="preserve">
+    <value>شماره تلفن ها</value>
+  </data>
+  <data name="Phone_1" xml:space="preserve">
+    <value>تلفن یک</value>
+  </data>
+  <data name="Phone_2" xml:space="preserve">
+    <value>تلفن دو</value>
+  </data>
+  <data name="PostalCode" xml:space="preserve">
+    <value>کدپستی</value>
+  </data>
+  <data name="Province" xml:space="preserve">
+    <value>استان</value>
+  </data>
+  <data name="Street_Name1" xml:space="preserve">
+    <value>خیابان یک</value>
+  </data>
+  <data name="Street_Name2" xml:space="preserve">
+    <value>خیابان دو</value>
+  </data>
+  <data name="NoAddress" xml:space="preserve">
+    <value>پلاک</value>
+  </data>
+  <data name="Report_Equipment" xml:space="preserve">
+    <value>Report_Equipment</value>
+  </data>
+  <data name="Lacation_Number_default" xml:space="preserve">
+    <value>شکم زایش (مقدار پیش فرض صفر)</value>
+  </data>
+  <data name="DefinedFarmAccountList" xml:space="preserve">
+    <value>لیست اکانت های تعریف شده برای فارم</value>
+  </data>
+  <data name="Free_Stall_Plot" xml:space="preserve">
+    <value>Free_Stall_Plot</value>
+  </data>
+  <data name="Cattle_Group_list" xml:space="preserve">
+    <value>لیست گروه ها</value>
+  </data>
+  <data name="Cattle_Time_Budget_Loading" xml:space="preserve">
+    <value>داده های بودجه زمانی دام در حال فراخوانی است لطفا شکیبا باشید</value>
+  </data>
+  <data name="Cattle_Time_Budget" xml:space="preserve">
+    <value>بودجه زمانی دام</value>
+  </data>
+  <data name="Account" xml:space="preserve">
+    <value>اکانت</value>
+  </data>
+  <data name="Cattle" xml:space="preserve">
+    <value>دام</value>
+  </data>
+  <data name="CattleGroup" xml:space="preserve">
+    <value>گروه</value>
+  </data>
+  <data name="CattleHerd" xml:space="preserve">
+    <value>گله</value>
+  </data>
+  <data name="CreateAccountWizard" xml:space="preserve">
+    <value>ایجاد اکانت</value>
+  </data>
+  <data name="CreateRole" xml:space="preserve">
+    <value>ایجاد نقش</value>
+  </data>
+  <data name="DefinedSystemRole_FarmList" xml:space="preserve">
+    <value>نقش های سیستمی ایجاد شده برای مزرعه</value>
+  </data>
+  <data name="FreeStallPlot" xml:space="preserve">
+    <value>نمودارهای بهاربند</value>
+  </data>
+  <data name="Insert" xml:space="preserve">
+    <value>ثبت</value>
+  </data>
+  <data name="List" xml:space="preserve">
+    <value>لیست</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>تنظیمات</value>
+  </data>
+  <data name="Alerts" xml:space="preserve">
+    <value>هشدار</value>
+  </data>
+  <data name="AssignToCattle" xml:space="preserve">
+    <value>انتساب به دام</value>
+  </data>
+  <data name="Report" xml:space="preserve">
+    <value>گزارش</value>
+  </data>
+  <data name="Sensor" xml:space="preserve">
+    <value>حسگر</value>
+  </data>
+  <data name="Cattle_Id_sensor" xml:space="preserve">
+    <value>شناسه دام</value>
+  </data>
+  <data name="FreeStall_Map_Loading" xml:space="preserve">
+    <value>نقشه در حال فراخوانی است. از شکیبایی شما متشکرم</value>
+  </data>
+  <data name="SortASC" xml:space="preserve">
+    <value>به ترتیب نزولی</value>
+  </data>
+  <data name="SortDESC" xml:space="preserve">
+    <value>به ترتیب صعودی</value>
+  </data>
+  <data name="Calf" xml:space="preserve">
+    <value>گوساله</value>
+  </data>
+  <data name="Dry" xml:space="preserve">
+    <value>خشک</value>
+  </data>
+  <data name="Heifer" xml:space="preserve">
+    <value>تلیسه</value>
+  </data>
+  <data name="Insem" xml:space="preserve">
+    <value>تلقیح</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>دیگر</value>
+  </data>
+  <data name="Preg" xml:space="preserve">
+    <value>آبستن</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>آماده</value>
+  </data>
+  <data name="Number_Example" xml:space="preserve">
+    <value>123</value>
+  </data>
+  <data name="Date_Example" xml:space="preserve">
+    <value>1300/01/01</value>
+  </data>
+  <data name="String_Example" xml:space="preserve">
+    <value>متن</value>
+  </data>
+  <data name="Edit_GroupOf_Cattle" xml:space="preserve">
+    <value>ویرایش گروهی دام ها</value>
+  </data>
+  <data name="EditGroupOfCattle" xml:space="preserve">
+    <value>ویرایش گروهی دام ها</value>
+  </data>
+</root>

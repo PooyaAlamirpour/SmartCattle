@@ -1,0 +1,157 @@
+﻿<table class="table table-bordered table-hover table-striped" id="searchable">
+    <thead class="bordered-darkorange">
+        <tr role="row">
+            <th>
+                شماره دام
+            </th>
+            <th>
+
+                شماره گروه
+
+            </th>
+
+            <th>
+
+                بهاربند
+
+            </th>
+
+            <th>
+
+                روزهای شیردهی
+
+            </th>
+
+            <th>
+
+                شکم زایش
+
+            </th>
+
+            <th>
+
+                وضعیت آبستنی
+
+            </th>
+
+            <th>
+
+                وضعیت فحلی
+
+            </th>
+
+            <th>
+
+                وضعیت سلامت
+
+            </th>
+
+
+
+        </tr>
+
+        <tr>
+
+            <th class="relative "><i data-filter="arithmetic" data-column="CattleNumber" class="fa fa-filter" aria-hidden="true"></i> <input type="text" class="filter-input" /></th>
+
+            <th class="relative "><i data-filter="arithmetic" data-column="GroupNumber" class="fa fa-filter" aria-hidden="true"></i> <input type="text" class="filter-input" /></th>
+
+            <th class="relative "><i data-filter="arithmetic" data-column="FreeStallCode" class="fa fa-filter" aria-hidden="true"></i> <input type="text" class="filter-input" /></th>
+
+            <th class="relative "><i data-filter="arithmetic" data-column="DIM" class="fa fa-filter" aria-hidden="true"></i> <input type="text" class="filter-input" /></th>
+
+            <th class="relative "><i data-filter="arithmetic" data-column="LactationNumber" class="fa fa-filter" aria-hidden="true"></i> <input type="text" class="filter-input" /></th>
+
+            <th class="relative " id="dateHeader">
+
+                <div class="input-group">
+
+                    <i data-filter="fertility" data-column="FertilityState" class="fa fa-filter" aria-hidden="true"></i>
+
+                    <div id="datepickerwidget" class="input-group-addon" data-mddatetimepicker="true" data-targetselector="#dateInput" data-trigger="click" data-enabletimepicker="false" data-isgregorian="false">
+
+                        <span class="glyphicon glyphicon-calendar"></span>
+
+                    </div>
+
+                    <input type="text" class="form-control no-padding" id="dateInput" placeholder="تاریخ" />
+
+                </div>
+
+
+
+            </th>
+
+            <th class="relative "><i data-filter="heat" data-column="HeatState" class="fa fa-filter" aria-hidden="true"></i></th>
+
+            <th class="relative "><i data-filter="health" data-column="HealthState" class="fa fa-filter" aria-hidden="true"></i> </th>
+
+        </tr>
+
+    </thead>
+
+    <tfoot>
+
+        <tr>
+
+            <th rowspan="1" colspan="1"><input type="text" name="search_engine" placeholder="جستجو" class="form-control input-sm"></th>
+
+            <th rowspan="1" colspan="1"><input type="text" name="search_browser" placeholder="جستجو" class="form-control input-sm"></th>
+
+            <th rowspan="1" colspan="1"><input type="text" name="search_platform" placeholder="جستجو" class="form-control input-sm"></th>
+
+            <th rowspan="1" colspan="1"><input type="text" name="search_version" placeholder="جستجو" class="form-control input-sm"></th>
+
+            <th rowspan="1" colspan="1"><input type="text" name="search_grade" placeholder="جستجو" class="form-control input-sm"></th>
+
+            <th rowspan="1" colspan="1"><input type="text" name="search_engine" placeholder="جستجو" class="form-control input-sm"></th>
+
+            <th rowspan="1" colspan="1"><input type="text" name="search_browser" placeholder="جستجو" class="form-control input-sm"></th>
+
+            <th rowspan="1" colspan="1"><input type="text" name="search_platform" placeholder="جستجو" class="form-control input-sm"></th>
+
+        </tr>
+
+    </tfoot>
+
+    <tbody></tbody>
+
+
+
+</table>
+
+<div id="paging" class="row">
+
+    <div class="col-sm-6">
+
+        <div>
+            Showing
+
+            0    to
+
+            0    from 0
+
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+
+        <div class="dataTables_paginate paging_bootstrap" id="searchable_paginate">
+
+            <ul class="pagination">
+
+                <li data-index="1"><a href="#">first</a></li>
+
+                <li data-index="1" class="active"><a href="#">1</a></li>
+
+
+
+                <li data-index="0"><a href="#">last</a></li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</div>

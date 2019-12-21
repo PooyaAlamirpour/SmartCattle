@@ -1,0 +1,305 @@
+﻿@using System
+@using BeyondThemes.Bootstrap
+<!DOCTYPE html>
+<!--
+BeyondAdmin - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.3.6
+Version: 1.6.0
+Purchase: https://wrapbootstrap.com/theme/beyondadmin-adminapp-angularjs-mvc-WB06R48S4
+-->
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!-- Head -->
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+
+    <meta name="description" content="@ViewBag.Description" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="~/assets/img/favicon.png" type="image/x-icon">
+
+    <style>
+        .flag {
+            max-width: 48px;
+            max-height: 100%;
+            margin: 0px 10px;
+            padding: 10px 0px;
+            cursor: pointer;
+        } 
+    .chartBox{
+ 
+height: 400px; 
+ direction:ltr; 
+ text-align:left;
+  font-family:'vazir !important';
+   margin: 10px auto;
+   float:left !important;
+    }
+</style>
+     
+    @Styles.Render("~/css/bootstrap")
+    <link id="bootstrap-rtl-link" href="" rel="stylesheet" />
+
+    @Styles.Render("~/css/beyond")
+    <link id="skin-link" href="" rel="stylesheet" type="text/css" />
+    
+    @Scripts.Render("~/bundles/skin")
+
+    <style>
+        .Div1 {
+            border: 0px solid #ddd;
+            width: 24%;
+            background-color: white;
+            float: left;
+            border: 2px solid #c00;
+            margin-right: 5px;
+            min-height: 50px;
+            position: fixed;
+        }
+    </style>
+</head>
+<!-- /Head -->
+<!-- Body -->
+<body>
+    <!-- Loading Container -->
+    <div class="loading-container">
+        <div class="loader"></div>
+    </div>
+    <!--  /Loading Container -->
+    <!-- Navbar -->
+    <div class="navbar Div1" style="height:60px;width:100%;">
+        <div class="navbar-inner" style="background-color:#f44336;height:60px;">
+            <div class="navbar-container" style="height:60px;">
+                <!-- Account Area and Settings --->
+                <div class="navbar-header fa-pull-right" style="height:60px;">
+                    <div class="navbar-account">
+                        <ul class="account-area" style="height:60px;position: absolute; left: 0; top: 0; width: 50%;margin-top:10px">
+                            <li><a href="/home/changeLanguage?langCulture=fa-IR"> <img class="flag" src="/assets/img/flags/fa.png" /> </a></li>
+                            <li> <a href="/home/changeLanguage?langCulture=en-US"><img class="flag" src="/assets/img/flags/en.png" /></a></li>
+                            <li id="NotificationMenu">
+                                @*<a class="dropdown-toggle" data-toggle="dropdown" title="Help" href="#">
+                                        <i class="icon fa fa-envelope"></i>
+                                        <span class="badge">3</span>
+                                    </a>*@
+                                <!--Messages Dropdown-->
+                                @*<ul class="pull-right dropdown-menu dropdown-arrow dropdown-messages" style="right:0" id="NotificationMenu">
+                                        <li style="background-color:#ff5154">
+                                            <a href="~/Notification/List">
+                                                <img src="~/assets/img/avatars/bing.png" class="message-avatar" alt="Divyia Austin" style="width:30px">
+                                                <div class="message">
+                                                    <span class="message-sender">
+                                                      دمای بدن دام
+                                                    </span>
+                                                    <span class="message-time" style="color:black;">
+                                                        2 دقیقه پیش
+                                                    </span>
+                                                    <span class="message-body" style="color:black;" >
+                                                         میزان دمای بدن دام شماره 5 از حد تعیین شده عبور کرده.
+                                                    </span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <img src="~/assets/img/avatars/bing.png" class="message-avatar" alt="Divyia Austin" style="width:30px">
+                                                <div class="message">
+                                                    <span class="message-sender">
+                                                        دمای بدن دام
+                                                    </span>
+                                                    <span class="message-time">
+                                                        20 دقیقه پیش
+                                                    </span>
+                                                    <span class="message-body">
+                                                        میزان دمای بدن دام شماره 6 از حد تعیین شده عبور کرده.
+                                                    </span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <img src="~/assets/img/avatars/bing.png" class="message-avatar" alt="Divyia Austin" style="width:30px">
+                                                <div class="message">
+                                                    <span class="message-sender">
+                                                        رطوبت محیط
+                                                    </span>
+                                                    <span class="message-time">
+                                                        دیروز
+                                                    </span>
+
+                                                    </span>
+                                                    <span class="message-body">
+                                                        رطوبت بهاربند شماره 5 از میزان تعیین شده بیشتر شده است.
+                                                    </span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>*@
+                                <!--/Messages Dropdown-->
+                            </li>
+                            <li>
+                                <a class="login-area dropdown-toggle" data-toggle="dropdown">
+                                    <div class="avatar" title="View your public profile">
+                                        <img src="~/assets/img/avatars/adam-jansen.jpg">
+                                    </div>
+                                    <section>
+                                        <h2>
+                                            <span class="profile" id="SmartCattleInfo">
+                                                <span>
+                                                    @Helper.getCurrentRolejName()
+                                                    ---
+                                                    @Helper.getCurrentFarmName()
+                                                </span>
+                                            </span>
+                                        </h2>
+                                    </section>
+                                </a>
+                                <!--Login Area Dropdown-->
+                                <ul class="pull-right dropdown-menu dropdown-arrow dropdown-login-area">
+                                    <li class="email"><a>@User.Identity.Name</a></li>
+                                    <li>
+                                        <div class="avatar-area">
+                                            <img src="~/assets/img/avatars/adam-jansen.jpg" class="avatar">
+                                            <span class="caption">@Localization.getString("change_photo")</span>
+                                        </div>
+                                    </li>
+
+                                    <!--Avatar Area-->
+                                    <li class="edit">
+                                        <a href="/Account/UserProfile" class="pull-left">@Localization.getString("Profile")</a>
+                                        <a href="/Account/Setting" class="pull-right">@Localization.getString("Setting")</a>
+                                    </li>
+
+                                    <li class="dropdown-footer">
+                                        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                                        {
+                                            @Html.AntiForgeryToken();
+                                            <a href="#" onclick="logOff()">
+                                                @Localization.getString("Sign_out")
+                                            </a>
+                                        }
+                                    </li>
+                                </ul>
+                                <!--/Login Area Dropdown-->
+                            </li>
+                        </ul>
+                        <!-- Settings -->
+                    </div>
+                </div>
+                <!-- /Account Area and Settings -->
+            </div>
+        </div>
+    </div>
+    <!-- /Navbar -->
+    <!-- Main Container -->
+    <div class="main-container container-fluid">
+        <!-- Page Container -->
+        <div class="page-container" style="margin-top:80px;margin-left:2px;">
+            <!-- Page Sidebar -->
+            <div class="page-sidebar Div1" style="display:inline-block;width:220px;" id="sidebar">
+                <div style="background-color:#f44336; width:218px;height:100px;z-index:99 !important;position:fixed;margin-top:60px" id="divBackgroundAvatar">
+                    <img src="~/assets/Thems/AdminBSB/images/user-img-background.jpg" width="100%" height="100%" />
+                </div>
+                <div style="margin-top:160px">
+                    @Html.MvcSiteMap().Menu()
+                </div>
+            </div>
+            <!-- /Page Sidebar -->
+            <!-- Chat Bar -->
+            <div id="chatbar" class="page-chatbar">
+                <div class="chatbar-contacts">
+                    <div class="contacts-search">
+                        <input type="text" class="searchinput" placeholder="Search Contacts" />
+                        <i class="searchicon fa fa-search"></i>
+                        <div class="searchhelper">Search Your Contacts and Chat History</div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Chat Bar -->
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- Page Breadcrumb -->
+                <div class="page-breadcrumbs">
+                    @Html.MvcSiteMap().SiteMapPath()
+                </div>
+                <!-- /Page Breadcrumb -->
+                <!-- Page Header -->
+                @*<div class="page-header position-relative" style="height:20px">
+                    @Html.MvcSiteMap().SiteMapTitle()
+                    <!--Header Buttons-->
+                    <div class="header-buttons">
+                        <a class="sidebar-toggler" href="#">
+                            <i class="fa fa-arrows-h"></i>
+                        </a>
+                        <a class="refresh" id="refresh-toggler" href="">
+                            <i class="glyphicon glyphicon-refresh"></i>
+                        </a>
+                        <a class="fullscreen" id="fullscreen-toggler" href="#">
+                            <i class="glyphicon glyphicon-fullscreen"></i>
+                        </a>
+                    </div>
+                    <!--Header Buttons End-->
+                </div>*@
+                <!-- /Page Header -->
+                <!-- Page Body -->
+                <div class="page-body">
+                    <!-- Your Content Goes Here -->
+                    @RenderBody()
+                </div>
+                <!-- /Page Body -->
+            </div>
+            <!-- /Page Content -->
+        </div>
+        <!-- /Page Container -->
+        <!-- Main Container -->
+
+    </div>
+
+    <!--Basic Scripts-->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <!--Beyond Scripts-->
+    @Scripts.Render("~/bundles/beyond")
+
+    <!--Page Related Scripts-->
+    <script src="~/Scripts/jquery.signalR-2.2.2.min.js"></script>
+    <!--Page Related Scripts-->
+    @RenderSection("PageScripts", required: false)
+    <script>
+        function logOff() {
+            $("#logoutForm").submit();
+        }
+    </script>
+
+
+    <script src="~/assets/js/alertify.js"></script>
+
+    <script>
+            var ContentOfPath = $('.header-title')[0].innerHTML;
+            var Current_Url = window.location.href;
+            if (Current_Url.includes("fa-IR")) {
+                Current_Url = Current_Url.replace("fa-IR", "#");
+            }
+            else if (Current_Url.includes("en-US")) {
+                Current_Url = Current_Url.replace("en-US", "#");
+            }
+            var indexOfSharp = Current_Url.indexOf('#');
+            var substringedUrl = Current_Url.substring(indexOfSharp).replace("#/", "").split('?');
+
+            $.post("/Home/SitePath",
+                {
+                    path: substringedUrl[0].replace("/", "_")
+                },
+                function (data) {
+                    $('.header-title')[0].innerHTML = "<h1><small>" + data + "</small></h1>";
+                });
+    </script>
+
+    <script src="http://localhost:8080/signalr/hubs"></script>
+    <script src="~/Areas/SignalR/InitialSignalR.js"></script>
+</body>
+<!--  /Body -->
+</html>
